@@ -33,11 +33,6 @@ export const sendVerificationMail = async (token: string, profile: Profile) => {
 
   const { name, email, userId } = profile;
 
-  await EmailVerificationToken.create({
-    owner: userId,
-    token,
-  });
-
   const welcomeMessage = `Hi ${name}, welcome to my app! Please verify your email by clicking on the link below:`;
 
   transport.sendMail({
