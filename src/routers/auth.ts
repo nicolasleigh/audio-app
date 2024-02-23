@@ -7,7 +7,7 @@ import {
   updatePassword,
   verifyEmail,
 } from '#/controllers/user';
-import { isValidPassResetToken } from '#/middleware/auth';
+import { isValidPassResetToken, mustAuth } from '#/middleware/auth';
 import { validate } from '#/middleware/validator';
 import {
   CreateUserSchema,
@@ -36,5 +36,10 @@ router.post(
   updatePassword
 );
 router.post('/sign-in', validate(SignInValidationSchema), signIn);
+router.get('/is-auth', mustAuth, (req, res) => {
+  res.json({
+    profile: req.user,
+  });
+});
 
 export default router;
