@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 import { CreateUser, VerifyEmailRequest } from '#/@types/user';
 import User from '#/models/user';
-import { generateToken } from '#/utils/helper';
+import { formatProfile, generateToken } from '#/utils/helper';
 import {
   sendForgetPasswordLink,
   sendPassResetSuccessEmail,
@@ -16,7 +16,6 @@ import { isValidObjectId } from 'mongoose';
 import { JWT_SECRET, PASSWORD_RESET_LINK } from '#/utils/variables';
 import { RequestWithFiles } from '#/middleware/fileParser';
 import cloudinary from '#/cloud';
-import formidable from 'formidable';
 
 export const create: RequestHandler = async (req: CreateUser, res) => {
   const { email, password, name } = req.body;
@@ -211,5 +210,9 @@ export const updateProfile: RequestHandler = async (
 
   await user.save();
 
-  res.json({ avatar: user.avatar });
+  res.json({ profile: formatProfile(user) });
+};
+
+export const sendProfile: RequestHandler = (req, res, next) => {
+  res.json({ profile: req.user });
 };
