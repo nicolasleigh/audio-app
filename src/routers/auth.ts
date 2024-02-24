@@ -19,6 +19,7 @@ import { Router } from 'express';
 import formidable from 'formidable';
 import path from 'node:path';
 import fs from 'node:fs';
+import fileParser, { RequestWithFiles } from '#/middleware/fileParser';
 
 const router = Router();
 
@@ -45,30 +46,9 @@ router.get('/is-auth', mustAuth, (req, res) => {
   });
 });
 
-router.post('/update-profile', async (req, res) => {
-  if (!req.headers['content-type']?.includes('multipart/form-data'))
-    return res.status(422).json({ error: 'Only accepts form-data' });
-
-  const dir = path.join(__dirname, '../public/profiles');
-
-  try {
-    fs.readdirSync(dir);
-  } catch (error) {
-    fs.mkdirSync(dir);
-  }
-
-  const form = formidable({
-    uploadDir: dir,
-    filename(name, ext, part, form) {
-      return Date.now() + '_' + part.originalFilename;
-    },
-  });
-  form.parse(req, (err, fields, files) => {
-    // console.log('fields', fields);
-    // console.log('files', files);
-
-    res.json({ uploaded: true });
-  });
+router.post('/update-profile', fileParser, (req: RequestWithFiles, res) => {
+  console.log(req.files);
+  res.json({ ok: true });
 });
 
 export default router;
