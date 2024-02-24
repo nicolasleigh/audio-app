@@ -21,6 +21,7 @@ const AudioSchema = new Schema<AudioDocument>(
   {
     title: { type: String, required: true, trim: true },
     owner: { type: Schema.Types.ObjectId, ref: 'User' },
+    about: { type: String, required: true },
     file: {
       type: Object,
       url: String,
