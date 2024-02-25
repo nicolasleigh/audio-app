@@ -83,3 +83,18 @@ export const NewPlaylistValidationSchema = yup.object().shape({
     .oneOf(['public', 'private'], 'visibility must be public or private')
     .required('visibility is missing!'),
 });
+
+export const OldPlaylistValidationSchema = yup.object().shape({
+  title: yup.string().required('Title is missing!'),
+  item: yup.string().transform(function (value) {
+    return this.isType(value) && isValidObjectId(value) ? value : '';
+  }),
+  // playlist id
+  id: yup.string().transform(function (value) {
+    return this.isType(value) && isValidObjectId(value) ? value : '';
+  }),
+  visibility: yup
+    .string()
+    .oneOf(['public', 'private'], 'visibility must be public or private'),
+  // .required('visibility is missing!'),
+});
