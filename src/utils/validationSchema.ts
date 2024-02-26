@@ -106,7 +106,7 @@ export const UpdateHistorySchema = yup.object().shape({
       return this.isType(value) && isValidObjectId(value) ? value : '';
     })
     .required('Invalid audio id!'),
-  process: yup.number().required('History progress is missing!'),
+  progress: yup.number().required('History progress is missing!'),
   date: yup
     .string()
     .transform(function (value) {

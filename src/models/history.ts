@@ -1,6 +1,5 @@
+import { historyType } from '#/@types/other';
 import { Model, ObjectId, Schema, model, models } from 'mongoose';
-
-type historyType = { audio: ObjectId; progress: number; date: Date };
 
 interface HistoryDocument {
   owner: ObjectId;
