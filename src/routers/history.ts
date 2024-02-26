@@ -1,5 +1,6 @@
 import {
   getHistories,
+  getRecentlyPlayed,
   removeHistory,
   updateHistory,
 } from '#/controllers/history';
@@ -13,5 +14,6 @@ const router = Router();
 router.post('/', mustAuth, validate(UpdateHistorySchema), updateHistory);
 router.delete('/', mustAuth, removeHistory);
 router.get('/', mustAuth, getHistories);
+router.get('/recently-played', mustAuth, getRecentlyPlayed);
 
 export default router;
