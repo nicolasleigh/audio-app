@@ -1,3 +1,4 @@
+import { PopulatedFavoriteList } from '#/@types/audio';
 import cloudinary from '#/cloud';
 import { RequestWithFiles } from '#/middleware/fileParser';
 import Audio from '#/models/audio';
@@ -101,4 +102,25 @@ export const updateAudio: RequestHandler = async (
       poster: audio.poster?.url,
     },
   });
+};
+
+export const getLatestUploads: RequestHandler = async (req, res) => {
+  const list = await Audio.find()
+    .sort('-createdAt')
+    .limit(10)
+    .populate<PopulatedFavoriteList>('owner');
+
+  const audios = list.map((item) => {
+    return {
+      id: item._id,
+      title: item.title,
+      about: item.about,
+      category: item.category,
+      file: item.file.url,
+      poster: item.poster?.url,
+      owner: { name: item.owner.name, id: item.owner._id },
+    };
+  });
+
+  res.json({ audios });
 };
