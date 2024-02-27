@@ -99,6 +99,7 @@ export const getPublicUploads: RequestHandler = async (req, res) => {
       title: item.title,
       about: item.about,
       file: item.file.url,
+      category: item.category,
       poster: item.poster?.url,
       date: item.createdAt,
       owner: { name: item.owner.name, id: item.owner._id },
@@ -503,4 +504,15 @@ export const getPlaylistAudios: RequestHandler = async (req, res) => {
   }
 
   res.json({ list: playlistResult });
+};
+
+export const getIsFollowing: RequestHandler = async (req, res) => {
+  const { profileId } = req.params;
+
+  if (!isValidObjectId(profileId))
+    return res.status(422).json({ error: 'Invalid profile id!' });
+
+  const user = await User.findOne({ _id: profileId, followers: req.user.id });
+
+  res.json({ status: user ? true : false });
 };
