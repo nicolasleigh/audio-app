@@ -11,6 +11,7 @@ import {
   verifyEmail,
 } from '#/controllers/auth';
 import { isValidPassResetToken, mustAuth } from '#/middleware/auth';
+import fileParser from '#/middleware/fileParser';
 import { validate } from '#/middleware/validator';
 import {
   CreateUserSchema,
@@ -19,10 +20,6 @@ import {
   UpdatePasswordSchema,
 } from '#/utils/validationSchema';
 import { Router } from 'express';
-import formidable from 'formidable';
-import path from 'node:path';
-import fs from 'node:fs';
-import fileParser, { RequestWithFiles } from '#/middleware/fileParser';
 
 const router = Router();
 
