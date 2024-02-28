@@ -19,6 +19,7 @@ interface Props {
   containerStyle?: StyleProp<TextStyle>;
   onChange?: (text: string) => void;
   errorMsg?: string;
+  value?: string;
 }
 
 export default function AuthInputField({
@@ -30,6 +31,7 @@ export default function AuthInputField({
   containerStyle,
   errorMsg,
   onChange,
+  value,
 }: Props) {
   return (
     <View style={[styles.container, containerStyle]}>
@@ -43,6 +45,7 @@ export default function AuthInputField({
         autoCapitalize={autoCapitalize}
         secureTextEntry={secureTextEntry}
         onChangeText={onChange}
+        value={value}
       />
     </View>
   );

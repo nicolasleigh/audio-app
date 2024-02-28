@@ -1,85 +1,55 @@
-import React, {useState} from 'react';
+import {Formik} from 'formik';
+import React from 'react';
 import {Button, SafeAreaView, StyleSheet, View} from 'react-native';
 import AuthInputField from '../../components/AuthInputField';
 import colors from '../../utils/colors';
 
+const initialValues = {
+  name: '',
+  email: '',
+  password: '',
+};
+
 export default function SignUp() {
-  const [userInfo, setUserInfo] = useState({
-    name: '',
-    email: '',
-    password: '',
-  });
-  const [errorInfo, setErrorInfo] = useState({
-    name: '',
-    email: '',
-    password: '',
-  });
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.formContainer}>
-        <AuthInputField
-          placeholder="John Doe"
-          label="Name"
-          containerStyle={styles.marginBottom}
-          onChange={text => {
-            setUserInfo({...userInfo, name: text});
-          }}
-          errorMsg={errorInfo.name}
-        />
-        <AuthInputField
-          placeholder="john@email.com"
-          label="Email"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          containerStyle={styles.marginBottom}
-          onChange={text => {
-            setUserInfo({...userInfo, email: text});
-          }}
-          errorMsg={errorInfo.email}
-        />
-        <AuthInputField
-          placeholder="********"
-          label="Password"
-          autoCapitalize="none"
-          secureTextEntry
-          onChange={text => {
-            setUserInfo({...userInfo, password: text});
-          }}
-          errorMsg={errorInfo.password}
-        />
-        <Button
-          title="Sign up"
-          onPress={() => {
-            if (!userInfo.name) {
-              return setErrorInfo({
-                name: 'Name is required',
-                email: '',
-                password: '',
-              });
-            }
-            if (!userInfo.email) {
-              return setErrorInfo({
-                email: 'Email is required',
-                name: '',
-                password: '',
-              });
-            }
-            if (!userInfo.password) {
-              return setErrorInfo({
-                password: 'Password is required',
-                name: '',
-                email: '',
-              });
-            }
-            setErrorInfo({
-              password: '',
-              name: '',
-              email: '',
-            });
-            console.log(userInfo);
-          }}
-        />
-      </View>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={values => {
+          console.log(values);
+        }}>
+        {({handleSubmit, values, handleChange}) => {
+          return (
+            <View style={styles.formContainer}>
+              <AuthInputField
+                placeholder="John Doe"
+                label="Name"
+                containerStyle={styles.marginBottom}
+                onChange={handleChange('name')}
+                value={values.name}
+              />
+              <AuthInputField
+                placeholder="john@email.com"
+                label="Email"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                containerStyle={styles.marginBottom}
+                onChange={handleChange('email')}
+                value={values.email}
+              />
+              <AuthInputField
+                placeholder="********"
+                label="Password"
+                autoCapitalize="none"
+                secureTextEntry
+                onChange={handleChange('password')}
+                value={values.password}
+              />
+              <Button title="Sign up" onPress={() => handleSubmit()} />
+            </View>
+          );
+        }}
+      </Formik>
     </SafeAreaView>
   );
 }
