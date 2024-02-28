@@ -7,6 +7,7 @@ import SubmitBtn from '../../components/form/SubmitBtn';
 import colors from '../../utils/colors';
 import PasswordVisibilityIcon from '../../ui/PasswordVisibilityIcon';
 import AppLink from '../../ui/AppLink';
+import CircleUi from '../../ui/CircleUi';
 
 const initialValues = {
   name: '',
@@ -36,37 +37,10 @@ export default function SignUp() {
   const [secureEntry, setSecureEntry] = useState(true);
   return (
     <SafeAreaView style={styles.container}>
-      <View
-        style={{
-          width: 200,
-          height: 200,
-          position: 'absolute',
-          top: -200 / 2,
-          left: -200 / 2,
-        }}>
-        <View
-          style={{
-            width: 200,
-            height: 200,
-            borderRadius: 200 / 2,
-            backgroundColor: colors.SECONDARY,
-            opacity: 0.3,
-          }}
-        />
-        <View
-          style={{
-            width: 200 / 1.5,
-            height: 200 / 1.5,
-            borderRadius: 200 / 2,
-            backgroundColor: colors.SECONDARY,
-            opacity: 0.3,
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: [{translateX: -200 / 3}, {translateY: -200 / 3}],
-          }}
-        />
-      </View>
+      <CircleUi position="top-left" size={200} />
+      <CircleUi position="top-right" size={100} />
+      <CircleUi position="bottom-left" size={100} />
+      <CircleUi position="bottom-right" size={200} />
       <Form
         initialValues={initialValues}
         validationSchema={signupSchema}
