@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, TextInput, View} from 'react-native';
+import {Keyboard, StyleSheet, TextInput, View} from 'react-native';
 import AuthFormContainer from '../../components/AuthFormContainer';
 import AppButton from '../../ui/AppButton';
 import AppLink from '../../ui/AppLink';
@@ -30,11 +30,18 @@ export default function Verification() {
     setOtp([...newOtp]);
   };
 
+  const handlePaste = (value: string) => {
+    if (value.length >= 6) {
+      Keyboard.dismiss();
+      const newOtp = value.split('');
+      setOtp([...newOtp]);
+    }
+  };
+
   useEffect(() => {
     inputRef.current?.focus();
     return () => {};
   }, [activeOtpIndex]);
-
   return (
     <AuthFormContainer heading="Please check your email">
       <View style={styles.inputContainer}>
@@ -48,6 +55,8 @@ export default function Verification() {
               onKeyPress={({nativeEvent}) => {
                 handleChange(nativeEvent.key, index);
               }}
+              onChangeText={handlePaste}
+              value={otp[index] || ''}
             />
           );
         })}
