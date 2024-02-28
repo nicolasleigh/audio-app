@@ -6,6 +6,7 @@ import Form from '../../components/form';
 import SubmitBtn from '../../components/form/SubmitBtn';
 import colors from '../../utils/colors';
 import PasswordVisibilityIcon from '../../ui/PasswordVisibilityIcon';
+import AppLink from '../../ui/AppLink';
 
 const initialValues = {
   name: '',
@@ -67,6 +68,11 @@ export default function SignUp() {
             onRightIconPress={() => setSecureEntry(prev => !prev)}
           />
           <SubmitBtn title="Sign Up" />
+
+          <View style={styles.linkContainer}>
+            <AppLink title="I Lost My Password" />
+            <AppLink title="Sign in" />
+          </View>
         </View>
       </Form>
     </SafeAreaView>
@@ -86,5 +92,11 @@ const styles = StyleSheet.create({
   },
   marginBottom: {
     marginBottom: 20,
+  },
+  linkContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 20,
   },
 });
