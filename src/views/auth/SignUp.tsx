@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import * as yup from 'yup';
-import Icon from 'react-native-vector-icons/AntDesign';
 import AuthInputField from '../../components/AuthInputField';
 import Form from '../../components/form';
-import colors from '../../utils/colors';
 import SubmitBtn from '../../components/form/SubmitBtn';
+import colors from '../../utils/colors';
+import PasswordVisibilityIcon from '../../ui/PasswordVisibilityIcon';
 
 const initialValues = {
   name: '',
@@ -32,6 +32,7 @@ const signupSchema = yup.object({
 });
 
 export default function SignUp() {
+  const [secureEntry, setSecureEntry] = useState(true);
   return (
     <SafeAreaView style={styles.container}>
       <Form
@@ -60,11 +61,12 @@ export default function SignUp() {
             placeholder="********"
             label="Password"
             autoCapitalize="none"
-            secureTextEntry
+            secureTextEntry={secureEntry}
             containerStyle={styles.marginBottom}
+            rightIcon={<PasswordVisibilityIcon privateIcon={secureEntry} />}
+            onRightIconPress={() => setSecureEntry(prev => !prev)}
           />
           <SubmitBtn title="Sign Up" />
-          <Icon name="customerservice" size={30} color="white" />
         </View>
       </Form>
     </SafeAreaView>
