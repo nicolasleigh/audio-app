@@ -36,6 +36,37 @@ export default function SignUp() {
   const [secureEntry, setSecureEntry] = useState(true);
   return (
     <SafeAreaView style={styles.container}>
+      <View
+        style={{
+          width: 200,
+          height: 200,
+          position: 'absolute',
+          top: -200 / 2,
+          left: -200 / 2,
+        }}>
+        <View
+          style={{
+            width: 200,
+            height: 200,
+            borderRadius: 200 / 2,
+            backgroundColor: colors.SECONDARY,
+            opacity: 0.3,
+          }}
+        />
+        <View
+          style={{
+            width: 200 / 1.5,
+            height: 200 / 1.5,
+            borderRadius: 200 / 2,
+            backgroundColor: colors.SECONDARY,
+            opacity: 0.3,
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: [{translateX: -200 / 3}, {translateY: -200 / 3}],
+          }}
+        />
+      </View>
       <Form
         initialValues={initialValues}
         validationSchema={signupSchema}
