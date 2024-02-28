@@ -9,6 +9,11 @@ export default function SignUp() {
     email: '',
     password: '',
   });
+  const [errorInfo, setErrorInfo] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.formContainer}>
@@ -19,6 +24,7 @@ export default function SignUp() {
           onChange={text => {
             setUserInfo({...userInfo, name: text});
           }}
+          errorMsg={errorInfo.name}
         />
         <AuthInputField
           placeholder="john@email.com"
@@ -29,6 +35,7 @@ export default function SignUp() {
           onChange={text => {
             setUserInfo({...userInfo, email: text});
           }}
+          errorMsg={errorInfo.email}
         />
         <AuthInputField
           placeholder="********"
@@ -38,8 +45,40 @@ export default function SignUp() {
           onChange={text => {
             setUserInfo({...userInfo, password: text});
           }}
+          errorMsg={errorInfo.password}
         />
-        <Button title="Sign up" onPress={() => console.log(userInfo)} />
+        <Button
+          title="Sign up"
+          onPress={() => {
+            if (!userInfo.name) {
+              return setErrorInfo({
+                name: 'Name is required',
+                email: '',
+                password: '',
+              });
+            }
+            if (!userInfo.email) {
+              return setErrorInfo({
+                email: 'Email is required',
+                name: '',
+                password: '',
+              });
+            }
+            if (!userInfo.password) {
+              return setErrorInfo({
+                password: 'Password is required',
+                name: '',
+                email: '',
+              });
+            }
+            setErrorInfo({
+              password: '',
+              name: '',
+              email: '',
+            });
+            console.log(userInfo);
+          }}
+        />
       </View>
     </SafeAreaView>
   );

@@ -18,6 +18,7 @@ interface Props {
   secureTextEntry?: boolean;
   containerStyle?: StyleProp<TextStyle>;
   onChange?: (text: string) => void;
+  errorMsg?: string;
 }
 
 export default function AuthInputField({
@@ -27,11 +28,15 @@ export default function AuthInputField({
   autoCapitalize,
   secureTextEntry,
   containerStyle,
+  errorMsg,
   onChange,
 }: Props) {
   return (
     <View style={[styles.container, containerStyle]}>
-      <Text style={styles.label}>{label}</Text>
+      <View style={styles.labelContainer}>
+        <Text style={styles.label}>{label}</Text>
+        <Text style={styles.errorMsg}>{errorMsg}</Text>
+      </View>
       <AppInput
         placeholder={placeholder}
         keyboardType={keyboardType}
@@ -45,8 +50,16 @@ export default function AuthInputField({
 
 const styles = StyleSheet.create({
   container: {},
+  labelContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 5,
+  },
   label: {
     color: colors.CONTRAST,
-    padding: 5,
+  },
+  errorMsg: {
+    color: colors.ERROR,
   },
 });
