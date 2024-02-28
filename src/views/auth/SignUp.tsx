@@ -1,6 +1,7 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import * as yup from 'yup';
+import Icon from 'react-native-vector-icons/AntDesign';
 import AuthInputField from '../../components/AuthInputField';
 import Form from '../../components/form';
 import colors from '../../utils/colors';
@@ -63,6 +64,7 @@ export default function SignUp() {
             containerStyle={styles.marginBottom}
           />
           <SubmitBtn title="Sign Up" />
+          <Icon name="customerservice" size={30} color="white" />
         </View>
       </Form>
     </SafeAreaView>
