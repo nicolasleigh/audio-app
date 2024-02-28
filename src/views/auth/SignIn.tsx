@@ -7,6 +7,8 @@ import Form from '../../components/form';
 import SubmitBtn from '../../components/form/SubmitBtn';
 import AppLink from '../../ui/AppLink';
 import PasswordVisibilityIcon from '../../ui/PasswordVisibilityIcon';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {AuthStackParamList} from '../../@types/navigation';
 
 const initialValues = {
   email: '',
@@ -26,8 +28,9 @@ const signinSchema = yup.object({
     .required('Password is required'),
 });
 
-export default function SignIn() {
+export default function SignIn({}) {
   const [secureEntry, setSecureEntry] = useState(true);
+  const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
   return (
     <Form
       initialValues={initialValues}
@@ -58,8 +61,18 @@ export default function SignIn() {
           <SubmitBtn title="Sign in" />
 
           <View style={styles.linkContainer}>
-            <AppLink title="I Lost My Password" />
-            <AppLink title="Sign up" />
+            <AppLink
+              title="I Lost My Password"
+              onPress={() => {
+                navigation.navigate('LostPassword');
+              }}
+            />
+            <AppLink
+              title="Sign up"
+              onPress={() => {
+                navigation.navigate('SignUp');
+              }}
+            />
           </View>
         </View>
       </AuthFormContainer>
