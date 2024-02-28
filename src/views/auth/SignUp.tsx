@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import * as yup from 'yup';
 import AuthInputField from '../../components/AuthInputField';
 import Form from '../../components/form';
@@ -41,6 +41,23 @@ export default function SignUp() {
       <CircleUi position="top-right" size={100} />
       <CircleUi position="bottom-left" size={100} />
       <CircleUi position="bottom-right" size={200} />
+
+      <View style={{width: '100%', paddingHorizontal: 15, marginBottom: 20}}>
+        <Image source={require('../../assets/logo.png')} />
+        <Text
+          style={{
+            color: colors.SECONDARY,
+            fontSize: 25,
+            fontWeight: 'bold',
+            paddingVertical: 5,
+          }}>
+          Welcome!
+        </Text>
+        <Text style={{color: colors.CONTRAST, fontSize: 16}}>
+          Let's get started by creating your account.
+        </Text>
+      </View>
+
       <Form
         initialValues={initialValues}
         validationSchema={signupSchema}
