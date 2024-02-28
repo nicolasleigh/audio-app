@@ -1,5 +1,5 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {StyleSheet, TextInput, View} from 'react-native';
 import AuthFormContainer from '../../components/AuthFormContainer';
 import AppButton from '../../ui/AppButton';
 import AppLink from '../../ui/AppLink';
@@ -8,11 +8,15 @@ import OTPField from '../../ui/OTPField';
 const otpFields = new Array(6).fill('');
 
 export default function Verification() {
+  // const [otp, setOtp] = useState([...otpFields]);
+
+  const inputRef = useRef<TextInput>(null);
+
   return (
     <AuthFormContainer heading="Please check your email">
       <View style={styles.inputContainer}>
         {otpFields.map((_, index) => {
-          return <OTPField key={index} placeholder="*" />;
+          return <OTPField ref={inputRef} key={index} placeholder="*" />;
         })}
       </View>
 
