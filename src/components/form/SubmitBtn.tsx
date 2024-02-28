@@ -1,6 +1,6 @@
 import {useFormikContext} from 'formik';
 import React from 'react';
-import {Button} from 'react-native';
+import AppButton from '../../ui/AppButton';
 
 interface Props {
   title: string;
@@ -8,5 +8,5 @@ interface Props {
 
 export default function SubmitBtn({title}: Props) {
   const {handleSubmit} = useFormikContext();
-  return <Button title={title} onPress={() => handleSubmit()} />;
+  return <AppButton title={title} onPress={() => handleSubmit()} />;
 }

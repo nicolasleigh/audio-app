@@ -60,6 +60,7 @@ export default function SignUp() {
             label="Password"
             autoCapitalize="none"
             secureTextEntry
+            containerStyle={styles.marginBottom}
           />
           <SubmitBtn title="Sign Up" />
         </View>
