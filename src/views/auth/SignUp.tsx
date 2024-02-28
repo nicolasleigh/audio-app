@@ -3,6 +3,7 @@ import React from 'react';
 import {Button, SafeAreaView, StyleSheet, View} from 'react-native';
 import AuthInputField from '../../components/AuthInputField';
 import colors from '../../utils/colors';
+import * as yup from 'yup';
 
 const initialValues = {
   name: '',
@@ -10,15 +11,34 @@ const initialValues = {
   password: '',
 };
 
+const signupSchema = yup.object({
+  name: yup.string().trim().min(3, 'Invalid name').required('Name is required'),
+  email: yup
+    .string()
+    .trim()
+    .email('Invalid email')
+    .required('Email is required'),
+  password: yup
+    .string()
+    .trim()
+    .min(6, 'Password is too short')
+    .matches(
+      /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#\$%\^&\*])[a-zA-Z\d!@#\$%\^&\*]+$/,
+      'Password is too simple',
+    )
+    .required('Password is required'),
+});
+
 export default function SignUp() {
   return (
     <SafeAreaView style={styles.container}>
       <Formik
         initialValues={initialValues}
+        validationSchema={signupSchema}
         onSubmit={values => {
           console.log(values);
         }}>
-        {({handleSubmit, values, handleChange}) => {
+        {({handleSubmit, values, handleChange, errors}) => {
           return (
             <View style={styles.formContainer}>
               <AuthInputField
@@ -27,6 +47,7 @@ export default function SignUp() {
                 containerStyle={styles.marginBottom}
                 onChange={handleChange('name')}
                 value={values.name}
+                errorMsg={errors.name}
               />
               <AuthInputField
                 placeholder="john@email.com"
@@ -36,6 +57,7 @@ export default function SignUp() {
                 containerStyle={styles.marginBottom}
                 onChange={handleChange('email')}
                 value={values.email}
+                errorMsg={errors.email}
               />
               <AuthInputField
                 placeholder="********"
@@ -44,6 +66,7 @@ export default function SignUp() {
                 secureTextEntry
                 onChange={handleChange('password')}
                 value={values.password}
+                errorMsg={errors.password}
               />
               <Button title="Sign up" onPress={() => handleSubmit()} />
             </View>
