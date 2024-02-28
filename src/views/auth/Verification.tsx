@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, TextInput, View} from 'react-native';
 import AuthFormContainer from '../../components/AuthFormContainer';
 import AppButton from '../../ui/AppButton';
@@ -8,15 +8,48 @@ import OTPField from '../../ui/OTPField';
 const otpFields = new Array(6).fill('');
 
 export default function Verification() {
-  // const [otp, setOtp] = useState([...otpFields]);
+  const [otp, setOtp] = useState([...otpFields]);
+  const [activeOtpIndex, setActiveOtpIndex] = useState(0);
 
   const inputRef = useRef<TextInput>(null);
+
+  const handleChange = (value: string, index: number) => {
+    const newOtp = [...otp];
+    if (value === 'Backspace') {
+      // move to previous input only if the current input is empty
+      if (!newOtp[index]) {
+        setActiveOtpIndex(index - 1);
+      }
+      newOtp[index] = '';
+    } else {
+      // update the current input and move to the next input
+      setActiveOtpIndex(index + 1);
+      newOtp[index] = value;
+    }
+
+    setOtp([...newOtp]);
+  };
+
+  useEffect(() => {
+    inputRef.current?.focus();
+    return () => {};
+  }, [activeOtpIndex]);
 
   return (
     <AuthFormContainer heading="Please check your email">
       <View style={styles.inputContainer}>
         {otpFields.map((_, index) => {
-          return <OTPField ref={inputRef} key={index} placeholder="*" />;
+          return (
+            <OTPField
+              ref={activeOtpIndex === index ? inputRef : null}
+              key={index}
+              placeholder="*"
+              keyboardType="number-pad"
+              onKeyPress={({nativeEvent}) => {
+                handleChange(nativeEvent.key, index);
+              }}
+            />
+          );
         })}
       </View>
 
