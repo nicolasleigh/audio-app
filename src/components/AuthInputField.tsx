@@ -9,17 +9,16 @@ import {
 } from 'react-native';
 import AppInput from '../ui/AppInput';
 import colors from '../utils/colors';
+import {useFormikContext} from 'formik';
 
 interface Props {
+  name: string;
   label?: string;
   placeholder?: string;
   keyboardType?: TextInputProps['keyboardType'];
   autoCapitalize?: TextInputProps['autoCapitalize'];
   secureTextEntry?: boolean;
   containerStyle?: StyleProp<TextStyle>;
-  onChange?: (text: string) => void;
-  errorMsg?: string;
-  value?: string;
 }
 
 export default function AuthInputField({
@@ -29,10 +28,14 @@ export default function AuthInputField({
   autoCapitalize,
   secureTextEntry,
   containerStyle,
-  errorMsg,
-  onChange,
-  value,
+  name,
 }: Props) {
+  const {handleChange, handleBlur, values, errors, touched} = useFormikContext<{
+    [key: string]: string;
+  }>();
+
+  const errorMsg = touched[name] && errors[name] ? errors[name] : '';
+
   return (
     <View style={[styles.container, containerStyle]}>
       <View style={styles.labelContainer}>
@@ -44,8 +47,9 @@ export default function AuthInputField({
         keyboardType={keyboardType}
         autoCapitalize={autoCapitalize}
         secureTextEntry={secureTextEntry}
-        onChangeText={onChange}
-        value={value}
+        onChangeText={handleChange(name)}
+        value={values[name]}
+        onBlur={handleBlur(name)}
       />
     </View>
   );
