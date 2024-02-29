@@ -1,7 +1,6 @@
-import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
-import AuthNavigator from './src/navigation/AuthNavigator';
 import {Provider} from 'react-redux';
+import AppNavigator from './src/navigation';
 import store from './src/store';
 
 export default function App() {
@@ -11,9 +10,7 @@ export default function App() {
   // return <Verification />;
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <AuthNavigator />
-      </NavigationContainer>
+      <AppNavigator />
     </Provider>
   );
 }

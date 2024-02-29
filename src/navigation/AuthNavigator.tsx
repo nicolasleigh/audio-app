@@ -5,12 +5,16 @@ import SignIn from '../views/auth/SignIn';
 import SignUp from '../views/auth/SignUp';
 import Verification from '../views/auth/Verification';
 import {AuthStackParamList} from '../@types/navigation';
+import {useSelector} from 'react-redux';
+import {getAuthState} from '../store/auth';
 
 interface Props {}
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
 export default function AuthNavigator({}: Props) {
+  const authState = useSelector(getAuthState);
+  console.log(authState);
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="SignIn" component={SignIn} />
