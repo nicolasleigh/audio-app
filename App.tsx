@@ -1,11 +1,8 @@
-import React from 'react';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import SignUp from './src/views/auth/SignUp';
-import SignIn from './src/views/auth/SignIn';
-import LostPassword from './src/views/auth/LostPassword';
-import Verification from './src/views/auth/Verification';
 import {NavigationContainer} from '@react-navigation/native';
+import React from 'react';
 import AuthNavigator from './src/navigation/AuthNavigator';
+import {Provider} from 'react-redux';
+import store from './src/store';
 
 export default function App() {
   // return <SignUp />;
@@ -13,8 +10,10 @@ export default function App() {
   // return <LostPassword />;
   // return <Verification />;
   return (
-    <NavigationContainer>
-      <AuthNavigator />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <AuthNavigator />
+      </NavigationContainer>
+    </Provider>
   );
 }
