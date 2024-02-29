@@ -9,7 +9,14 @@ import AppLink from '../../ui/AppLink';
 import PasswordVisibilityIcon from '../../ui/PasswordVisibilityIcon';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {AuthStackParamList} from '../../@types/navigation';
+import {FormikHelpers} from 'formik';
+import client from '../../api/client';
 
+interface NewUser {
+  name: string;
+  email: string;
+  password: string;
+}
 const initialValues = {
   name: '',
   email: '',
@@ -37,13 +44,24 @@ const signupSchema = yup.object({
 export default function SignUp() {
   const [secureEntry, setSecureEntry] = useState(true);
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
+  const handleSubmit = async (
+    values: NewUser,
+    action: FormikHelpers<NewUser>,
+  ) => {
+    try {
+      // const {data} = await client.post('/auth/create', values);
+      const {data} = await client.post('auth/create', values);
+      console.log(data);
+    } catch (error) {
+      console.log('Sign up error ', error);
+    }
+  };
+
   return (
     <Form
       initialValues={initialValues}
       validationSchema={signupSchema}
-      onSubmit={values => {
-        console.log(values);
-      }}>
+      onSubmit={handleSubmit}>
       <AuthFormContainer
         heading="Welcome"
         subHeading="Let's get started by creating your account.">
