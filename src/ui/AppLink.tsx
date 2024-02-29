@@ -5,11 +5,14 @@ import colors from '../utils/colors';
 interface Props {
   title: string;
   onPress?: () => void;
+  active?: boolean;
 }
 
-export default function AppLink({title, onPress}: Props) {
+export default function AppLink({title, onPress, active = true}: Props) {
   return (
-    <Pressable onPress={onPress}>
+    <Pressable
+      onPress={active ? onPress : null}
+      style={{opacity: active ? 1 : 0.4}}>
       <Text style={styles.title}>{title}</Text>
     </Pressable>
   );
