@@ -7,6 +7,12 @@ interface Props {
 }
 
 export default function SubmitBtn({title}: Props) {
-  const {handleSubmit} = useFormikContext();
-  return <AppButton busy title={title} onPress={() => handleSubmit()} />;
+  const {handleSubmit, isSubmitting} = useFormikContext();
+  return (
+    <AppButton
+      busy={isSubmitting}
+      title={title}
+      onPress={() => handleSubmit()}
+    />
+  );
 }

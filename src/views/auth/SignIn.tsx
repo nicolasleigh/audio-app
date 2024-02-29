@@ -41,15 +41,16 @@ export default function SignIn({}) {
 
   const handleSubmit = async (
     values: SignInUserInfo,
-    action: FormikHelpers<SignInUserInfo>,
+    actions: FormikHelpers<SignInUserInfo>,
   ) => {
+    actions.setSubmitting(true);
     try {
-      // const {data} = await client.post('/auth/create', values);
       const {data} = await client.post('auth/sign-in', values);
       console.log(data);
     } catch (error) {
       console.log('Sign in error ', error.response.data.error);
     }
+    actions.setSubmitting(false);
   };
 
   return (

@@ -46,8 +46,9 @@ export default function SignUp() {
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
   const handleSubmit = async (
     values: NewUser,
-    action: FormikHelpers<NewUser>,
+    actions: FormikHelpers<NewUser>,
   ) => {
+    actions.setSubmitting(true);
     try {
       // const {data} = await client.post('/auth/create', values);
       const {data} = await client.post('auth/create', values);
@@ -56,6 +57,7 @@ export default function SignUp() {
     } catch (error) {
       console.log('Sign up error ', error);
     }
+    actions.setSubmitting(false);
   };
 
   return (

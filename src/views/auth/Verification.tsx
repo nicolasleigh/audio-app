@@ -16,6 +16,7 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'Verification'>;
 export default function Verification(props: Props) {
   const [otp, setOtp] = useState([...otpFields]);
   const [activeOtpIndex, setActiveOtpIndex] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
 
   const {userInfo} = props.route.params;
@@ -50,10 +51,10 @@ export default function Verification(props: Props) {
   const isValidOtp = otp.every(value => value.trim());
 
   const handleSubmit = async () => {
-    console.log(otp.join(''));
     if (!isValidOtp) {
       return;
     }
+    setSubmitting(true);
     try {
       const {data} = await client.post('/auth/verify-email', {
         userId: userInfo.id,
@@ -64,6 +65,7 @@ export default function Verification(props: Props) {
     } catch (error) {
       console.log('Verification error ', error.response.data.error);
     }
+    setSubmitting(false);
   };
 
   useEffect(() => {
@@ -91,7 +93,7 @@ export default function Verification(props: Props) {
         })}
       </View>
 
-      <AppButton title="Submit" onPress={handleSubmit} />
+      <AppButton busy={submitting} title="Submit" onPress={handleSubmit} />
       <View style={styles.linkContainer}>
         <AppLink title="Re-send OTP" />
       </View>
