@@ -1,16 +1,18 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text} from 'react-native';
 import colors from '../utils/colors';
+import Loader from './Loader';
 
 interface Props {
   title: string;
   onPress?: () => void;
+  busy?: boolean;
 }
 
-export default function AppButton({title, onPress}: Props) {
+export default function AppButton({title, onPress, busy}: Props) {
   return (
     <Pressable onPress={onPress} style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      {!busy ? <Text style={styles.title}>{title}</Text> : <Loader />}
     </Pressable>
   );
 }
