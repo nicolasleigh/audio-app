@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Modal,
   Pressable,
@@ -10,26 +10,55 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../utils/colors';
 
-interface Props {
+interface Props<T> {
   visible?: boolean;
   title?: string;
+  data: T[];
+  renderItem(item: T): JSX.Element;
+  onSelect(item: T, index: number): void;
+  onRequestClose?(): void;
 }
 
-export default function CategorySelector({visible = false, title}: Props) {
+export default function CategorySelector<T extends any>({
+  visible = false,
+  title,
+  data,
+  renderItem,
+  onSelect,
+  onRequestClose,
+}: Props<T>) {
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const handleSelect = (item: T, index: number) => {
+    setSelectedIndex(index);
+    onSelect(item, index);
+    onRequestClose && onRequestClose();
+  };
+
   return (
-    <Modal visible={visible} transparent>
+    <Modal onRequestClose={onRequestClose} visible={visible} transparent>
       <Pressable style={styles.backdrop} />
       <View style={styles.modalContainer}>
         <View style={styles.modal}>
           <Text style={styles.title}>{title}</Text>
           <ScrollView>
-            <Pressable style={styles.selectorContainer}>
-              <MaterialCommunityIcons
-                name="radiobox-marked"
-                color={colors.SECONDARY}
-              />
-              <Text style={{padding: 10}}>Category 1</Text>
-            </Pressable>
+            {data.map((item, index) => {
+              return (
+                <Pressable
+                  onPress={() => handleSelect(item, index)}
+                  key={index}
+                  style={styles.selectorContainer}>
+                  {selectedIndex === index ? (
+                    <MaterialCommunityIcons
+                      name="radiobox-marked"
+                      color={colors.SECONDARY}
+                    />
+                  ) : (
+                    <MaterialCommunityIcons name="radiobox-blank" />
+                  )}
+                  {renderItem(item)}
+                </Pressable>
+              );
+            })}
           </ScrollView>
         </View>
       </View>

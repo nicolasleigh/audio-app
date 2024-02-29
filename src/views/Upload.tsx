@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Pressable,
   ScrollView,
@@ -16,6 +16,7 @@ import CategorySelector from '../components/CategorySelector';
 interface Props {}
 
 export default function Upload({}: Props) {
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
   return (
     <ScrollView style={styles.container}>
       <View style={styles.fileSelectorContainer}>
@@ -55,7 +56,20 @@ export default function Upload({}: Props) {
           multiline
         />
 
-        <CategorySelector visible title='Category' />
+        <CategorySelector
+          visible={showCategoryModal}
+          onRequestClose={() => {
+            setShowCategoryModal(false);
+          }}
+          title="Category"
+          data={['Business']}
+          renderItem={item => {
+            return <Text style={styles.category}>{item}</Text>;
+          }}
+          onSelect={item => {
+            console.log(item);
+          }}
+        />
         <AppButton borderRadius={7} title="Submit" />
       </View>
     </ScrollView>
@@ -86,4 +100,5 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlignVertical: 'top',
   },
+  category: {padding: 10},
 });
