@@ -8,6 +8,12 @@ import SubmitBtn from '../../components/form/SubmitBtn';
 import AppLink from '../../ui/AppLink';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {AuthStackParamList} from '../../@types/navigation';
+import {FormikHelpers} from 'formik';
+import client from '../../api/client';
+
+interface initialValues {
+  email: string;
+}
 
 const initialValues = {
   email: '',
@@ -21,15 +27,27 @@ const lostPasswordSchema = yup.object({
     .required('Email is required'),
 });
 
+const handleSubmit = async (
+  values: initialValues,
+  actions: FormikHelpers<initialValues>,
+) => {
+  actions.setSubmitting(true);
+  try {
+    const {data} = await client.post('auth/forget-password', values);
+    console.log(data);
+  } catch (error) {
+    console.log('Lost password error ', error.response.data.error);
+  }
+  actions.setSubmitting(false);
+};
+
 export default function LostPassword() {
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
   return (
     <Form
       initialValues={initialValues}
       validationSchema={lostPasswordSchema}
-      onSubmit={values => {
-        console.log(values);
-      }}>
+      onSubmit={handleSubmit}>
       <AuthFormContainer
         heading="Forget Password?"
         subHeading="Did you forget your password? Don't worry, we'll help you get it back.">
