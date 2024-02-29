@@ -4,12 +4,18 @@ import AuthFormContainer from '../../components/AuthFormContainer';
 import AppButton from '../../ui/AppButton';
 import AppLink from '../../ui/AppLink';
 import OTPField from '../../ui/OTPField';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AuthStackParamList} from '../../@types/navigation';
 
 const otpFields = new Array(6).fill('');
 
-export default function Verification() {
+type Props = NativeStackScreenProps<AuthStackParamList, 'Verification'>;
+
+export default function Verification(props: Props) {
   const [otp, setOtp] = useState([...otpFields]);
   const [activeOtpIndex, setActiveOtpIndex] = useState(0);
+
+  console.log(props.route.params.userInfo);
 
   const inputRef = useRef<TextInput>(null);
 
