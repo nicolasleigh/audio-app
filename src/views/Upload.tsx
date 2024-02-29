@@ -10,6 +10,8 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../utils/colors';
 import FileSelector from '../components/FileSelector';
+import AppButton from '../ui/AppButton';
+import CategorySelector from '../components/CategorySelector';
 
 interface Props {}
 
@@ -52,6 +54,9 @@ export default function Upload({}: Props) {
           numberOfLines={10}
           multiline
         />
+
+        <CategorySelector visible title='Category' />
+        <AppButton borderRadius={7} title="Submit" />
       </View>
     </ScrollView>
   );
