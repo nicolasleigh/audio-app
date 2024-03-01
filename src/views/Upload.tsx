@@ -14,6 +14,7 @@ import AppButton from '../ui/AppButton';
 import CategorySelector from '../components/CategorySelector';
 import {categories} from '../utils/categories';
 import {DocumentPickerResponse, types} from 'react-native-document-picker';
+import * as yup from 'yup';
 
 interface Props {}
 
@@ -31,14 +32,39 @@ const defaultForm: FormFields = {
   about: '',
 };
 
+const audioInfoSchema = yup.object().shape({
+  title: yup.string().trim().required('Title is missing'),
+  category: yup.string().oneOf(categories, 'Category is missing'),
+  about: yup.string().trim().required('About is missing'),
+  file: yup.object().shape({
+    uri: yup.string().required('Audio file is missing'),
+    name: yup.string().required('Audio file is missing'),
+    type: yup.string().required('Audio file is missing'),
+    size: yup.number().required('Audio file is missing'),
+  }),
+  poster: yup.object().shape({
+    uri: yup.string(),
+    name: yup.string(),
+    type: yup.string(),
+    size: yup.number(),
+  }),
+});
+
 export default function Upload({}: Props) {
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [audioInfo, setAudioInfo] = useState({
     ...defaultForm,
   });
 
-  const handleUpload = () => {
-    console.log(audioInfo);
+  const handleUpload = async () => {
+    try {
+      const data = await audioInfoSchema.validate(audioInfo);
+      console.log(data);
+    } catch (error) {
+      if (error instanceof yup.ValidationError) {
+        console.log('Validation error ', error.message);
+      } else console.log(error);
+    }
   };
 
   return (
