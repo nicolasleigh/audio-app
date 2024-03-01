@@ -7,12 +7,21 @@ import colors from '../utils/colors';
 
 interface Props {}
 
+const dummyData = new Array(4).fill('');
+
 export default function LatestUploads({}: Props) {
   const {data, isLoading} = useFetchLatestAudios();
   if (isLoading) {
     return (
       <PulseAnimationContainer>
-        <Text style={{color: 'white', fontSize: 25}}>Loading</Text>
+        <View style={styles.container}>
+          <View style={styles.dummyTitleView} />
+          <View style={styles.dummyContainer}>
+            {dummyData.map((_, index) => {
+              return <View key={index} style={styles.dummyView} />;
+            })}
+          </View>
+        </View>
       </PulseAnimationContainer>
     );
   }
@@ -40,5 +49,22 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 15,
+  },
+  dummyTitleView: {
+    height: 20,
+    width: 150,
+    backgroundColor: colors.INACTIVE_CONTRAST,
+    marginBottom: 15,
+    borderRadius: 5,
+  },
+  dummyView: {
+    height: 100,
+    width: 100,
+    backgroundColor: colors.INACTIVE_CONTRAST,
+    marginRight: 15,
+    borderRadius: 5,
+  },
+  dummyContainer: {
+    flexDirection: 'row',
   },
 });
