@@ -11,6 +11,7 @@ import {Keys, getFromAsyncStorage} from '../utils/asyncStorage';
 import catchAsyncError from '../api/catchError';
 import {useDispatch} from 'react-redux';
 import {updateNotification} from '../store/notification';
+import PlaylistModal from '../components/PlaylistModal';
 
 interface Props {}
 
@@ -88,6 +89,18 @@ export default function Home({}: Props) {
             </Pressable>
           );
         }}
+      />
+
+      <PlaylistModal
+        visible
+        list={[
+          {title: 'Playlist one', visibility: 'private', id: '1'},
+          {
+            title: 'Playlist two',
+            visibility: 'public',
+            id: '2',
+          },
+        ]}
       />
     </View>
   );
