@@ -19,6 +19,9 @@ interface Props {}
 export default function Home({}: Props) {
   const [showOptions, setShowOptions] = useState(false);
   const [selectedAudio, setSelectedAudio] = useState<AudioData>();
+  const [showPlaylistModal, setShowPlaylistModal] = useState(false);
+  const [showPlaylistForm, setShowPlaylistForm] = useState(false);
+
   const dispatch = useDispatch();
 
   const handleOnFavPress = async () => {
@@ -48,6 +51,11 @@ export default function Home({}: Props) {
     setSelectedAudio(audio);
     setShowOptions(true);
   };
+
+  const handleOnAddToPlaylist = () => {
+    setShowOptions(false);
+    setShowPlaylistModal(true);
+  };
   return (
     <View style={styles.container}>
       <LatestUploads
@@ -71,6 +79,7 @@ export default function Home({}: Props) {
           {
             title: 'Add to playlist',
             icon: 'playlist-music',
+            onPress: handleOnAddToPlaylist,
           },
           {
             title: 'Add to favorites',
@@ -92,7 +101,23 @@ export default function Home({}: Props) {
         }}
       />
 
-      <PlaylistForm />
+      <PlaylistModal
+        visible={showPlaylistModal}
+        onRequestClose={() => {
+          setShowPlaylistModal(false);
+        }}
+        list={[]}
+        onCreateNew={() => {
+          setShowPlaylistModal(false);
+          setShowPlaylistForm(true);
+        }}
+      />
+      <PlaylistForm
+        visible={showPlaylistForm}
+        onRequestClose={() => {
+          setShowPlaylistForm(false);
+        }}
+      />
     </View>
   );
 }

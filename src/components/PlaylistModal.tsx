@@ -10,23 +10,30 @@ interface Props {
   visible?: boolean;
   onRequestClose?(): void;
   list: Playlist[];
+  onCreateNew(): void;
 }
 
 interface ListItemProps {
   title: string;
   icon: JSX.Element;
+  onPress?(): void;
 }
 
-const ListItem = ({title, icon}: ListItemProps) => {
+const ListItem = ({title, icon, onPress}: ListItemProps) => {
   return (
-    <Pressable style={styles.listItemContainer}>
+    <Pressable onPress={onPress} style={styles.listItemContainer}>
       {icon}
       <Text style={styles.listItemTitle}>{title}</Text>
     </Pressable>
   );
 };
 
-export default function PlaylistModal({visible, onRequestClose, list}: Props) {
+export default function PlaylistModal({
+  visible,
+  onRequestClose,
+  list,
+  onCreateNew,
+}: Props) {
   return (
     <BasicModalContainer visible={visible} onRequestClose={onRequestClose}>
       {/* render playlist */}
@@ -52,6 +59,7 @@ export default function PlaylistModal({visible, onRequestClose, list}: Props) {
       <ListItem
         icon={<AntDesign size={20} name="plus" color={colors.PRIMARY} />}
         title="Create New"
+        onPress={onCreateNew}
       />
     </BasicModalContainer>
   );

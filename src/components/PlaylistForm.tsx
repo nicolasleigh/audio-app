@@ -5,12 +5,14 @@ import BasicModalContainer from '../ui/BasicModalContainer';
 import colors from '../utils/colors';
 
 interface Props {
-  status: 'private';
+  status?: 'private';
+  visible: boolean;
+  onRequestClose(): void;
 }
 
-export default function PlaylistForm({status}: Props) {
+export default function PlaylistForm({status, visible, onRequestClose}: Props) {
   return (
-    <BasicModalContainer>
+    <BasicModalContainer visible={visible} onRequestClose={onRequestClose}>
       <View>
         <Text style={styles.title}>Create New Playlist</Text>
         <TextInput placeholder="Title" style={styles.input} />
@@ -36,20 +38,6 @@ export default function PlaylistForm({status}: Props) {
     </BasicModalContainer>
   );
 }
-
-// {
-//    <PlaylistModal
-// visible
-// list={[
-//   {title: 'Playlist one', visibility: 'private', id: '1'},
-//   {
-//     title: 'Playlist two',
-//     visibility: 'public',
-//     id: '2',
-//   },
-// ]}
-// />
-// }
 
 const styles = StyleSheet.create({
   title: {
