@@ -3,8 +3,11 @@ import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useFetchRecommendedAudios} from '../hooks/query';
 import colors from '../utils/colors';
 import GridView from '../ui/GridView';
+import PulseAnimationContainer from '../ui/PulseAnimationContainer';
 
 interface Props {}
+
+const dummyData = new Array(6).fill('');
 
 export default function RecommendedAudios({}: Props) {
   const {data, isLoading} = useFetchRecommendedAudios();
@@ -12,6 +15,23 @@ export default function RecommendedAudios({}: Props) {
   const getPoster = (poster?: string) => {
     return poster ? {uri: poster} : require('../assets/music.png');
   };
+
+  if (isLoading) {
+    return (
+      <PulseAnimationContainer>
+        <View style={styles.container}>
+          <View style={styles.dummyTitleView} />
+          <GridView
+            col={3}
+            data={dummyData}
+            renderItem={() => {
+              return <View style={styles.dummyView} />;
+            }}
+          />
+        </View>
+      </PulseAnimationContainer>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -54,4 +74,20 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   poster: {width: '100%', aspectRatio: 1, borderRadius: 7},
+  dummyTitleView: {
+    height: 20,
+    width: 150,
+    backgroundColor: colors.INACTIVE_CONTRAST,
+    marginBottom: 15,
+    borderRadius: 5,
+  },
+  dummyView: {
+    width: '100%',
+    aspectRatio: 1,
+    backgroundColor: colors.INACTIVE_CONTRAST,
+    borderRadius: 7,
+  },
+  dummyContainer: {
+    flexDirection: 'row',
+  },
 });
