@@ -15,6 +15,8 @@ import CategorySelector from '../components/CategorySelector';
 import {categories} from '../utils/categories';
 import {DocumentPickerResponse, types} from 'react-native-document-picker';
 import * as yup from 'yup';
+import client from '../api/client';
+import {Keys, getFromAsyncStorage} from '../utils/asyncStorage';
 
 interface Props {}
 
@@ -58,12 +60,37 @@ export default function Upload({}: Props) {
 
   const handleUpload = async () => {
     try {
-      const data = await audioInfoSchema.validate(audioInfo);
+      const finalData = await audioInfoSchema.validate(audioInfo);
+      const formData = new FormData();
+      formData.append('title', finalData.title);
+      formData.append('about', finalData.about);
+      formData.append('category', finalData.category);
+      formData.append('file', {
+        name: finalData.file.name,
+        type: finalData.file.type,
+        uri: finalData.file.uri,
+      });
+      if (finalData.poster.uri) {
+        formData.append('poster', {
+          name: finalData.poster.name,
+          type: finalData.poster.type,
+          uri: finalData.poster.uri,
+        });
+      }
+
+      const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
+
+      const {data} = await client.post('/audio/create', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
       console.log(data);
     } catch (error) {
       if (error instanceof yup.ValidationError) {
         console.log('Validation error ', error.message);
-      } else console.log(error);
+      } else console.log(error.response.data);
     }
   };
 
