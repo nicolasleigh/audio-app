@@ -5,18 +5,21 @@ import colors from '../utils/colors';
 interface Props {
   title: string;
   poster?: string;
+  onPress?(): void;
+  onLongPress?(): void;
 }
 
-export default function AudioCard({title, poster}: Props) {
+export default function AudioCard({
+  title,
+  poster,
+  onPress,
+  onLongPress,
+}: Props) {
   const source = poster ? {uri: poster} : require('../assets/music.png');
   return (
     <Pressable
-      onPress={() => {
-        console.log('on audio press');
-      }}
-      onLongPress={() => {
-        console.log('on audio long press');
-      }}
+      onPress={onPress}
+      onLongPress={onLongPress}
       style={styles.container}>
       <Image source={source} style={styles.poster} />
       <Text numberOfLines={2} ellipsizeMode="tail" style={styles.title}>

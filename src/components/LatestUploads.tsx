@@ -4,12 +4,16 @@ import {useFetchLatestAudios} from '../hooks/query';
 import AudioCard from '../ui/AudioCard';
 import PulseAnimationContainer from '../ui/PulseAnimationContainer';
 import colors from '../utils/colors';
+import {AudioData} from '../@types/audio';
 
-interface Props {}
+interface Props {
+  onAudioPress(item: AudioData, data: AudioData[]): void;
+  onAudioLongPress(item: AudioData, data: AudioData[]): void;
+}
 
 const dummyData = new Array(4).fill('');
 
-export default function LatestUploads({}: Props) {
+export default function LatestUploads({onAudioLongPress, onAudioPress}: Props) {
   const {data, isLoading} = useFetchLatestAudios();
   if (isLoading) {
     return (
@@ -32,7 +36,13 @@ export default function LatestUploads({}: Props) {
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {data?.map(item => {
           return (
-            <AudioCard key={item.id} title={item.title} poster={item.poster} />
+            <AudioCard
+              key={item.id}
+              title={item.title}
+              poster={item.poster}
+              onPress={() => onAudioPress(item, data)}
+              onLongPress={() => onAudioLongPress(item, data)}
+            />
           );
         })}
       </ScrollView>

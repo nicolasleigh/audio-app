@@ -8,8 +8,22 @@ interface Props {}
 export default function Home({}: Props) {
   return (
     <View style={styles.container}>
-      <LatestUploads />
-      <RecommendedAudios />
+      <LatestUploads
+        onAudioPress={item => {
+          console.log(item);
+        }}
+        onAudioLongPress={() => {
+          console.log('long press');
+        }}
+      />
+      <RecommendedAudios
+        onAudioPress={item => {
+          console.log(item);
+        }}
+        onAudioLongPress={() => {
+          console.log('long press');
+        }}
+      />
     </View>
   );
 }
