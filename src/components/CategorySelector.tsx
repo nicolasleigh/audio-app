@@ -36,8 +36,8 @@ export default function CategorySelector<T extends any>({
 
   return (
     <Modal onRequestClose={onRequestClose} visible={visible} transparent>
-      <Pressable style={styles.backdrop} />
       <View style={styles.modalContainer}>
+        <Pressable onPress={onRequestClose} style={styles.backdrop} />
         <View style={styles.modal}>
           <Text style={styles.title}>{title}</Text>
           <ScrollView>
@@ -70,12 +70,14 @@ const styles = StyleSheet.create({
   backdrop: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: colors.INACTIVE_CONTRAST,
+    zIndex: -1,
   },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent',
+    zIndex: 1,
   },
   modal: {
     width: '90%',

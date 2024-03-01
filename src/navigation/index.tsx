@@ -51,7 +51,7 @@ export default function AppNavigator({}: Props) {
         }
         // console.log('fetchAuthInfo ', data);
       } catch (error) {
-        console.log('Auth error ', error.response.data.error);
+        console.log('Auth error ', error.response?.data.error || error);
       }
       dispatch(updateBusy(false));
     };

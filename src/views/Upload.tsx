@@ -12,11 +12,15 @@ import colors from '../utils/colors';
 import FileSelector from '../components/FileSelector';
 import AppButton from '../ui/AppButton';
 import CategorySelector from '../components/CategorySelector';
+import {categories} from '../utils/categories';
 
 interface Props {}
 
 export default function Upload({}: Props) {
   const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [audioInfo, setAudioInfo] = useState({
+    category: '',
+  });
   return (
     <ScrollView style={styles.container}>
       <View style={styles.fileSelectorContainer}>
@@ -48,6 +52,14 @@ export default function Upload({}: Props) {
           placeholderTextColor={colors.INACTIVE_CONTRAST}
           style={styles.input}
         />
+        <Pressable
+          onPress={() => {
+            setShowCategoryModal(true);
+          }}
+          style={styles.categorySelector}>
+          <Text style={styles.categorySelectorTitle}>Category</Text>
+          <Text style={styles.selectedCategory}>{audioInfo.category}</Text>
+        </Pressable>
         <TextInput
           placeholder="About"
           placeholderTextColor={colors.INACTIVE_CONTRAST}
@@ -62,14 +74,15 @@ export default function Upload({}: Props) {
             setShowCategoryModal(false);
           }}
           title="Category"
-          data={['Business']}
+          data={categories}
           renderItem={item => {
             return <Text style={styles.category}>{item}</Text>;
           }}
           onSelect={item => {
-            console.log(item);
+            setAudioInfo({category: item});
           }}
         />
+        <View style={{marginBottom: 20}} />
         <AppButton borderRadius={7} title="Submit" />
       </View>
     </ScrollView>
@@ -97,8 +110,20 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 18,
     color: colors.CONTRAST,
-    marginBottom: 20,
     textAlignVertical: 'top',
   },
-  category: {padding: 10},
+  category: {padding: 10, color: colors.PRIMARY},
+  categorySelector: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  categorySelectorTitle: {
+    color: colors.CONTRAST,
+  },
+  selectedCategory: {
+    color: colors.SECONDARY,
+    marginLeft: 5,
+    fontStyle: 'italic',
+  },
 });
