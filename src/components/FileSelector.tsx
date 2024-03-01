@@ -8,16 +8,44 @@ import {
   ViewStyle,
 } from 'react-native';
 import colors from '../utils/colors';
+import DocumentPicker, {
+  DocumentPickerOptions,
+  DocumentPickerResponse,
+} from 'react-native-document-picker';
+import {SupportedPlatforms} from 'react-native-document-picker/lib/typescript/fileTypes';
 
 interface Props {
   icon?: React.ReactNode;
   btnTitle?: string;
   style?: StyleProp<ViewStyle>;
+  onSelect(file: DocumentPickerResponse): void;
+  options: DocumentPickerOptions<SupportedPlatforms>;
 }
 
-export default function FileSelector({icon, btnTitle, style}: Props) {
+export default function FileSelector({
+  icon,
+  onSelect,
+  btnTitle,
+  style,
+  options,
+}: Props) {
+  const handleDocumentSelect = async () => {
+    try {
+      const document = await DocumentPicker.pick(options);
+      // console.log('Document ', document);
+      // [{"fileCopyUri": null, "name": "IMG_0005.JPG", "size": '', "type": "image/jpeg", "uri": ""}]
+      const file = document[0];
+      onSelect(file);
+    } catch (error) {
+      if (!DocumentPicker.isCancel(error)) {
+        console.log('Error picking document ', error);
+      }
+    }
+  };
   return (
-    <Pressable style={[styles.btnContainer, style]}>
+    <Pressable
+      onPress={handleDocumentSelect}
+      style={[styles.btnContainer, style]}>
       <View style={styles.iconContainer}>{icon}</View>
       <Text style={styles.btnTitle}>{btnTitle}</Text>
     </Pressable>

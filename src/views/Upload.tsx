@@ -13,6 +13,7 @@ import FileSelector from '../components/FileSelector';
 import AppButton from '../ui/AppButton';
 import CategorySelector from '../components/CategorySelector';
 import {categories} from '../utils/categories';
+import {types} from 'react-native-document-picker';
 
 interface Props {}
 
@@ -33,6 +34,10 @@ export default function Upload({}: Props) {
             />
           }
           btnTitle="Select Poster"
+          options={{type: [types.images]}}
+          onSelect={file => {
+            console.log(file);
+          }}
         />
         <FileSelector
           icon={
@@ -44,6 +49,10 @@ export default function Upload({}: Props) {
           }
           btnTitle="Select Audio"
           style={{marginLeft: 20}}
+          options={{type: [types.audio]}}
+          onSelect={file => {
+            console.log(file);
+          }}
         />
       </View>
       <View style={styles.formContainer}>
