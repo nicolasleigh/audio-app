@@ -17,6 +17,8 @@ import {DocumentPickerResponse, types} from 'react-native-document-picker';
 import * as yup from 'yup';
 import client from '../api/client';
 import {Keys, getFromAsyncStorage} from '../utils/asyncStorage';
+import Progress from '../ui/Progress';
+import {mapRange} from '../utils/math';
 
 interface Props {}
 
@@ -32,6 +34,8 @@ const defaultForm: FormFields = {
   title: '',
   category: '',
   about: '',
+  file: undefined,
+  poster: undefined,
 };
 
 const audioInfoSchema = yup.object().shape({
@@ -57,8 +61,11 @@ export default function Upload({}: Props) {
   const [audioInfo, setAudioInfo] = useState({
     ...defaultForm,
   });
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [busy, setBusy] = useState(false);
 
   const handleUpload = async () => {
+    setBusy(true);
     try {
       const finalData = await audioInfoSchema.validate(audioInfo);
       const formData = new FormData();
@@ -85,6 +92,22 @@ export default function Upload({}: Props) {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
         },
+        onUploadProgress(progressEvent) {
+          const uploaded = mapRange({
+            inputMin: 0,
+            inputMax: progressEvent.total || 0,
+            outputMin: 0,
+            outputMax: 100,
+            inputValue: progressEvent.loaded,
+          });
+
+          if (uploaded >= 100) {
+            setAudioInfo({...defaultForm});
+            setBusy(false);
+          }
+
+          setUploadProgress(Math.floor(uploaded));
+        },
       });
       console.log(data);
     } catch (error) {
@@ -92,6 +115,7 @@ export default function Upload({}: Props) {
         console.log('Validation error ', error.message);
       } else console.log(error.response.data);
     }
+    setBusy(false);
   };
 
   return (
@@ -135,6 +159,7 @@ export default function Upload({}: Props) {
           onChangeText={text => {
             setAudioInfo({...audioInfo, title: text});
           }}
+          value={audioInfo.title}
         />
         <Pressable
           onPress={() => {
@@ -153,6 +178,7 @@ export default function Upload({}: Props) {
           onChangeText={text => {
             setAudioInfo({...audioInfo, about: text});
           }}
+          value={audioInfo.about}
         />
 
         <CategorySelector
@@ -169,8 +195,16 @@ export default function Upload({}: Props) {
             setAudioInfo({...audioInfo, category: item});
           }}
         />
-        <View style={{marginBottom: 20}} />
-        <AppButton borderRadius={7} title="Submit" onPress={handleUpload} />
+        <View style={{marginVertical: 20}}>
+          {busy ? <Progress progress={uploadProgress} /> : null}
+        </View>
+
+        <AppButton
+          busy={busy}
+          borderRadius={7}
+          title="Submit"
+          onPress={handleUpload}
+        />
       </View>
     </ScrollView>
   );
