@@ -14,6 +14,8 @@ import client from '../../api/client';
 import {updateLoggedIn, updateProfile} from '../../store/auth';
 import {useDispatch} from 'react-redux';
 import {Keys, saveToAsyncStorage} from '../../utils/asyncStorage';
+import catchAsyncError from '../../api/catchError';
+import {updateNotification} from '../../store/notification';
 
 const initialValues = {
   email: '',
@@ -56,7 +58,8 @@ export default function SignIn({}) {
       dispatch(updateProfile(data.profile));
       dispatch(updateLoggedIn(true));
     } catch (error) {
-      console.log('Sign in error ', error.response.data.error);
+      const errorMessage = catchAsyncError(error);
+      dispatch(updateNotification({message: errorMessage, type: 'error'}));
     }
     actions.setSubmitting(false);
   };

@@ -11,6 +11,10 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {AuthStackParamList} from '../../@types/navigation';
 import {FormikHelpers} from 'formik';
 import client from '../../api/client';
+import {isAxiosError} from 'axios';
+import catchAsyncError from '../../api/catchError';
+import {useDispatch} from 'react-redux';
+import {updateNotification} from '../../store/notification';
 
 interface NewUser {
   name: string;
@@ -44,6 +48,7 @@ const signupSchema = yup.object({
 export default function SignUp() {
   const [secureEntry, setSecureEntry] = useState(true);
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
+  const dispatch = useDispatch();
   const handleSubmit = async (
     values: NewUser,
     actions: FormikHelpers<NewUser>,
@@ -55,7 +60,8 @@ export default function SignUp() {
       // console.log(data);
       navigation.navigate('Verification', {userInfo: data.user});
     } catch (error) {
-      console.log('Sign up error ', error);
+      const errorMessage = catchAsyncError(error);
+      dispatch(updateNotification({message: errorMessage, type: 'error'}));
     }
     actions.setSubmitting(false);
   };

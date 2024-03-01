@@ -3,12 +3,10 @@ import {Provider} from 'react-redux';
 import AppNavigator from './src/navigation';
 import store from './src/store';
 import AppContainer from './src/components/AppContainer';
+// import {clearAsyncStorage} from './src/utils/asyncStorage';
 
 export default function App() {
-  // return <SignUp />;
-  // return <SignIn />;
-  // return <LostPassword />;
-  // return <Verification />;
+  // clearAsyncStorage();
   return (
     <Provider store={store}>
       <AppContainer>

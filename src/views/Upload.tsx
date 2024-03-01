@@ -19,6 +19,9 @@ import client from '../api/client';
 import {Keys, getFromAsyncStorage} from '../utils/asyncStorage';
 import Progress from '../ui/Progress';
 import {mapRange} from '../utils/math';
+import catchAsyncError from '../api/catchError';
+import {useDispatch} from 'react-redux';
+import {updateNotification} from '../store/notification';
 
 interface Props {}
 
@@ -63,6 +66,7 @@ export default function Upload({}: Props) {
   });
   const [uploadProgress, setUploadProgress] = useState(0);
   const [busy, setBusy] = useState(false);
+  const dispatch = useDispatch();
 
   const handleUpload = async () => {
     setBusy(true);
@@ -111,9 +115,8 @@ export default function Upload({}: Props) {
       });
       console.log(data);
     } catch (error) {
-      if (error instanceof yup.ValidationError) {
-        console.log('Validation error ', error.message);
-      } else console.log(error.response.data);
+      const errorMessage = catchAsyncError(error);
+      dispatch(updateNotification({message: errorMessage, type: 'error'}));
     }
     setBusy(false);
   };

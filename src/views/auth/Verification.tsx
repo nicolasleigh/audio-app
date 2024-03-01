@@ -9,6 +9,9 @@ import {AuthStackParamList} from '../../@types/navigation';
 import client from '../../api/client';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import colors from '../../utils/colors';
+import {useDispatch} from 'react-redux';
+import catchAsyncError from '../../api/catchError';
+import {updateNotification} from '../../store/notification';
 
 const otpFields = new Array(6).fill('');
 
@@ -21,6 +24,7 @@ export default function Verification(props: Props) {
   const [countDown, setCountDown] = useState(30);
   const [canSendNewOtpRequest, setCanSendNewOtpRequest] = useState(false);
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
+  const dispatch = useDispatch();
 
   const {userInfo} = props.route.params;
 
@@ -55,7 +59,9 @@ export default function Verification(props: Props) {
 
   const handleSubmit = async () => {
     if (!isValidOtp) {
-      return;
+      return dispatch(
+        updateNotification({message: 'Invalid OTP', type: 'error'}),
+      );
     }
     setSubmitting(true);
     try {
@@ -63,10 +69,13 @@ export default function Verification(props: Props) {
         userId: userInfo.id,
         token: otp.join(''),
       });
+
+      dispatch(updateNotification({message: data.message, type: 'success'}));
       // navigate to sign in
       navigation.navigate('SignIn');
     } catch (error) {
-      console.log('Verification error ', error.response.data.error);
+      const errorMessage = catchAsyncError(error);
+      dispatch(updateNotification({message: errorMessage, type: 'error'}));
     }
     setSubmitting(false);
   };
@@ -77,7 +86,9 @@ export default function Verification(props: Props) {
     try {
       await client.post('/auth/re-verify-email', {userId: userInfo.id});
     } catch (error) {
-      console.log('Request for new otp ', error.response.data.error);
+      // console.log('Request for new otp ', error.response.data.error);
+      const errorMessage = catchAsyncError(error);
+      dispatch(updateNotification({message: errorMessage, type: 'error'}));
     }
   };
 
