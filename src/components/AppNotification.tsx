@@ -43,11 +43,11 @@ export default function AppNotification({}: Props) {
           duration: 150,
         });
 
-        dispatch(updateNotification({message: '', type: 'error'}));
+        dispatch(updateNotification({message: '', type}));
       }, 3000);
     };
 
-    performAnimation();
+    if (message) performAnimation();
 
     return () => {
       clearTimeout(timeoutId);
