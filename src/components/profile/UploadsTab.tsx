@@ -11,6 +11,7 @@ import {useFetchUploadsByProfile} from '../../hooks/query';
 import colors from '../../utils/colors';
 import AudioListItem from '../../ui/AudioListItem';
 import AudioListLoadingUI from '../../ui/AudioListLoadingUI';
+import EmptyRecords from '../../ui/EmptyRecords';
 
 interface Props {}
 
@@ -19,6 +20,9 @@ export default function UploadsTab({}: Props) {
 
   if (isLoading) {
     return <AudioListLoadingUI />;
+  }
+  if (!data?.length) {
+    return <EmptyRecords title="There is no audio." />;
   }
 
   return (
