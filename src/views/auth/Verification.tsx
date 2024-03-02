@@ -5,7 +5,10 @@ import AppButton from '../../ui/AppButton';
 import AppLink from '../../ui/AppLink';
 import OTPField from '../../ui/OTPField';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AuthStackParamList} from '../../@types/navigation';
+import {
+  AuthStackParamList,
+  ProfileNavigatorStackParamList,
+} from '../../@types/navigation';
 import client from '../../api/client';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import colors from '../../utils/colors';
@@ -15,7 +18,15 @@ import {updateNotification} from '../../store/notification';
 
 const otpFields = new Array(6).fill('');
 
-type Props = NativeStackScreenProps<AuthStackParamList, 'Verification'>;
+type Props = NativeStackScreenProps<
+  AuthStackParamList | ProfileNavigatorStackParamList,
+  'Verification'
+>;
+
+type PossibleScreens = {
+  ProfileSetting: undefined;
+  SignIn: undefined;
+};
 
 export default function Verification(props: Props) {
   const [otp, setOtp] = useState([...otpFields]);
@@ -23,7 +34,7 @@ export default function Verification(props: Props) {
   const [submitting, setSubmitting] = useState(false);
   const [countDown, setCountDown] = useState(30);
   const [canSendNewOtpRequest, setCanSendNewOtpRequest] = useState(false);
-  const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
+  const navigation = useNavigation<NavigationProp<PossibleScreens>>();
   const dispatch = useDispatch();
 
   const {userInfo} = props.route.params;
@@ -71,8 +82,17 @@ export default function Verification(props: Props) {
       });
 
       dispatch(updateNotification({message: data.message, type: 'success'}));
-      // navigate to sign in
-      navigation.navigate('SignIn');
+
+      const {routeNames} = navigation.getState();
+
+      if (routeNames.includes('SignIn')) {
+        // navigate to sign in
+        navigation.navigate('SignIn');
+      }
+
+      if (routeNames.includes('ProfileSetting')) {
+        navigation.navigate('ProfileSetting');
+      }
     } catch (error) {
       const errorMessage = catchAsyncError(error);
       dispatch(updateNotification({message: errorMessage, type: 'error'}));
