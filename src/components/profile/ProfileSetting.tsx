@@ -1,7 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  PermissionsAndroid,
+} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import ImagePicker from 'react-native-image-crop-picker';
 import AppHeader from '../AppHeader';
 import colors from '../../utils/colors';
 import AvatarField from '../../ui/AvatarField';
@@ -78,6 +86,24 @@ export default function ProfileSetting({}: Props) {
     setBusy(false);
   };
 
+  const handleImageSelect = async () => {
+    try {
+      const permissionRes = await PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      ]);
+      console.log(permissionRes);
+      const res = await ImagePicker.openPicker({
+        cropping: true,
+        width: 300,
+        height: 300,
+      });
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (profile) {
       setUserInfo({name: profile.name, avatar: profile.avatar});
@@ -94,7 +120,7 @@ export default function ProfileSetting({}: Props) {
       <View style={styles.settingOptionsContainer}>
         <View style={styles.avatarContainer}>
           <AvatarField source={userInfo.avatar} />
-          <Pressable>
+          <Pressable onPress={handleImageSelect}>
             <Text style={styles.linkText}>Update Profile Image</Text>
           </Pressable>
         </View>
