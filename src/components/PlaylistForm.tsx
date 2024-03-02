@@ -10,7 +10,7 @@ interface Props {
   onSubmit(value: PlaylistInfo): void;
 }
 
-interface PlaylistInfo {
+export interface PlaylistInfo {
   title: string;
   private: boolean;
 }

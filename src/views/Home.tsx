@@ -12,7 +12,7 @@ import catchAsyncError from '../api/catchError';
 import {useDispatch} from 'react-redux';
 import {updateNotification} from '../store/notification';
 import PlaylistModal from '../components/PlaylistModal';
-import PlaylistForm from '../components/PlaylistForm';
+import PlaylistForm, {PlaylistInfo} from '../components/PlaylistForm';
 
 interface Props {}
 
@@ -55,6 +55,30 @@ export default function Home({}: Props) {
   const handleOnAddToPlaylist = () => {
     setShowOptions(false);
     setShowPlaylistModal(true);
+  };
+
+  const handlePlaylistSubmit = async (value: PlaylistInfo) => {
+    if (!value.title.trim()) return;
+    try {
+      const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
+      const {data} = await client.post(
+        '/playlist/create',
+        {
+          resId: selectedAudio?.id,
+          title: value.title,
+          visibility: value.private ? 'private' : 'public',
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      console.log(data);
+    } catch (error) {
+      const errorMsg = catchAsyncError(error);
+      console.log(errorMsg);
+    }
   };
   return (
     <View style={styles.container}>
@@ -117,7 +141,7 @@ export default function Home({}: Props) {
         onRequestClose={() => {
           setShowPlaylistForm(false);
         }}
-        onSubmit={value => console.log(value)}
+        onSubmit={handlePlaylistSubmit}
       />
     </View>
   );
