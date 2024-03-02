@@ -1,13 +1,18 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {useFetchPlaylist} from '../../hooks/query';
+import PlaylistItem from '../../ui/PlaylistItem';
 
 interface Props {}
 
 export default function PlaylistTab({}: Props) {
+  const {data, isLoading} = useFetchPlaylist();
   return (
-    <View style={styles.container}>
-      <Text style={{fontSize: 20, color: 'white'}}>UploadTab</Text>
-    </View>
+    <ScrollView style={styles.container}>
+      {data?.map(playlist => {
+        return <PlaylistItem key={playlist.id} playlist={playlist} />;
+      })}
+    </ScrollView>
   );
 }
 
