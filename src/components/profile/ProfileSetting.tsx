@@ -67,6 +67,15 @@ export default function ProfileSetting({}: Props) {
       }
       const formData = new FormData();
       formData.append('name', userInfo.name);
+
+      if (userInfo.avatar) {
+        formData.append('avatar', {
+          name: 'avatar',
+          type: 'image/jpeg',
+          uri: userInfo.avatar,
+        });
+      }
+
       const client = await getClient({'Content-Type': 'multipart/form-data'});
       const {data} = await client.post('/auth/update-profile', formData);
       dispatch(updateProfile(data.profile));
@@ -83,12 +92,12 @@ export default function ProfileSetting({}: Props) {
   const handleImageSelect = async () => {
     try {
       await getPermissionToReadImages();
-      const res = await ImagePicker.openPicker({
+      const {path} = await ImagePicker.openPicker({
         cropping: true,
         width: 300,
         height: 300,
       });
-      console.log(res);
+      setUserInfo({...userInfo, avatar: path});
     } catch (error) {
       console.log(error);
     }
