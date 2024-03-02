@@ -1,23 +1,59 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import BasicModalContainer from '../ui/BasicModalContainer';
 import colors from '../utils/colors';
 
 interface Props {
-  status?: 'private';
   visible: boolean;
   onRequestClose(): void;
+  onSubmit(value: PlaylistInfo): void;
 }
 
-export default function PlaylistForm({status, visible, onRequestClose}: Props) {
+interface PlaylistInfo {
+  title: string;
+  private: boolean;
+}
+
+export default function PlaylistForm({
+  visible,
+  onRequestClose,
+  onSubmit,
+}: Props) {
+  const [playlistInfo, setPlaylistInfo] = useState({
+    title: '',
+    private: false,
+  });
+
+  const handleSubmit = () => {
+    onSubmit(playlistInfo);
+    handleClose();
+  };
+
+  const handleClose = () => {
+    setPlaylistInfo({title: '', private: false});
+    onRequestClose();
+  };
+
   return (
-    <BasicModalContainer visible={visible} onRequestClose={onRequestClose}>
+    <BasicModalContainer visible={visible} onRequestClose={handleClose}>
       <View>
         <Text style={styles.title}>Create New Playlist</Text>
-        <TextInput placeholder="Title" style={styles.input} />
-        <Pressable style={styles.privateSelector}>
-          {status === 'private' ? (
+        <TextInput
+          placeholder="Title"
+          style={styles.input}
+          onChangeText={text => {
+            setPlaylistInfo({...playlistInfo, title: text});
+          }}
+          value={playlistInfo.title}
+        />
+
+        <Pressable
+          onPress={() => {
+            setPlaylistInfo({...playlistInfo, private: !playlistInfo.private});
+          }}
+          style={styles.privateSelector}>
+          {playlistInfo.private ? (
             <MaterialCommunityIcons
               name="radiobox-marked"
               color={colors.PRIMARY}
@@ -31,7 +67,7 @@ export default function PlaylistForm({status, visible, onRequestClose}: Props) {
           <Text style={styles.privateLabel}>Private</Text>
         </Pressable>
 
-        <Pressable style={styles.submitBtn}>
+        <Pressable style={styles.submitBtn} onPress={handleSubmit}>
           <Text>Create</Text>
         </Pressable>
       </View>

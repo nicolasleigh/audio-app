@@ -117,6 +117,7 @@ export default function Home({}: Props) {
         onRequestClose={() => {
           setShowPlaylistForm(false);
         }}
+        onSubmit={value => console.log(value)}
       />
     </View>
   );
