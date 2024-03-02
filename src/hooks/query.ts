@@ -64,3 +64,23 @@ export const useFetchPlaylist = () => {
 
   return {data, isLoading};
 };
+
+const fetchUploadsByProfile = async (): Promise<AudioData[]> => {
+  const client = await getClient();
+  const {data} = await client.get('/profile/uploads');
+  return data.audios;
+};
+
+export const useFetchUploadsByProfile = () => {
+  const dispatch = useDispatch();
+  const {data, isError, error, isLoading} = useQuery({
+    queryKey: ['uploads-by-profile'],
+    queryFn: fetchUploadsByProfile,
+  });
+  if (isError) {
+    const errorMsg = catchAsyncError(error);
+    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+  }
+
+  return {data, isLoading};
+};

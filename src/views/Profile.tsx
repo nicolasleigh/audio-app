@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   tabBarStyle: {
+    marginBottom: 20,
     backgroundColor: 'transparent',
     elevation: 0, // remove shadow on Android
     shadowRadius: 0, // remove shadow on iOS
