@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  PermissionsAndroid,
-} from 'react-native';
+import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -26,6 +19,7 @@ import {
   updateProfile,
 } from '../../store/auth';
 import deepEqual from 'deep-equal';
+import {getPermissionToReadImages} from '../../utils/helper';
 
 interface Props {}
 interface ProfileInfo {
@@ -88,11 +82,7 @@ export default function ProfileSetting({}: Props) {
 
   const handleImageSelect = async () => {
     try {
-      const permissionRes = await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-      ]);
-      console.log(permissionRes);
+      await getPermissionToReadImages();
       const res = await ImagePicker.openPicker({
         cropping: true,
         width: 300,
