@@ -6,10 +6,32 @@ import AppHeader from '../AppHeader';
 import colors from '../../utils/colors';
 import AvatarField from '../../ui/AvatarField';
 import AppButton from '../../ui/AppButton';
+import {getClient} from '../../api/client';
+import catchAsyncError from '../../api/catchError';
+import {useDispatch} from 'react-redux';
+import {updateNotification} from '../../store/notification';
+import {Keys, removeFromAsyncStorage} from '../../utils/asyncStorage';
+import {updateBusy, updateLoggedIn, updateProfile} from '../../store/auth';
 
 interface Props {}
 
 export default function ProfileSetting({}: Props) {
+  const dispatch = useDispatch();
+  const handleLogout = async (fromAll?: boolean) => {
+    dispatch(updateBusy(true));
+    try {
+      const endpoint = '/auth/log-out?fromAll=' + (fromAll ? 'yes' : '');
+      const client = await getClient();
+      await client.post(endpoint);
+      await removeFromAsyncStorage(Keys.AUTH_TOKEN);
+      dispatch(updateProfile(null));
+      dispatch(updateLoggedIn(false));
+    } catch (error) {
+      const errorMsg = catchAsyncError(error);
+      dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    }
+    dispatch(updateBusy(false));
+  };
   return (
     <View style={styles.container}>
       <AppHeader title="Setting" />
@@ -34,11 +56,11 @@ export default function ProfileSetting({}: Props) {
         <Text style={styles.title}>Logout</Text>
       </View>
       <View style={styles.settingOptionsContainer}>
-        <Pressable style={styles.logoutBtn}>
+        <Pressable onPress={() => handleLogout(true)} style={styles.logoutBtn}>
           <AntDesign name="logout" size={20} color={colors.CONTRAST} />
           <Text style={styles.logoutBtnTitle}>Logout From All</Text>
         </Pressable>
-        <Pressable style={styles.logoutBtn}>
+        <Pressable onPress={() => handleLogout()} style={styles.logoutBtn}>
           <AntDesign name="logout" size={20} color={colors.CONTRAST} />
           <Text style={styles.logoutBtnTitle}>Logout</Text>
         </Pressable>
