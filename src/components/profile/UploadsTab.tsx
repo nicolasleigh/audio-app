@@ -10,11 +10,16 @@ import {
 import {useFetchUploadsByProfile} from '../../hooks/query';
 import colors from '../../utils/colors';
 import AudioListItem from '../../ui/AudioListItem';
+import AudioListLoadingUI from '../../ui/AudioListLoadingUI';
 
 interface Props {}
 
 export default function UploadsTab({}: Props) {
   const {data, isLoading} = useFetchUploadsByProfile();
+
+  if (isLoading) {
+    return <AudioListLoadingUI />;
+  }
 
   return (
     <ScrollView style={styles.container}>
