@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -8,15 +8,33 @@ import AvatarField from '../../ui/AvatarField';
 import AppButton from '../../ui/AppButton';
 import {getClient} from '../../api/client';
 import catchAsyncError from '../../api/catchError';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {updateNotification} from '../../store/notification';
 import {Keys, removeFromAsyncStorage} from '../../utils/asyncStorage';
-import {updateBusy, updateLoggedIn, updateProfile} from '../../store/auth';
+import {
+  getAuthState,
+  updateBusy,
+  updateLoggedIn,
+  updateProfile,
+} from '../../store/auth';
+import deepEqual from 'deep-equal';
 
 interface Props {}
+interface ProfileInfo {
+  name: string;
+  avatar?: string;
+}
 
 export default function ProfileSetting({}: Props) {
+  const [userInfo, setUserInfo] = useState<ProfileInfo>({name: ''});
   const dispatch = useDispatch();
+  const {profile} = useSelector(getAuthState);
+
+  const isSame = deepEqual(userInfo, {
+    name: profile?.name,
+    avatar: profile?.avatar,
+  });
+
   const handleLogout = async (fromAll?: boolean) => {
     dispatch(updateBusy(true));
     try {
@@ -32,6 +50,13 @@ export default function ProfileSetting({}: Props) {
     }
     dispatch(updateBusy(false));
   };
+
+  useEffect(() => {
+    if (profile) {
+      setUserInfo({name: profile.name, avatar: profile.avatar});
+    }
+  }, [profile]);
+
   return (
     <View style={styles.container}>
       <AppHeader title="Setting" />
@@ -41,14 +66,18 @@ export default function ProfileSetting({}: Props) {
 
       <View style={styles.settingOptionsContainer}>
         <View style={styles.avatarContainer}>
-          <AvatarField />
+          <AvatarField source={userInfo.avatar} />
           <Pressable>
             <Text style={styles.linkText}>Update Profile Image</Text>
           </Pressable>
         </View>
-        <TextInput style={styles.nameInput} value="John" />
+        <TextInput
+          onChangeText={text => setUserInfo({...userInfo, name: text})}
+          style={styles.nameInput}
+          value={userInfo.name}
+        />
         <View style={styles.emailContainer}>
-          <Text style={styles.email}>john@e.com</Text>
+          <Text style={styles.email}>{profile?.email}</Text>
           <MaterialIcons name="verified" size={15} color={colors.SECONDARY} />
         </View>
       </View>
@@ -65,10 +94,11 @@ export default function ProfileSetting({}: Props) {
           <Text style={styles.logoutBtnTitle}>Logout</Text>
         </Pressable>
       </View>
-
-      <View style={styles.marginTop}>
-        <AppButton title="Update" borderRadius={7} />
-      </View>
+      {!isSame ? (
+        <View style={styles.marginTop}>
+          <AppButton title="Update" borderRadius={7} />
+        </View>
+      ) : null}
     </View>
   );
 }
