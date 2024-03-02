@@ -1,12 +1,12 @@
 import {useQuery} from '@tanstack/react-query';
 import {useDispatch} from 'react-redux';
-import catchAsyncError from '../api/catchError';
-import {updateNotification} from '../store/notification';
-import client from '../api/client';
 import {AudioData, Playlist} from '../@types/audio';
-import {Keys, getFromAsyncStorage} from '../utils/asyncStorage';
+import catchAsyncError from '../api/catchError';
+import {getClient} from '../api/client';
+import {updateNotification} from '../store/notification';
 
 const fetchLatest = async (): Promise<AudioData[]> => {
+  const client = await getClient();
   const {data} = await client.get('/audio/latest');
   return data.audios;
 };
@@ -26,6 +26,7 @@ export const useFetchLatestAudios = () => {
 };
 
 const fetchRecommended = async (): Promise<AudioData[]> => {
+  const client = await getClient();
   const {data} = await client.get('/profile/recommended');
   return data.audios;
 };
@@ -45,12 +46,8 @@ export const useFetchRecommendedAudios = () => {
 };
 
 const fetchPlaylist = async (): Promise<Playlist[]> => {
-  const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
-  const {data} = await client.get('/playlist/by-profile', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const client = await getClient();
+  const {data} = await client.get('/playlist/by-profile');
   return data.playlist;
 };
 

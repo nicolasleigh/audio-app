@@ -7,21 +7,20 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import colors from '../utils/colors';
-import FileSelector from '../components/FileSelector';
-import AppButton from '../ui/AppButton';
-import CategorySelector from '../components/CategorySelector';
-import {categories} from '../utils/categories';
 import {DocumentPickerResponse, types} from 'react-native-document-picker';
-import * as yup from 'yup';
-import client from '../api/client';
-import {Keys, getFromAsyncStorage} from '../utils/asyncStorage';
-import Progress from '../ui/Progress';
-import {mapRange} from '../utils/math';
-import catchAsyncError from '../api/catchError';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
+import * as yup from 'yup';
+import catchAsyncError from '../api/catchError';
+import {getClient} from '../api/client';
+import CategorySelector from '../components/CategorySelector';
+import FileSelector from '../components/FileSelector';
 import {updateNotification} from '../store/notification';
+import AppButton from '../ui/AppButton';
+import Progress from '../ui/Progress';
+import {categories} from '../utils/categories';
+import colors from '../utils/colors';
+import {mapRange} from '../utils/math';
 
 interface Props {}
 
@@ -89,13 +88,8 @@ export default function Upload({}: Props) {
         });
       }
 
-      const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
-
+      const client = await getClient({'Content-Type': 'multipart/form-data'});
       const {data} = await client.post('/audio/create', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
-        },
         onUploadProgress(progressEvent) {
           const uploaded = mapRange({
             inputMin: 0,

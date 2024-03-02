@@ -1,19 +1,18 @@
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import LatestUploads from '../components/LatestUploads';
-import RecommendedAudios from '../components/RecommendedAudios';
-import OptionsModal from '../components/OptionsModal';
-import colors from '../utils/colors';
-import {AudioData, Playlist} from '../@types/audio';
-import client from '../api/client';
-import {Keys, getFromAsyncStorage} from '../utils/asyncStorage';
-import catchAsyncError from '../api/catchError';
 import {useDispatch} from 'react-redux';
-import {updateNotification} from '../store/notification';
-import PlaylistModal from '../components/PlaylistModal';
+import {AudioData, Playlist} from '../@types/audio';
+import catchAsyncError from '../api/catchError';
+import {getClient} from '../api/client';
+import LatestUploads from '../components/LatestUploads';
+import OptionsModal from '../components/OptionsModal';
 import PlaylistForm, {PlaylistInfo} from '../components/PlaylistForm';
+import PlaylistModal from '../components/PlaylistModal';
+import RecommendedAudios from '../components/RecommendedAudios';
 import {useFetchPlaylist} from '../hooks/query';
+import {updateNotification} from '../store/notification';
+import colors from '../utils/colors';
 
 interface Props {}
 
@@ -32,16 +31,8 @@ export default function Home({}: Props) {
 
     // send request with the audio id that we want to add to fav
     try {
-      const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
-      const {data} = await client.post(
-        '/favorite?audioId=' + selectedAudio.id,
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const client = await getClient();
+      const {data} = await client.post('/favorite?audioId=' + selectedAudio.id);
     } catch (error) {
       const errorMsg = catchAsyncError(error);
       dispatch(updateNotification({message: errorMsg, type: 'error'}));
@@ -63,20 +54,12 @@ export default function Home({}: Props) {
   const handlePlaylistSubmit = async (value: PlaylistInfo) => {
     if (!value.title.trim()) return;
     try {
-      const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
-      const {data} = await client.post(
-        '/playlist/create',
-        {
-          resId: selectedAudio?.id,
-          title: value.title,
-          visibility: value.private ? 'private' : 'public',
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const client = await getClient();
+      const {data} = await client.post('/playlist/create', {
+        resId: selectedAudio?.id,
+        title: value.title,
+        visibility: value.private ? 'private' : 'public',
+      });
       console.log(data);
     } catch (error) {
       const errorMsg = catchAsyncError(error);
@@ -86,21 +69,13 @@ export default function Home({}: Props) {
 
   const updatePlaylist = async (item: Playlist) => {
     try {
-      const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
-      const {data} = await client.patch(
-        '/playlist',
-        {
-          id: item.id,
-          item: selectedAudio?.id,
-          title: item.title,
-          visibility: item.visibility,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const client = await getClient();
+      const {data} = await client.patch('/playlist', {
+        id: item.id,
+        item: selectedAudio?.id,
+        title: item.title,
+        visibility: item.visibility,
+      });
       setSelectedAudio(undefined);
       setShowPlaylistModal(false);
       dispatch(
