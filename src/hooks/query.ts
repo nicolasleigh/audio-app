@@ -84,3 +84,23 @@ export const useFetchUploadsByProfile = () => {
 
   return {data, isLoading};
 };
+
+const fetchFavorite = async (): Promise<AudioData[]> => {
+  const client = await getClient();
+  const {data} = await client.get('/favorite');
+  return data.audios;
+};
+
+export const useFetchFavorite = () => {
+  const dispatch = useDispatch();
+  const {data, isError, error, isLoading} = useQuery({
+    queryKey: ['favorite'],
+    queryFn: fetchFavorite,
+  });
+  if (isError) {
+    const errorMsg = catchAsyncError(error);
+    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+  }
+
+  return {data, isLoading};
+};

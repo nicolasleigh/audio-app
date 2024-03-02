@@ -28,7 +28,7 @@ export default function UploadsTab({}: Props) {
   return (
     <ScrollView style={styles.container}>
       {data?.map(item => {
-        return <AudioListItem audio={item} />;
+        return <AudioListItem audio={item} key={item.id} />;
       })}
     </ScrollView>
   );
