@@ -27,6 +27,7 @@ interface ProfileInfo {
 
 export default function ProfileSetting({}: Props) {
   const [userInfo, setUserInfo] = useState<ProfileInfo>({name: ''});
+  const [busy, setBusy] = useState(false);
   const dispatch = useDispatch();
   const {profile} = useSelector(getAuthState);
 
@@ -49,6 +50,32 @@ export default function ProfileSetting({}: Props) {
       dispatch(updateNotification({message: errorMsg, type: 'error'}));
     }
     dispatch(updateBusy(false));
+  };
+
+  const handleSubmit = async () => {
+    setBusy(true);
+    try {
+      if (!userInfo.name.trim()) {
+        return dispatch(
+          updateNotification({
+            message: 'Profile name is required',
+            type: 'error',
+          }),
+        );
+      }
+      const formData = new FormData();
+      formData.append('name', userInfo.name);
+      const client = await getClient({'Content-Type': 'multipart/form-data'});
+      const {data} = await client.post('/auth/update-profile', formData);
+      dispatch(updateProfile(data.profile));
+      dispatch(
+        updateNotification({message: 'Profile updated', type: 'success'}),
+      );
+    } catch (error) {
+      const errorMsg = catchAsyncError(error);
+      dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    }
+    setBusy(false);
   };
 
   useEffect(() => {
@@ -96,7 +123,12 @@ export default function ProfileSetting({}: Props) {
       </View>
       {!isSame ? (
         <View style={styles.marginTop}>
-          <AppButton title="Update" borderRadius={7} />
+          <AppButton
+            onPress={handleSubmit}
+            busy={busy}
+            title="Update"
+            borderRadius={7}
+          />
         </View>
       ) : null}
     </View>
