@@ -5,7 +5,7 @@ import LatestUploads from '../components/LatestUploads';
 import RecommendedAudios from '../components/RecommendedAudios';
 import OptionsModal from '../components/OptionsModal';
 import colors from '../utils/colors';
-import {AudioData} from '../@types/audio';
+import {AudioData, Playlist} from '../@types/audio';
 import client from '../api/client';
 import {Keys, getFromAsyncStorage} from '../utils/asyncStorage';
 import catchAsyncError from '../api/catchError';
@@ -13,6 +13,7 @@ import {useDispatch} from 'react-redux';
 import {updateNotification} from '../store/notification';
 import PlaylistModal from '../components/PlaylistModal';
 import PlaylistForm, {PlaylistInfo} from '../components/PlaylistForm';
+import {useFetchPlaylist} from '../hooks/query';
 
 interface Props {}
 
@@ -21,6 +22,8 @@ export default function Home({}: Props) {
   const [selectedAudio, setSelectedAudio] = useState<AudioData>();
   const [showPlaylistModal, setShowPlaylistModal] = useState(false);
   const [showPlaylistForm, setShowPlaylistForm] = useState(false);
+
+  const {data: list} = useFetchPlaylist();
 
   const dispatch = useDispatch();
 
@@ -80,6 +83,34 @@ export default function Home({}: Props) {
       console.log(errorMsg);
     }
   };
+
+  const updatePlaylist = async (item: Playlist) => {
+    try {
+      const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
+      const {data} = await client.patch(
+        '/playlist',
+        {
+          id: item.id,
+          item: selectedAudio?.id,
+          title: item.title,
+          visibility: item.visibility,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      setSelectedAudio(undefined);
+      setShowPlaylistModal(false);
+      dispatch(
+        updateNotification({message: 'Added to playlist', type: 'success'}),
+      );
+    } catch (error) {
+      const errorMsg = catchAsyncError(error);
+      console.log(errorMsg);
+    }
+  };
   return (
     <View style={styles.container}>
       <LatestUploads
@@ -130,11 +161,12 @@ export default function Home({}: Props) {
         onRequestClose={() => {
           setShowPlaylistModal(false);
         }}
-        list={[]}
+        list={list || []}
         onCreateNew={() => {
           setShowPlaylistModal(false);
           setShowPlaylistForm(true);
         }}
+        onPlaylistPress={updatePlaylist}
       />
       <PlaylistForm
         visible={showPlaylistForm}

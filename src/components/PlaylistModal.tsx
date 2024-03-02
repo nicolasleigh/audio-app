@@ -11,6 +11,7 @@ interface Props {
   onRequestClose?(): void;
   list: Playlist[];
   onCreateNew(): void;
+  onPlaylistPress(item: Playlist): void;
 }
 
 interface ListItemProps {
@@ -19,20 +20,12 @@ interface ListItemProps {
   onPress?(): void;
 }
 
-const ListItem = ({title, icon, onPress}: ListItemProps) => {
-  return (
-    <Pressable onPress={onPress} style={styles.listItemContainer}>
-      {icon}
-      <Text style={styles.listItemTitle}>{title}</Text>
-    </Pressable>
-  );
-};
-
 export default function PlaylistModal({
   visible,
   onRequestClose,
   list,
   onCreateNew,
+  onPlaylistPress,
 }: Props) {
   return (
     <BasicModalContainer visible={visible} onRequestClose={onRequestClose}>
@@ -41,6 +34,7 @@ export default function PlaylistModal({
         {list.map((item, index) => {
           return (
             <ListItem
+              onPress={() => onPlaylistPress(item)}
               key={item.id}
               icon={
                 <FontAwesome
@@ -70,3 +64,12 @@ const styles = StyleSheet.create({
   listItemContainer: {flexDirection: 'row', alignItems: 'center', height: 45},
   listItemTitle: {fontSize: 16, color: colors.PRIMARY, marginLeft: 5},
 });
+
+const ListItem = ({title, icon, onPress}: ListItemProps) => {
+  return (
+    <Pressable onPress={onPress} style={styles.listItemContainer}>
+      {icon}
+      <Text style={styles.listItemTitle}>{title}</Text>
+    </Pressable>
+  );
+};
