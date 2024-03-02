@@ -20,6 +20,7 @@ import {
 } from '../../store/auth';
 import deepEqual from 'deep-equal';
 import {getPermissionToReadImages} from '../../utils/helper';
+import ReVerificationLink from '../ReVerificationLink';
 
 interface Props {}
 interface ProfileInfo {
@@ -130,7 +131,11 @@ export default function ProfileSetting({}: Props) {
         />
         <View style={styles.emailContainer}>
           <Text style={styles.email}>{profile?.email}</Text>
-          <MaterialIcons name="verified" size={15} color={colors.SECONDARY} />
+          {profile?.verified ? (
+            <MaterialIcons name="verified" size={15} color={colors.SECONDARY} />
+          ) : (
+            <ReVerificationLink linkTitle="verify" activeAtFirst />
+          )}
         </View>
       </View>
       <View style={styles.titleContainer}>
