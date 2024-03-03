@@ -1,6 +1,7 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Octicons from 'react-native-vector-icons/Octicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {UserProfile} from '../store/auth';
 import AvatarField from '../ui/AvatarField';
@@ -23,7 +24,11 @@ export default function ProfileContainer({profile}: Props) {
         <Text style={styles.profileName}>{profile.name}</Text>
         <View style={styles.flexRow}>
           <Text style={styles.email}>{profile.email}</Text>
-          <MaterialIcons name="verified" size={15} color={colors.SECONDARY} />
+          {profile.verified ? (
+            <MaterialIcons name="verified" size={15} color={colors.SECONDARY} />
+          ) : (
+            <Octicons name="unverified" size={15} color={colors.SECONDARY} />
+          )}
         </View>
         <View style={styles.flexRow}>
           <Text style={styles.profileActionLink}>

@@ -1,20 +1,19 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Keyboard, StyleSheet, Text, TextInput, View} from 'react-native';
-import AuthFormContainer from '../../components/AuthFormContainer';
-import AppButton from '../../ui/AppButton';
-import AppLink from '../../ui/AppLink';
-import OTPField from '../../ui/OTPField';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import React, {useEffect, useRef, useState} from 'react';
+import {Keyboard, StyleSheet, TextInput, View} from 'react-native';
+import {useDispatch} from 'react-redux';
 import {
   AuthStackParamList,
   ProfileNavigatorStackParamList,
 } from '../../@types/navigation';
-import client from '../../api/client';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import colors from '../../utils/colors';
-import {useDispatch} from 'react-redux';
 import catchAsyncError from '../../api/catchError';
+import client from '../../api/client';
+import AuthFormContainer from '../../components/AuthFormContainer';
+import ReVerificationLink from '../../components/ReVerificationLink';
 import {updateNotification} from '../../store/notification';
+import AppButton from '../../ui/AppButton';
+import OTPField from '../../ui/OTPField';
 
 const otpFields = new Array(6).fill('');
 
@@ -32,8 +31,6 @@ export default function Verification(props: Props) {
   const [otp, setOtp] = useState([...otpFields]);
   const [activeOtpIndex, setActiveOtpIndex] = useState(0);
   const [submitting, setSubmitting] = useState(false);
-  const [countDown, setCountDown] = useState(30);
-  const [canSendNewOtpRequest, setCanSendNewOtpRequest] = useState(false);
   const navigation = useNavigation<NavigationProp<PossibleScreens>>();
   const dispatch = useDispatch();
 
@@ -100,38 +97,9 @@ export default function Verification(props: Props) {
     setSubmitting(false);
   };
 
-  const requestForOTP = async () => {
-    setCountDown(30);
-    setCanSendNewOtpRequest(false);
-    try {
-      await client.post('/auth/re-verify-email', {userId: userInfo.id});
-    } catch (error) {
-      // console.log('Request for new otp ', error.response.data.error);
-      const errorMessage = catchAsyncError(error);
-      dispatch(updateNotification({message: errorMessage, type: 'error'}));
-    }
-  };
-
   useEffect(() => {
     inputRef.current?.focus();
   }, [activeOtpIndex]);
-
-  useEffect(() => {
-    if (canSendNewOtpRequest) return;
-    const intervalId = setInterval(() => {
-      setCountDown(prev => {
-        if (prev <= 0) {
-          setCanSendNewOtpRequest(true);
-          clearInterval(intervalId);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [canSendNewOtpRequest]);
 
   return (
     <AuthFormContainer heading="Please check your email">
@@ -155,14 +123,7 @@ export default function Verification(props: Props) {
 
       <AppButton busy={submitting} title="Submit" onPress={handleSubmit} />
       <View style={styles.linkContainer}>
-        {countDown > 0 ? (
-          <Text style={styles.countDown}>{countDown} sec</Text>
-        ) : null}
-        <AppLink
-          active={canSendNewOtpRequest}
-          title="Re-send OTP"
-          onPress={requestForOTP}
-        />
+        <ReVerificationLink linkTitle="Re-send OTP" userId={userInfo.id} />
       </View>
     </AuthFormContainer>
   );
@@ -180,10 +141,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: '100%',
     justifyContent: 'flex-end',
-    flexDirection: 'row',
-  },
-  countDown: {
-    color: colors.SECONDARY,
-    marginRight: 10,
   },
 });
