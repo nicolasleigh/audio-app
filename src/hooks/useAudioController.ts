@@ -104,11 +104,40 @@ const useAudioController = () => {
     await TrackPlayer.seekTo(position + sec);
   };
 
+  const onNextPress = async () => {
+    const currentList = await TrackPlayer.getQueue();
+    const currentIndex = await TrackPlayer.getActiveTrackIndex();
+    if (!currentIndex) return;
+
+    const nextIndex = currentIndex + 1;
+
+    const nextAudio = currentList[nextIndex];
+    if (nextAudio) {
+      await TrackPlayer.skipToNext();
+      dispatch(updateOnGoingAudio(onGoingList[nextIndex]));
+    }
+  };
+  const onPreviousPress = async () => {
+    const currentList = await TrackPlayer.getQueue();
+    const currentIndex = await TrackPlayer.getActiveTrackIndex();
+    if (!currentIndex) return;
+
+    const preIndex = currentIndex - 1;
+
+    const nextAudio = currentList[preIndex];
+    if (nextAudio) {
+      await TrackPlayer.skipToNext();
+      dispatch(updateOnGoingAudio(onGoingList[preIndex]));
+    }
+  };
+
   return {
     onAudioPress,
     togglePlayPause,
     seekTo,
     skipTo,
+    onNextPress,
+    onPreviousPress,
     isPlayerReady,
     isPlaying,
     isBusy,

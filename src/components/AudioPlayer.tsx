@@ -28,14 +28,30 @@ const formattedDuration = (duration = 0) => {
 
 export default function AudioPlayer({visible, onRequestClose}: Props) {
   const {onGoingAudio} = useSelector(getPlayerState);
-  const {isPlaying, isBusy, seekTo, skipTo, togglePlayPause} =
-    useAudioController();
+  const {
+    isPlaying,
+    isBusy,
+    seekTo,
+    skipTo,
+    togglePlayPause,
+    onNextPress,
+    onPreviousPress,
+  } = useAudioController();
   const poster = onGoingAudio?.poster;
   const source = poster ? {uri: poster} : require('../assets/music.png');
 
   const {duration, position} = useProgress();
+
   const updateSeek = async (value: number) => {
     await seekTo(value);
+  };
+
+  const handleOnNextPress = async () => {
+    await onNextPress();
+  };
+
+  const handleOnPreviousPress = async () => {
+    await onPreviousPress();
   };
 
   const handleSkipTo = async (skipType: 'forward' | 'reverse') => {
@@ -70,7 +86,7 @@ export default function AudioPlayer({visible, onRequestClose}: Props) {
           />
 
           <View style={styles.controls}>
-            <PlayerController ignoreContainer>
+            <PlayerController ignoreContainer onPress={handleOnPreviousPress}>
               <AntDesign
                 name="stepbackward"
                 size={24}
@@ -112,7 +128,7 @@ export default function AudioPlayer({visible, onRequestClose}: Props) {
               <Text style={styles.skipText}>+10s</Text>
             </PlayerController>
 
-            <PlayerController ignoreContainer>
+            <PlayerController ignoreContainer onPress={handleOnNextPress}>
               <AntDesign name="stepforward" size={24} color={colors.CONTRAST} />
             </PlayerController>
           </View>
