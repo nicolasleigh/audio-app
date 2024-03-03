@@ -35,6 +35,11 @@ export default function AppModal({
     transform: [{translateY: translateY.value}],
   }));
 
+  const handleClose = () => {
+    translateY.value = modalHeight;
+    onRequestClose();
+  };
+
   const gesture = Gesture.Pan()
     .onUpdate(e => {
       if (e.translationY < 0) return;
@@ -45,7 +50,7 @@ export default function AppModal({
         translateY.value = 0;
       } else {
         translateY.value = modalHeight;
-        runOnJS(onRequestClose)();
+        runOnJS(handleClose)();
       }
     });
 
@@ -56,12 +61,13 @@ export default function AppModal({
 
   return (
     <Modal
-      onRequestClose={onRequestClose}
+      onRequestClose={handleClose}
       visible={visible}
       style={styles.container}
       transparent>
       <GestureHandlerRootView style={{flex: 1}}>
         <Pressable style={styles.backdrop}>
+          {/* <Pressable onResponderEnd={handleClose} style={styles.backdrop}> */}
           <GestureDetector gesture={gesture}>
             <Animated.View style={[styles.modal, translateStyle]}>
               {children}

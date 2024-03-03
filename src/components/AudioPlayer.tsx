@@ -14,6 +14,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import PlayPauseBtn from '../ui/PlayPauseBtn';
 import PlayerController from '../ui/PlayerController';
 import Loader from '../ui/Loader';
+import PlaybackRateSelector from '../ui/PlaybackRateSelector';
 
 interface Props {
   visible: boolean;
@@ -132,6 +133,7 @@ export default function AudioPlayer({visible, onRequestClose}: Props) {
               <AntDesign name="stepforward" size={24} color={colors.CONTRAST} />
             </PlayerController>
           </View>
+          <PlaybackRateSelector containerStyle={{marginTop: 20}} />
         </View>
       </View>
     </AppModal>
