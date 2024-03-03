@@ -4,6 +4,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import colors from '../utils/colors';
 import {useSelector} from 'react-redux';
 import {getPlayerState} from '../store/player';
+import PlayPauseBtn from '../ui/PlayPauseBtn';
+import useAudioController from '../hooks/useAudioController';
+import Loader from '../ui/Loader';
 
 interface Props {}
 
@@ -11,6 +14,7 @@ export const MiniPlayerHeight = 60;
 
 export default function MiniAudioPlayer({}: Props) {
   const {onGoingAudio} = useSelector(getPlayerState);
+  const {isPlaying, isBusy, togglePlayPause} = useAudioController();
   const poster = onGoingAudio?.poster;
   const source = poster ? {uri: poster} : require('../assets/music.png');
   return (
@@ -23,9 +27,12 @@ export default function MiniAudioPlayer({}: Props) {
       <Pressable style={{paddingHorizontal: 10}}>
         <AntDesign name="hearto" size={24} color={colors.CONTRAST} />
       </Pressable>
-      <Pressable style={{paddingHorizontal: 10}}>
-        <AntDesign name="caretright" size={24} color={colors.CONTRAST} />
-      </Pressable>
+
+      {isBusy ? (
+        <Loader />
+      ) : (
+        <PlayPauseBtn playing={isPlaying} onPress={togglePlayPause} />
+      )}
     </View>
   );
 }

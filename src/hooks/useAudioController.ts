@@ -36,6 +36,11 @@ const useAudioController = () => {
   // const isPlayerReady = playbackState.state !== State.None;
   // const isPlayerReady = playbackState.state === State.Ready;
   const isPlayerReady = Boolean(playbackState.state);
+  const isPlaying = playbackState.state === State.Playing;
+  const isPaused = playbackState.state === State.Paused;
+  const isBusy =
+    playbackState.state === State.Buffering ||
+    playbackState.state === State.Loading;
 
   const onAudioPress = async (item: AudioData, data: AudioData[]) => {
     // console.log(playbackState);
@@ -81,7 +86,16 @@ const useAudioController = () => {
     }
   };
 
-  return {onAudioPress, isPlayerReady};
+  const togglePlayPause = async () => {
+    if (isPlaying) {
+      await TrackPlayer.pause();
+    }
+    if (isPaused) {
+      await TrackPlayer.play();
+    }
+  };
+
+  return {onAudioPress, togglePlayPause, isPlayerReady, isPlaying, isBusy};
 };
 
 export default useAudioController;
