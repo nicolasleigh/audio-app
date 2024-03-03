@@ -88,5 +88,6 @@ const styles = StyleSheet.create({
     left: 0,
     borderTopEndRadius: 10,
     borderTopStartRadius: 10,
+    overflow: 'hidden',
   },
 });

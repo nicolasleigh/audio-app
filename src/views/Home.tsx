@@ -168,11 +168,7 @@ export default function Home({}: Props) {
           }}
           onSubmit={handlePlaylistSubmit}
         />
-        <Button title="Open" onPress={() => setShow(true)} />
       </ScrollView>
-      <AppModal animation visible={show} onRequestClose={() => setShow(false)}>
-        <View />
-      </AppModal>
     </AppView>
   );
 }
