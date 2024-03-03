@@ -1,8 +1,8 @@
 import React from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import AppModal from '../ui/AppModal';
-import {useSelector} from 'react-redux';
-import {getPlayerState} from '../store/player';
+import {useDispatch, useSelector} from 'react-redux';
+import {getPlayerState, updatePlaybackRate} from '../store/player';
 import colors from '../utils/colors';
 import AppLink from '../ui/AppLink';
 import {useProgress} from 'react-native-track-player';
@@ -28,7 +28,7 @@ const formattedDuration = (duration = 0) => {
 };
 
 export default function AudioPlayer({visible, onRequestClose}: Props) {
-  const {onGoingAudio} = useSelector(getPlayerState);
+  const {onGoingAudio, playbackRate} = useSelector(getPlayerState);
   const {
     isPlaying,
     isBusy,
@@ -37,11 +37,13 @@ export default function AudioPlayer({visible, onRequestClose}: Props) {
     togglePlayPause,
     onNextPress,
     onPreviousPress,
+    setPlaybackRate,
   } = useAudioController();
   const poster = onGoingAudio?.poster;
   const source = poster ? {uri: poster} : require('../assets/music.png');
 
   const {duration, position} = useProgress();
+  const dispatch = useDispatch();
 
   const updateSeek = async (value: number) => {
     await seekTo(value);
@@ -58,6 +60,11 @@ export default function AudioPlayer({visible, onRequestClose}: Props) {
   const handleSkipTo = async (skipType: 'forward' | 'reverse') => {
     if (skipType === 'forward') await skipTo(10);
     if (skipType === 'reverse') await skipTo(-10);
+  };
+
+  const onPlaybackRatePress = async (rate: number) => {
+    await setPlaybackRate(rate);
+    dispatch(updatePlaybackRate(rate));
   };
 
   return (
@@ -133,7 +140,11 @@ export default function AudioPlayer({visible, onRequestClose}: Props) {
               <AntDesign name="stepforward" size={24} color={colors.CONTRAST} />
             </PlayerController>
           </View>
-          <PlaybackRateSelector containerStyle={{marginTop: 20}} />
+          <PlaybackRateSelector
+            containerStyle={{marginTop: 20}}
+            onPress={onPlaybackRatePress}
+            activeRate={playbackRate.toString()}
+          />
         </View>
       </View>
     </AppModal>
