@@ -5,7 +5,12 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 import {AudioData} from '../@types/audio';
 import {useDispatch, useSelector} from 'react-redux';
-import {getPlayerState, updateOnGoingAudio} from '../store/player';
+import {
+  getPlayerState,
+  updateOnGoingAudio,
+  updateOnGoingList,
+} from '../store/player';
+import deepEqual from 'deep-equal';
 
 const updateQueue = async (data: AudioData[]) => {
   const lists: Track[] = data.map(item => {
@@ -24,7 +29,7 @@ const updateQueue = async (data: AudioData[]) => {
 
 const useAudioController = () => {
   const playbackState = usePlaybackState();
-  const {onGoingAudio} = useSelector(getPlayerState);
+  const {onGoingAudio, onGoingList} = useSelector(getPlayerState);
   const dispatch = useDispatch();
   console.log(playbackState);
 
@@ -40,6 +45,7 @@ const useAudioController = () => {
       await TrackPlayer.skip(index);
       await TrackPlayer.play();
       dispatch(updateOnGoingAudio(item));
+      return dispatch(updateOnGoingList(data));
     }
     if (playbackState.state === State.Playing && onGoingAudio?.id === item.id) {
       // same audio is already playing, then pause it
@@ -54,6 +60,15 @@ const useAudioController = () => {
       await TrackPlayer.skip(index);
       await TrackPlayer.play();
       dispatch(updateOnGoingAudio(item));
+      return dispatch(updateOnGoingList(data));
+    }
+    if (onGoingAudio?.id !== item.id) {
+      const fromSameList = deepEqual(onGoingList, data);
+      if (fromSameList) {
+        // playing new audio from same list
+      } else {
+        // playing new audio from different list
+      }
     }
   };
 

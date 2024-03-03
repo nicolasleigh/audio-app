@@ -1,17 +1,20 @@
 import React from 'react';
-import {Image, Pressable, StyleSheet, Text} from 'react-native';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import colors from '../utils/colors';
+import PlayAnimation from './PlayAnimation';
 
 interface Props {
   title: string;
   poster?: string;
   onPress?(): void;
   onLongPress?(): void;
+  playing?: boolean;
 }
 
 export default function AudioCard({
   title,
   poster,
+  playing = false,
   onPress,
   onLongPress,
 }: Props) {
@@ -21,7 +24,10 @@ export default function AudioCard({
       onPress={onPress}
       onLongPress={onLongPress}
       style={styles.container}>
-      <Image source={source} style={styles.poster} />
+      <View>
+        <Image source={source} style={styles.poster} />
+        <PlayAnimation visible={playing} />
+      </View>
       <Text numberOfLines={2} ellipsizeMode="tail" style={styles.title}>
         {title}
       </Text>
