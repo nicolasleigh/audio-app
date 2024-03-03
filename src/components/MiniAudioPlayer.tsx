@@ -7,6 +7,8 @@ import {getPlayerState} from '../store/player';
 import PlayPauseBtn from '../ui/PlayPauseBtn';
 import useAudioController from '../hooks/useAudioController';
 import Loader from '../ui/Loader';
+import {mapRange} from '../utils/math';
+import {useProgress} from 'react-native-track-player';
 
 interface Props {}
 
@@ -15,25 +17,41 @@ export const MiniPlayerHeight = 60;
 export default function MiniAudioPlayer({}: Props) {
   const {onGoingAudio} = useSelector(getPlayerState);
   const {isPlaying, isBusy, togglePlayPause} = useAudioController();
+  const progress = useProgress();
+  // console.log(progress); //{"buffered": 90.69714285714285, "duration": 90.69714285714285, "position": 0.502803609}
   const poster = onGoingAudio?.poster;
   const source = poster ? {uri: poster} : require('../assets/music.png');
   return (
-    <View style={styles.container}>
-      <Image source={source} style={styles.poster} />
-      <View style={styles.contentContainer}>
-        <Text style={styles.title}>{onGoingAudio?.title}</Text>
-        <Text style={styles.name}>{onGoingAudio?.owner.name}</Text>
-      </View>
-      <Pressable style={{paddingHorizontal: 10}}>
-        <AntDesign name="hearto" size={24} color={colors.CONTRAST} />
-      </Pressable>
+    <>
+      <View
+        style={{
+          height: 2,
+          backgroundColor: colors.SECONDARY,
+          width: `${mapRange({
+            outputMin: 0,
+            outputMax: 100,
+            inputMin: 0,
+            inputMax: progress.duration,
+            inputValue: progress.position,
+          })}%`,
+        }}></View>
+      <View style={styles.container}>
+        <Image source={source} style={styles.poster} />
+        <View style={styles.contentContainer}>
+          <Text style={styles.title}>{onGoingAudio?.title}</Text>
+          <Text style={styles.name}>{onGoingAudio?.owner.name}</Text>
+        </View>
+        <Pressable style={{paddingHorizontal: 10}}>
+          <AntDesign name="hearto" size={24} color={colors.CONTRAST} />
+        </Pressable>
 
-      {isBusy ? (
-        <Loader />
-      ) : (
-        <PlayPauseBtn playing={isPlaying} onPress={togglePlayPause} />
-      )}
-    </View>
+        {isBusy ? (
+          <Loader />
+        ) : (
+          <PlayPauseBtn playing={isPlaying} onPress={togglePlayPause} />
+        )}
+      </View>
+    </>
   );
 }
 
