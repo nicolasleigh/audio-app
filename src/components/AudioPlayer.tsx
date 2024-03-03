@@ -13,6 +13,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import PlayPauseBtn from '../ui/PlayPauseBtn';
 import PlayerController from '../ui/PlayerController';
+import Loader from '../ui/Loader';
 
 interface Props {
   visible: boolean;
@@ -27,13 +28,19 @@ const formattedDuration = (duration = 0) => {
 
 export default function AudioPlayer({visible, onRequestClose}: Props) {
   const {onGoingAudio} = useSelector(getPlayerState);
-  const {seekTo} = useAudioController();
+  const {isPlaying, isBusy, seekTo, skipTo, togglePlayPause} =
+    useAudioController();
   const poster = onGoingAudio?.poster;
   const source = poster ? {uri: poster} : require('../assets/music.png');
 
   const {duration, position} = useProgress();
   const updateSeek = async (value: number) => {
     await seekTo(value);
+  };
+
+  const handleSkipTo = async (skipType: 'forward' | 'reverse') => {
+    if (skipType === 'forward') await skipTo(10);
+    if (skipType === 'reverse') await skipTo(-10);
   };
 
   return (
@@ -71,24 +78,38 @@ export default function AudioPlayer({visible, onRequestClose}: Props) {
               />
             </PlayerController>
 
-            <PlayerController ignoreContainer>
+            <PlayerController
+              onPress={() => handleSkipTo('reverse')}
+              ignoreContainer>
               <FontAwesome
                 name="rotate-left"
                 size={18}
                 color={colors.CONTRAST}
               />
+              <Text style={styles.skipText}>-10s</Text>
             </PlayerController>
 
             <PlayerController>
-              <PlayPauseBtn color={colors.PRIMARY} />
+              {isBusy ? (
+                <Loader color={colors.PRIMARY} />
+              ) : (
+                <PlayPauseBtn
+                  playing={isPlaying}
+                  color={colors.PRIMARY}
+                  onPress={togglePlayPause}
+                />
+              )}
             </PlayerController>
 
-            <PlayerController ignoreContainer>
+            <PlayerController
+              ignoreContainer
+              onPress={() => handleSkipTo('forward')}>
               <FontAwesome
                 name="rotate-right"
                 size={18}
                 color={colors.CONTRAST}
               />
+              <Text style={styles.skipText}>+10s</Text>
             </PlayerController>
 
             <PlayerController ignoreContainer>
@@ -136,5 +157,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: 20,
+  },
+  skipText: {
+    fontSize: 12,
+    marginTop: 2,
+    color: colors.CONTRAST,
   },
 });

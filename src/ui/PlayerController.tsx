@@ -6,12 +6,14 @@ interface Props {
   size?: number;
   children?: React.ReactNode;
   ignoreContainer?: boolean;
+  onPress?(): void;
 }
 
 export default function PlayerController({
   size = 45,
   children,
   ignoreContainer,
+  onPress,
 }: Props) {
   return (
     <Pressable
@@ -23,7 +25,8 @@ export default function PlayerController({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: ignoreContainer ? 'transparent' : colors.CONTRAST,
-      }}>
+      }}
+      onPress={onPress}>
       {children}
     </Pressable>
   );
