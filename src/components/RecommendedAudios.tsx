@@ -1,10 +1,13 @@
 import React from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
+import {useSelector} from 'react-redux';
+import {AudioData} from '../@types/audio';
 import {useFetchRecommendedAudios} from '../hooks/query';
-import colors from '../utils/colors';
+import {getPlayerState} from '../store/player';
+import AudioCard from '../ui/AudioCard';
 import GridView from '../ui/GridView';
 import PulseAnimationContainer from '../ui/PulseAnimationContainer';
-import {AudioData} from '../@types/audio';
+import colors from '../utils/colors';
 
 interface Props {
   onAudioPress(item: AudioData, data: AudioData[]): void;
@@ -18,10 +21,7 @@ export default function RecommendedAudios({
   onAudioPress,
 }: Props) {
   const {data = [], isLoading} = useFetchRecommendedAudios();
-
-  const getPoster = (poster?: string) => {
-    return poster ? {uri: poster} : require('../assets/music.png');
-  };
+  const {onGoingAudio} = useSelector(getPlayerState);
 
   if (isLoading) {
     return (
@@ -48,17 +48,14 @@ export default function RecommendedAudios({
         data={data || []}
         renderItem={item => {
           return (
-            <Pressable
+            <AudioCard
+              title={item.title}
+              poster={item.poster}
               onPress={() => onAudioPress(item, data)}
-              onLongPress={() => onAudioLongPress(item, data)}>
-              <Image style={styles.poster} source={getPoster(item.poster)} />
-              <Text
-                numberOfLines={2}
-                ellipsizeMode="tail"
-                style={styles.audioTitle}>
-                {item.title}
-              </Text>
-            </Pressable>
+              onLongPress={() => onAudioLongPress(item, data)}
+              containerStyle={{width: '100%'}}
+              playing={onGoingAudio?.id === item.id}
+            />
           );
         }}
       />

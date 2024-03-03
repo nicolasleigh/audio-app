@@ -1,5 +1,13 @@
 import React from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from 'react-native';
 import colors from '../utils/colors';
 import PlayAnimation from './PlayAnimation';
 
@@ -9,12 +17,14 @@ interface Props {
   onPress?(): void;
   onLongPress?(): void;
   playing?: boolean;
+  containerStyle?: StyleProp<ViewStyle>;
 }
 
 export default function AudioCard({
   title,
   poster,
   playing = false,
+  containerStyle,
   onPress,
   onLongPress,
 }: Props) {
@@ -23,7 +33,7 @@ export default function AudioCard({
     <Pressable
       onPress={onPress}
       onLongPress={onLongPress}
-      style={styles.container}>
+      style={[styles.container, containerStyle]}>
       <View>
         <Image source={source} style={styles.poster} />
         <PlayAnimation visible={playing} />
@@ -44,8 +54,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   poster: {
-    width: 100,
-    height: 100,
+    width: '100%',
+    aspectRatio: 1,
     borderRadius: 7,
   },
 });
