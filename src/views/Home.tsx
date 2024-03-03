@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  Button,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
 import {AudioData, Playlist} from '../@types/audio';
@@ -16,6 +23,7 @@ import colors from '../utils/colors';
 import TrackPlayer, {Track} from 'react-native-track-player';
 import useAudioController from '../hooks/useAudioController';
 import AppView from '../components/AppView';
+import AppModal from '../ui/AppModal';
 
 interface Props {}
 
@@ -25,6 +33,7 @@ export default function Home({}: Props) {
   const [showPlaylistModal, setShowPlaylistModal] = useState(false);
   const [showPlaylistForm, setShowPlaylistForm] = useState(false);
   const {onAudioPress} = useAudioController();
+  const [show, setShow] = useState(false);
 
   const {data: list} = useFetchPlaylist();
 
@@ -159,7 +168,11 @@ export default function Home({}: Props) {
           }}
           onSubmit={handlePlaylistSubmit}
         />
+        <Button title="Open" onPress={() => setShow(true)} />
       </ScrollView>
+      <AppModal animation visible={show} onRequestClose={() => setShow(false)}>
+        <View />
+      </AppModal>
     </AppView>
   );
 }
