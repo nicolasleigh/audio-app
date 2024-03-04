@@ -1,31 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import {
-  Button,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React, {useState} from 'react';
+import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
 import {AudioData, Playlist} from '../@types/audio';
 import catchAsyncError from '../api/catchError';
 import {getClient} from '../api/client';
+import AppView from '../components/AppView';
 import LatestUploads from '../components/LatestUploads';
 import OptionsModal from '../components/OptionsModal';
 import PlaylistForm, {PlaylistInfo} from '../components/PlaylistForm';
 import PlaylistModal from '../components/PlaylistModal';
+import RecentlyPlayed from '../components/RecentlyPlayed';
 import RecommendedAudios from '../components/RecommendedAudios';
+import RecommendedPlaylist from '../components/RecommendedPlaylist';
 import {useFetchPlaylist} from '../hooks/query';
+import useAudioController from '../hooks/useAudioController';
 import {updateNotification} from '../store/notification';
 import colors from '../utils/colors';
-import TrackPlayer, {Track} from 'react-native-track-player';
-import useAudioController from '../hooks/useAudioController';
-import AppView from '../components/AppView';
-import AppModal from '../ui/AppModal';
-import RecentlyPlayed from '../components/RecentlyPlayed';
-import RecommendedPlaylist from '../components/RecommendedPlaylist';
 
 interface Props {}
 

@@ -1,29 +1,45 @@
+import {useQueryClient} from '@tanstack/react-query';
 import React from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {RefreshControl, ScrollView, StyleSheet} from 'react-native';
+import {useSelector} from 'react-redux';
 import {useFetchFavorite} from '../../hooks/query';
+import useAudioController from '../../hooks/useAudioController';
+import {getPlayerState} from '../../store/player';
+import AudioListItem from '../../ui/AudioListItem';
 import AudioListLoadingUI from '../../ui/AudioListLoadingUI';
 import EmptyRecords from '../../ui/EmptyRecords';
-import AudioListItem from '../../ui/AudioListItem';
-import useAudioController from '../../hooks/useAudioController';
-import {useSelector} from 'react-redux';
-import {getPlayerState} from '../../store/player';
+import colors from '../../utils/colors';
 
 interface Props {}
 
 export default function FavoriteTab({}: Props) {
-  const {data, isLoading} = useFetchFavorite();
+  const {data, isLoading, isFetching} = useFetchFavorite();
   const {onAudioPress} = useAudioController();
   const {onGoingAudio} = useSelector(getPlayerState);
+
+  const queryClient = useQueryClient();
+
+  const handleOnRefresh = () => {
+    queryClient.invalidateQueries({queryKey: ['favorite']});
+  };
 
   if (isLoading) {
     return <AudioListLoadingUI />;
   }
-  if (!data?.length) {
-    return <EmptyRecords title="There is no favorite audio." />;
-  }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl
+          refreshing={isFetching}
+          onRefresh={handleOnRefresh}
+          tintColor={colors.CONTRAST}
+        />
+      }>
+      {!data?.length ? (
+        <EmptyRecords title="There is no favorite audio." />
+      ) : null}
       {data?.map(item => {
         return (
           <AudioListItem

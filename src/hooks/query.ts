@@ -93,7 +93,7 @@ const fetchFavorite = async (): Promise<AudioData[]> => {
 
 export const useFetchFavorite = () => {
   const dispatch = useDispatch();
-  const {data, isError, error, isLoading} = useQuery({
+  const {data, isError, error, isLoading, isFetching} = useQuery({
     queryKey: ['favorite'],
     queryFn: fetchFavorite,
   });
@@ -102,7 +102,7 @@ export const useFetchFavorite = () => {
     dispatch(updateNotification({message: errorMsg, type: 'error'}));
   }
 
-  return {data, isLoading};
+  return {data, isLoading, isFetching};
 };
 
 const fetchHistories = async (): Promise<History[]> => {

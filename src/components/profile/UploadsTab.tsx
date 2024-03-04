@@ -1,20 +1,13 @@
 import React from 'react';
-import {
-  Image,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
+import {useSelector} from 'react-redux';
 import {useFetchUploadsByProfile} from '../../hooks/query';
-import colors from '../../utils/colors';
+import useAudioController from '../../hooks/useAudioController';
+import {getPlayerState} from '../../store/player';
 import AudioListItem from '../../ui/AudioListItem';
 import AudioListLoadingUI from '../../ui/AudioListLoadingUI';
 import EmptyRecords from '../../ui/EmptyRecords';
-import useAudioController from '../../hooks/useAudioController';
-import {useSelector} from 'react-redux';
-import {getPlayerState} from '../../store/player';
+import colors from '../../utils/colors';
 
 interface Props {}
 
