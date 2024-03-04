@@ -10,6 +10,7 @@ import Loader from '../ui/Loader';
 import {mapRange} from '../utils/math';
 import {useProgress} from 'react-native-track-player';
 import AudioPlayer from './AudioPlayer';
+import CurrentAudioList from './CurrentAudioList';
 
 interface Props {}
 
@@ -19,6 +20,7 @@ export default function MiniAudioPlayer({}: Props) {
   const {onGoingAudio} = useSelector(getPlayerState);
   const {isPlaying, isBusy, togglePlayPause} = useAudioController();
   const [playerVisibility, setPlayerVisibility] = useState(false);
+  const [showCurrentList, setShowCurrentList] = useState(false);
   const progress = useProgress();
   // console.log(progress); //{"buffered": 90.69714285714285, "duration": 90.69714285714285, "position": 0.502803609}
   const poster = onGoingAudio?.poster;
@@ -30,6 +32,14 @@ export default function MiniAudioPlayer({}: Props) {
   const showPlayerModal = () => {
     setPlayerVisibility(true);
   };
+  const handleOnCurrentListClose = () => {
+    setShowCurrentList(false);
+  };
+  const handleOnListOptionPress = () => {
+    closePlayerModal();
+    setShowCurrentList(true);
+  };
+
   return (
     <>
       <View
@@ -64,6 +74,11 @@ export default function MiniAudioPlayer({}: Props) {
       <AudioPlayer
         visible={playerVisibility}
         onRequestClose={closePlayerModal}
+        onListOptionPress={handleOnListOptionPress}
+      />
+      <CurrentAudioList
+        visible={showCurrentList}
+        onRequestClose={handleOnCurrentListClose}
       />
     </>
   );

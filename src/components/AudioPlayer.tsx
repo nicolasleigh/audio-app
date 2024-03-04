@@ -11,6 +11,7 @@ import Slider from '@react-native-community/slider';
 import useAudioController from '../hooks/useAudioController';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import PlayPauseBtn from '../ui/PlayPauseBtn';
 import PlayerController from '../ui/PlayerController';
 import Loader from '../ui/Loader';
@@ -20,6 +21,7 @@ import AudioInfoContainer from './AudioInfoContainer';
 interface Props {
   visible: boolean;
   onRequestClose(): void;
+  onListOptionPress?(): void;
 }
 
 const formattedDuration = (duration = 0) => {
@@ -28,7 +30,11 @@ const formattedDuration = (duration = 0) => {
   });
 };
 
-export default function AudioPlayer({visible, onRequestClose}: Props) {
+export default function AudioPlayer({
+  visible,
+  onRequestClose,
+  onListOptionPress,
+}: Props) {
   const [showAudioInfo, setShowAudioInfo] = useState(false);
   const {onGoingAudio, playbackRate} = useSelector(getPlayerState);
   const {
@@ -68,19 +74,6 @@ export default function AudioPlayer({visible, onRequestClose}: Props) {
     await setPlaybackRate(rate);
     dispatch(updatePlaybackRate(rate));
   };
-
-  // if (showAudioInfo) {
-  //   return (
-  //     <AppModal animation visible={visible} onRequestClose={onRequestClose}>
-  //       <View style={styles.container}>
-  //         <AudioInfoContainer
-  //           visible={showAudioInfo}
-  //           closeHandler={setShowAudioInfo}
-  //         />
-  //       </View>
-  //     </AppModal>
-  //   );
-  // }
 
   return (
     <AppModal animation visible={visible} onRequestClose={onRequestClose}>
@@ -169,6 +162,16 @@ export default function AudioPlayer({visible, onRequestClose}: Props) {
             onPress={onPlaybackRatePress}
             activeRate={playbackRate.toString()}
           />
+
+          <View style={styles.listOptionBtnContainer}>
+            <PlayerController ignoreContainer onPress={onListOptionPress}>
+              <MaterialCommunityIcons
+                name="playlist-music"
+                size={24}
+                color={colors.CONTRAST}
+              />
+            </PlayerController>
+          </View>
         </View>
       </View>
     </AppModal>
@@ -220,5 +223,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: 10,
+  },
+  listOptionBtnContainer: {
+    alignItems: 'flex-end',
   },
 });
