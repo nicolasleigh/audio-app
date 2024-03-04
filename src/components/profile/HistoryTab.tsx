@@ -5,11 +5,25 @@ import {useFetchHistories} from '../../hooks/query';
 import EmptyRecords from '../../ui/EmptyRecords';
 import AudioListLoadingUI from '../../ui/AudioListLoadingUI';
 import colors from '../../utils/colors';
+import {getClient} from '../../api/client';
+import {useQueryClient} from '@tanstack/react-query';
+import {historyAudio} from '../../@types/audio';
 
 interface Props {}
 
 export default function HistoryTab({}: Props) {
   const {data, isLoading} = useFetchHistories();
+  const queryClient = useQueryClient();
+
+  const removeHistories = async (histories: string[]) => {
+    const client = await getClient();
+    await client.delete('/history?histories=' + JSON.stringify(histories));
+    queryClient.invalidateQueries({queryKey: ['histories']});
+  };
+
+  const handleSingleHistoryRemove = async (history: historyAudio) => {
+    await removeHistories([history.id]);
+  };
 
   if (isLoading) {
     return <AudioListLoadingUI />;
@@ -31,7 +45,7 @@ export default function HistoryTab({}: Props) {
                 return (
                   <View key={audio.id + index} style={styles.history}>
                     <Text style={styles.historyTitle}>{audio.title}</Text>
-                    <Pressable>
+                    <Pressable onPress={() => handleSingleHistoryRemove(audio)}>
                       <AntDesign name="close" color={colors.CONTRAST} />
                     </Pressable>
                   </View>
