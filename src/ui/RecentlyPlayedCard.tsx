@@ -1,18 +1,29 @@
 import React from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import colors from '../utils/colors';
+import PlayAnimation from './PlayAnimation';
 
 interface Props {
   title: string;
   poster?: string;
+  isPlaying?: boolean;
   onPress?(): void;
 }
 
-export default function RecentlyPlayedCard({title, onPress, poster}: Props) {
+export default function RecentlyPlayedCard({
+  title,
+  isPlaying = false,
+  onPress,
+  poster,
+}: Props) {
   const source = poster ? {uri: poster} : require('../assets/music_small.png');
   return (
     <Pressable onPress={onPress} style={styles.container}>
-      <Image source={source} style={styles.poster} />
+      <View>
+        <Image source={source} style={styles.poster} />
+        <PlayAnimation visible={isPlaying} />
+      </View>
+
       <View style={styles.titleContainer}>
         <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
           {title}

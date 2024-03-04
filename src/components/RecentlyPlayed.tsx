@@ -5,13 +5,18 @@ import colors from '../utils/colors';
 import RecentlyPlayedCard from '../ui/RecentlyPlayedCard';
 import GridView from '../ui/GridView';
 import PulseAnimationContainer from '../ui/PulseAnimationContainer';
+import useAudioController from '../hooks/useAudioController';
+import {useSelector} from 'react-redux';
+import {getPlayerState} from '../store/player';
 
 interface Props {}
 
 const dummyData = new Array(4).fill('');
 
 export default function RecentlyPlayed({}: Props) {
-  const {data, isLoading} = useFetchRecentlyPlayed();
+  const {data = [], isLoading} = useFetchRecentlyPlayed();
+  const {onAudioPress} = useAudioController();
+  const {onGoingAudio} = useSelector(getPlayerState);
   if (isLoading) {
     return (
       <PulseAnimationContainer>
@@ -39,30 +44,22 @@ export default function RecentlyPlayed({}: Props) {
     <View style={styles.container}>
       <Text style={styles.title}>Recently Played</Text>
       <GridView
-        data={data || []}
+        data={data}
         renderItem={item => {
           return (
             <View key={item.id} style={styles.listStyle}>
               <RecentlyPlayedCard
                 title={item.title}
                 poster={item.poster}
-                onPress={() => {}}
+                onPress={() => {
+                  onAudioPress(item, data);
+                }}
+                isPlaying={onGoingAudio?.id === item.id}
               />
             </View>
           );
         }}
       />
-      {/* {data?.map(item => {
-        return (
-          <View key={item.id} style={styles.listStyle}>
-            <RecentlyPlayedCard
-              title={item.title}
-              poster={item.poster}
-              onPress={() => {}}
-            />
-          </View>
-        );
-      })} */}
     </View>
   );
 }
