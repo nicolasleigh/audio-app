@@ -70,7 +70,7 @@ export default function MiniAudioPlayer({}: Props) {
   const handleOnProfileLinkPress = () => {
     closePlayerModal();
     navigate('PublicProfile', {
-      profileId: onGoingAudio?.id || '',
+      profileId: onGoingAudio?.owner.id || '',
     });
   };
 

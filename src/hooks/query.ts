@@ -4,6 +4,7 @@ import {AudioData, History, Playlist} from '../@types/audio';
 import catchAsyncError from '../api/catchError';
 import {getClient} from '../api/client';
 import {updateNotification} from '../store/notification';
+import {PublicProfile} from '../@types/user';
 
 const fetchLatest = async (): Promise<AudioData[]> => {
   const client = await getClient();
@@ -176,6 +177,27 @@ export const useFetchIsFavorite = (id: string) => {
   const {data, isError, error, isLoading, isFetching} = useQuery({
     queryKey: ['favorite', id],
     queryFn: () => fetchIsFavorite(id),
+    enabled: !!id, // only fetch if id is exist
+  });
+  if (isError) {
+    const errorMsg = catchAsyncError(error);
+    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+  }
+
+  return {data, isLoading, isFetching};
+};
+
+const fetchPublicProfile = async (id: string): Promise<PublicProfile> => {
+  const client = await getClient();
+  const {data} = await client.get('/profile/info/' + id);
+  return data.profile;
+};
+
+export const useFetchPublicProfile = (id: string) => {
+  const dispatch = useDispatch();
+  const {data, isError, error, isLoading, isFetching} = useQuery({
+    queryKey: ['profile', id],
+    queryFn: () => fetchPublicProfile(id),
     enabled: !!id, // only fetch if id is exist
   });
   if (isError) {

@@ -1,8 +1,10 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {HomeNavigatorStackParamList} from '../@types/navigation';
 import AppView from '../components/AppView';
+import PublicProfileContainer from '../components/profile/PublicProfileContainer';
+import {useFetchPublicProfile} from '../hooks/query';
 
 type Props = NativeStackScreenProps<
   HomeNavigatorStackParamList,
@@ -11,11 +13,11 @@ type Props = NativeStackScreenProps<
 
 export default function PublicProfile({route}: Props) {
   const {profileId} = route.params;
-  console.log(profileId);
+  const {data} = useFetchPublicProfile(profileId);
   return (
     <AppView>
       <View style={styles.container}>
-        <Text style={{color: 'white'}}>Public Profile</Text>
+        <PublicProfileContainer profile={data} />
       </View>
     </AppView>
   );
