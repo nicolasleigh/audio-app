@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import AppModal from '../ui/AppModal';
 import {useDispatch, useSelector} from 'react-redux';
@@ -15,6 +15,7 @@ import PlayPauseBtn from '../ui/PlayPauseBtn';
 import PlayerController from '../ui/PlayerController';
 import Loader from '../ui/Loader';
 import PlaybackRateSelector from '../ui/PlaybackRateSelector';
+import AudioInfoContainer from './AudioInfoContainer';
 
 interface Props {
   visible: boolean;
@@ -28,6 +29,7 @@ const formattedDuration = (duration = 0) => {
 };
 
 export default function AudioPlayer({visible, onRequestClose}: Props) {
+  const [showAudioInfo, setShowAudioInfo] = useState(false);
   const {onGoingAudio, playbackRate} = useSelector(getPlayerState);
   const {
     isPlaying,
@@ -67,9 +69,31 @@ export default function AudioPlayer({visible, onRequestClose}: Props) {
     dispatch(updatePlaybackRate(rate));
   };
 
+  // if (showAudioInfo) {
+  //   return (
+  //     <AppModal animation visible={visible} onRequestClose={onRequestClose}>
+  //       <View style={styles.container}>
+  //         <AudioInfoContainer
+  //           visible={showAudioInfo}
+  //           closeHandler={setShowAudioInfo}
+  //         />
+  //       </View>
+  //     </AppModal>
+  //   );
+  // }
+
   return (
     <AppModal animation visible={visible} onRequestClose={onRequestClose}>
       <View style={styles.container}>
+        <Pressable
+          style={styles.infoBtn}
+          onPress={() => setShowAudioInfo(true)}>
+          <AntDesign name="infocirlceo" color={colors.CONTRAST} size={24} />
+        </Pressable>
+        <AudioInfoContainer
+          visible={showAudioInfo}
+          closeHandler={setShowAudioInfo}
+        />
         <Image source={source} style={styles.poster} />
         <View style={styles.contentContainer}>
           <Text style={styles.title}>{onGoingAudio?.title}</Text>
@@ -191,5 +215,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 2,
     color: colors.CONTRAST,
+  },
+  infoBtn: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
   },
 });
