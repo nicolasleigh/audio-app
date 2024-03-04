@@ -52,10 +52,10 @@ const useAudioController = () => {
     // if (isPlayerReady) {
     if (!playbackState.state) {
       await updateQueue(data);
+      dispatch(updateOnGoingAudio(item)); // give us audio id before playing audio
       const index = data.findIndex(audio => audio.id === item.id);
       await TrackPlayer.skip(index);
       await TrackPlayer.play();
-      dispatch(updateOnGoingAudio(item));
       return dispatch(updateOnGoingList(data));
     }
     if (playbackState.state === State.Playing && onGoingAudio?.id === item.id) {
@@ -67,10 +67,10 @@ const useAudioController = () => {
     }
     if (playbackState.state) {
       await updateQueue(data);
+      dispatch(updateOnGoingAudio(item));
       const index = data.findIndex(audio => audio.id === item.id);
       await TrackPlayer.skip(index);
       await TrackPlayer.play();
-      dispatch(updateOnGoingAudio(item));
       return dispatch(updateOnGoingList(data));
     }
     if (onGoingAudio?.id !== item.id) {

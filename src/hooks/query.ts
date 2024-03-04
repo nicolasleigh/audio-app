@@ -164,3 +164,24 @@ export const useFetchRecommendedPlaylist = () => {
 
   return {data, isLoading, isFetching};
 };
+
+const fetchIsFavorite = async (id: string): Promise<boolean[]> => {
+  const client = await getClient();
+  const {data} = await client.get('/favorite/is-fav?audioId=' + id);
+  return data.result;
+};
+
+export const useFetchIsFavorite = (id: string) => {
+  const dispatch = useDispatch();
+  const {data, isError, error, isLoading, isFetching} = useQuery({
+    queryKey: ['favorite', id],
+    queryFn: () => fetchIsFavorite(id),
+    enabled: !!id, // only fetch if id is exist
+  });
+  if (isError) {
+    const errorMsg = catchAsyncError(error);
+    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+  }
+
+  return {data, isLoading, isFetching};
+};
