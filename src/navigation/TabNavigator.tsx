@@ -7,6 +7,7 @@ import Profile from '../views/Profile';
 import Upload from '../views/Upload';
 import colors from '../utils/colors';
 import ProfileNavigator from './ProfileNavigator';
+import HomeNavigator from './HomeNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,8 +21,8 @@ const TabNavigator = () => {
         },
       }}>
       <Tab.Screen
-        name="HomeScreen"
-        component={Home}
+        name="HomeNavigator"
+        component={HomeNavigator}
         options={{
           tabBarIcon: props => {
             // console.log(props);

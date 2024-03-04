@@ -14,6 +14,8 @@ import CurrentAudioList from './CurrentAudioList';
 import {useFetchIsFavorite} from '../hooks/query';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {getClient} from '../api/client';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {HomeNavigatorStackParamList} from '../@types/navigation';
 
 interface Props {}
 
@@ -25,6 +27,8 @@ export default function MiniAudioPlayer({}: Props) {
   const [playerVisibility, setPlayerVisibility] = useState(false);
   const [showCurrentList, setShowCurrentList] = useState(false);
   const progress = useProgress();
+  const {navigate} =
+    useNavigation<NavigationProp<HomeNavigatorStackParamList>>();
   const {data: isFav} = useFetchIsFavorite(onGoingAudio?.id || '');
 
   // console.log(progress); //{"buffered": 90.69714285714285, "duration": 90.69714285714285, "position": 0.502803609}
@@ -62,6 +66,12 @@ export default function MiniAudioPlayer({}: Props) {
   const handleOnListOptionPress = () => {
     closePlayerModal();
     setShowCurrentList(true);
+  };
+  const handleOnProfileLinkPress = () => {
+    closePlayerModal();
+    navigate('PublicProfile', {
+      profileId: onGoingAudio?.id || '',
+    });
   };
 
   return (
@@ -105,6 +115,7 @@ export default function MiniAudioPlayer({}: Props) {
         visible={playerVisibility}
         onRequestClose={closePlayerModal}
         onListOptionPress={handleOnListOptionPress}
+        onProfileLinkPress={handleOnProfileLinkPress}
       />
       <CurrentAudioList
         visible={showCurrentList}

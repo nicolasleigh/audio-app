@@ -16,3 +16,8 @@ export type ProfileNavigatorStackParamList = {
   ProfileSetting: undefined;
   Verification: {userInfo: NewUserResponse};
 };
+
+export type HomeNavigatorStackParamList = {
+  PublicProfile: {profileId: string};
+  Home: undefined;
+};

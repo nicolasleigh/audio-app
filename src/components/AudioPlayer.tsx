@@ -22,6 +22,7 @@ interface Props {
   visible: boolean;
   onRequestClose(): void;
   onListOptionPress?(): void;
+  onProfileLinkPress?(): void;
 }
 
 const formattedDuration = (duration = 0) => {
@@ -34,6 +35,7 @@ export default function AudioPlayer({
   visible,
   onRequestClose,
   onListOptionPress,
+  onProfileLinkPress,
 }: Props) {
   const [showAudioInfo, setShowAudioInfo] = useState(false);
   const {onGoingAudio, playbackRate} = useSelector(getPlayerState);
@@ -91,7 +93,10 @@ export default function AudioPlayer({
         <View style={styles.contentContainer}>
           <Text style={styles.title}>{onGoingAudio?.title}</Text>
 
-          <AppLink title={onGoingAudio?.owner.name || ''} />
+          <AppLink
+            onPress={onProfileLinkPress}
+            title={onGoingAudio?.owner.name || ''}
+          />
 
           <View style={styles.durationContainer}>
             <Text style={styles.duration}>
