@@ -154,7 +154,7 @@ const fetchRecommendedPlaylist = async (): Promise<Playlist[]> => {
 export const useFetchRecommendedPlaylist = () => {
   const dispatch = useDispatch();
   const {data, isError, error, isLoading, isFetching} = useQuery({
-    queryKey: ['recently-played'],
+    queryKey: ['recommended-playlist'],
     queryFn: fetchRecommendedPlaylist,
   });
   if (isError) {

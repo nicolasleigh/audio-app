@@ -105,16 +105,28 @@ export default function Home({}: Props) {
   return (
     <AppView>
       <ScrollView contentContainerStyle={styles.container}>
-        <RecentlyPlayed />
-        <LatestUploads
-          onAudioPress={onAudioPress}
-          onAudioLongPress={handleOnLongPress}
-        />
-        <RecommendedAudios
-          onAudioPress={onAudioPress}
-          onAudioLongPress={handleOnLongPress}
-        />
-        <RecommendedPlaylist />
+        <View style={styles.space}>
+          <RecentlyPlayed />
+        </View>
+
+        <View style={styles.space}>
+          <LatestUploads
+            onAudioPress={onAudioPress}
+            onAudioLongPress={handleOnLongPress}
+          />
+        </View>
+
+        <View style={styles.space}>
+          <RecommendedAudios
+            onAudioPress={onAudioPress}
+            onAudioLongPress={handleOnLongPress}
+          />
+        </View>
+
+        <View style={styles.space}>
+          <RecommendedPlaylist />
+        </View>
+
         <OptionsModal
           visible={showOptions}
           onRequestClose={() => {
@@ -173,6 +185,9 @@ export default function Home({}: Props) {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
+  },
+  space: {
+    marginBottom: 15,
   },
   optionContainer: {
     flexDirection: 'row',
