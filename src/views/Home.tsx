@@ -100,12 +100,7 @@ export default function Home({}: Props) {
     }
   };
 
-  useEffect(() => {
-    const setupPlayer = async () => {
-      await TrackPlayer.setupPlayer();
-    };
-    setupPlayer();
-  }, []);
+
 
   return (
     <AppView>
