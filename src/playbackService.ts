@@ -13,6 +13,9 @@ const playbackService = async () => {
   TrackPlayer.addEventListener(Event.RemotePrevious, () => {
     TrackPlayer.skipToPrevious();
   });
+  TrackPlayer.addEventListener(Event.PlaybackProgressUpdated, e => {
+    console.log(e);
+  });
 };
 
 export default playbackService;
