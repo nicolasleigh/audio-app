@@ -1,6 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  Alert,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import ImagePicker from 'react-native-image-crop-picker';
 import AppHeader from '../AppHeader';
@@ -21,6 +29,7 @@ import {
 import deepEqual from 'deep-equal';
 import {getPermissionToReadImages} from '../../utils/helper';
 import ReVerificationLink from '../ReVerificationLink';
+import {useQueryClient} from '@tanstack/react-query';
 
 interface Props {}
 interface ProfileInfo {
@@ -33,6 +42,7 @@ export default function ProfileSetting({}: Props) {
   const [busy, setBusy] = useState(false);
   const dispatch = useDispatch();
   const {profile} = useSelector(getAuthState);
+  const queryClient = useQueryClient();
 
   const isSame = deepEqual(userInfo, {
     name: profile?.name,
@@ -104,6 +114,46 @@ export default function ProfileSetting({}: Props) {
     }
   };
 
+  const clearHistory = async () => {
+    try {
+      const client = await getClient();
+      dispatch(
+        updateNotification({
+          message: 'Your histories will be removed!',
+          type: 'success',
+        }),
+      );
+      await client.delete('/history?all=yes');
+      queryClient.invalidateQueries({queryKey: ['histories']});
+    } catch (error) {
+      const errorMsg = catchAsyncError(error);
+      dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    }
+  };
+
+  const handleOnHistoryClear = () => {
+    Alert.alert(
+      'Are you sure?',
+      'This action will clear out all the history!',
+      [
+        {
+          text: 'Clear',
+          style: 'destructive',
+          onPress() {
+            clearHistory();
+          },
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ],
+      {
+        cancelable: true, // only for android
+      },
+    );
+  };
+
   useEffect(() => {
     if (profile) {
       setUserInfo({name: profile.name, avatar: profile.avatar});
@@ -138,19 +188,41 @@ export default function ProfileSetting({}: Props) {
           )}
         </View>
       </View>
+
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>History</Text>
+      </View>
+      <View style={styles.settingOptionsContainer}>
+        <Pressable
+          onPress={handleOnHistoryClear}
+          style={styles.buttonContainer}>
+          <MaterialCommunityIcons
+            name="broom"
+            size={20}
+            color={colors.CONTRAST}
+          />
+          <Text style={styles.buttonTitle}>Clear All</Text>
+        </Pressable>
+      </View>
+
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Logout</Text>
       </View>
       <View style={styles.settingOptionsContainer}>
-        <Pressable onPress={() => handleLogout(true)} style={styles.logoutBtn}>
+        <Pressable
+          onPress={() => handleLogout(true)}
+          style={styles.buttonContainer}>
           <AntDesign name="logout" size={20} color={colors.CONTRAST} />
-          <Text style={styles.logoutBtnTitle}>Logout From All</Text>
+          <Text style={styles.buttonTitle}>Logout From All</Text>
         </Pressable>
-        <Pressable onPress={() => handleLogout()} style={styles.logoutBtn}>
+        <Pressable
+          onPress={() => handleLogout()}
+          style={styles.buttonContainer}>
           <AntDesign name="logout" size={20} color={colors.CONTRAST} />
-          <Text style={styles.logoutBtnTitle}>Logout</Text>
+          <Text style={styles.buttonTitle}>Logout</Text>
         </Pressable>
       </View>
+
       {!isSame ? (
         <View style={styles.marginTop}>
           <AppButton
@@ -212,12 +284,12 @@ const styles = StyleSheet.create({
     color: colors.CONTRAST,
     marginRight: 10,
   },
-  logoutBtn: {
+  buttonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 15,
   },
-  logoutBtnTitle: {
+  buttonTitle: {
     color: colors.CONTRAST,
     fontSize: 18,
     marginLeft: 5,
