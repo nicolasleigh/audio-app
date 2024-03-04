@@ -6,8 +6,8 @@ import EmptyRecords from '../../ui/EmptyRecords';
 import AudioListLoadingUI from '../../ui/AudioListLoadingUI';
 import colors from '../../utils/colors';
 import {getClient} from '../../api/client';
-import {useQueryClient} from '@tanstack/react-query';
-import {historyAudio} from '../../@types/audio';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {History, historyAudio} from '../../@types/audio';
 import {useNavigation} from '@react-navigation/native';
 
 interface Props {}
@@ -24,13 +24,35 @@ export default function HistoryTab({}: Props) {
     queryClient.invalidateQueries({queryKey: ['histories']});
   };
 
+  const removeMutate = useMutation({
+    mutationFn: async histories => removeHistories(histories),
+    onMutate: (histories: string[]) => {
+      queryClient.setQueryData<History[]>(['histories'], oldData => {
+        let newData: History[] = [];
+        if (!oldData) return newData;
+
+        for (let data of oldData) {
+          const filteredData = data.audios.filter(
+            item => !histories.includes(item.id),
+          );
+          if (filteredData.length) {
+            newData.push({date: data.date, audios: filteredData});
+          }
+        }
+        return newData;
+      });
+    },
+  });
+
   const handleSingleHistoryRemove = async (history: historyAudio) => {
-    await removeHistories([history.id]);
+    removeMutate.mutate([history.id]);
+    // await removeHistories([history.id]);
   };
 
   const handleMultipleHistoryRemove = async () => {
     setSelectedHistories([]);
-    await removeHistories([...selectedHistories]);
+    removeMutate.mutate([...selectedHistories]);
+    // await removeHistories([...selectedHistories]);
   };
 
   const handleOnLongPress = (history: historyAudio) => {
