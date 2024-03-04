@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useFetchHistories} from '../../hooks/query';
 import EmptyRecords from '../../ui/EmptyRecords';
@@ -13,10 +20,11 @@ import {useNavigation} from '@react-navigation/native';
 interface Props {}
 
 export default function HistoryTab({}: Props) {
-  const {data, isLoading} = useFetchHistories();
+  const {data, isLoading, isFetching} = useFetchHistories();
   const queryClient = useQueryClient();
   const [selectedHistories, setSelectedHistories] = useState<string[]>([]);
   const navigation = useNavigation();
+  const noData = !data?.length;
 
   const removeHistories = async (histories: string[]) => {
     const client = await getClient();
@@ -68,6 +76,10 @@ export default function HistoryTab({}: Props) {
     });
   };
 
+  const handleOnRefresh = () => {
+    queryClient.invalidateQueries({queryKey: ['histories']});
+  };
+
   useEffect(() => {
     const unselectHistories = () => {
       setSelectedHistories([]);
@@ -83,10 +95,10 @@ export default function HistoryTab({}: Props) {
     return <AudioListLoadingUI />;
   }
 
-  if (!data || !data[0]?.audios.length) {
-    return <EmptyRecords title="There is no history" />;
-  }
-  if (data) console.log(data[0].audios); //{"audioId": "", "date": "", "id": "", "title": ""}
+  // if (!data || !data[0]?.audios.length) {
+  //   return <EmptyRecords title="There is no history" />;
+  // }
+  if (data) console.log(data[0]?.audios); //{"audioId": "", "date": "", "id": "", "title": ""}
   // console.log(data);
   return (
     <>
@@ -97,8 +109,17 @@ export default function HistoryTab({}: Props) {
           <Text style={styles.removeBtnText}>Remove</Text>
         </Pressable>
       ) : null}
-      <ScrollView style={styles.container}>
-        {data.map((item, mainIndex) => {
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={isFetching}
+            onRefresh={handleOnRefresh}
+            tintColor={colors.CONTRAST}
+          />
+        }
+        style={styles.container}>
+        {noData ? <EmptyRecords title="There is no history" /> : null}
+        {data?.map((item, mainIndex) => {
           return (
             <View key={item.date + mainIndex}>
               <Text style={styles.date}>{item.date}</Text>

@@ -113,7 +113,7 @@ const fetchHistories = async (): Promise<History[]> => {
 
 export const useFetchHistories = () => {
   const dispatch = useDispatch();
-  const {data, isError, error, isLoading} = useQuery({
+  const {data, isError, error, isLoading, isFetching} = useQuery({
     queryKey: ['histories'],
     queryFn: fetchHistories,
   });
@@ -122,5 +122,5 @@ export const useFetchHistories = () => {
     dispatch(updateNotification({message: errorMsg, type: 'error'}));
   }
 
-  return {data, isLoading};
+  return {data, isLoading, isFetching};
 };
