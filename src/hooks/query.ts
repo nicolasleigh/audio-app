@@ -1,6 +1,6 @@
 import {useQuery} from '@tanstack/react-query';
 import {useDispatch} from 'react-redux';
-import {AudioData, Playlist} from '../@types/audio';
+import {AudioData, History, Playlist} from '../@types/audio';
 import catchAsyncError from '../api/catchError';
 import {getClient} from '../api/client';
 import {updateNotification} from '../store/notification';
@@ -96,6 +96,26 @@ export const useFetchFavorite = () => {
   const {data, isError, error, isLoading} = useQuery({
     queryKey: ['favorite'],
     queryFn: fetchFavorite,
+  });
+  if (isError) {
+    const errorMsg = catchAsyncError(error);
+    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+  }
+
+  return {data, isLoading};
+};
+
+const fetchHistories = async (): Promise<History[]> => {
+  const client = await getClient();
+  const {data} = await client.get('/history');
+  return data.histories;
+};
+
+export const useFetchHistories = () => {
+  const dispatch = useDispatch();
+  const {data, isError, error, isLoading} = useQuery({
+    queryKey: ['histories'],
+    queryFn: fetchHistories,
   });
   if (isError) {
     const errorMsg = catchAsyncError(error);
