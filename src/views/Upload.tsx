@@ -21,6 +21,7 @@ import Progress from '../ui/Progress';
 import {categories} from '../utils/categories';
 import colors from '../utils/colors';
 import {mapRange} from '../utils/math';
+import AppView from '../components/AppView';
 
 interface Props {}
 
@@ -116,94 +117,96 @@ export default function Upload({}: Props) {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.fileSelectorContainer}>
-        <FileSelector
-          icon={
-            <MaterialCommunityIcons
-              name="image-outline"
-              size={35}
-              color={colors.SECONDARY}
-            />
-          }
-          btnTitle="Select Poster"
-          options={{type: [types.images]}}
-          onSelect={poster => {
-            setAudioInfo({...audioInfo, poster});
-          }}
-        />
-        <FileSelector
-          icon={
-            <MaterialCommunityIcons
-              name="file-music-outline"
-              size={35}
-              color={colors.SECONDARY}
-            />
-          }
-          btnTitle="Select Audio"
-          style={{marginLeft: 20}}
-          options={{type: [types.audio]}}
-          onSelect={file => {
-            setAudioInfo({...audioInfo, file});
-          }}
-        />
-      </View>
-      <View style={styles.formContainer}>
-        <TextInput
-          placeholder="Title"
-          placeholderTextColor={colors.INACTIVE_CONTRAST}
-          style={styles.input}
-          onChangeText={text => {
-            setAudioInfo({...audioInfo, title: text});
-          }}
-          value={audioInfo.title}
-        />
-        <Pressable
-          onPress={() => {
-            setShowCategoryModal(true);
-          }}
-          style={styles.categorySelector}>
-          <Text style={styles.categorySelectorTitle}>Category</Text>
-          <Text style={styles.selectedCategory}>{audioInfo.category}</Text>
-        </Pressable>
-        <TextInput
-          placeholder="About"
-          placeholderTextColor={colors.INACTIVE_CONTRAST}
-          style={styles.input}
-          numberOfLines={10}
-          multiline
-          onChangeText={text => {
-            setAudioInfo({...audioInfo, about: text});
-          }}
-          value={audioInfo.about}
-        />
-
-        <CategorySelector
-          visible={showCategoryModal}
-          onRequestClose={() => {
-            setShowCategoryModal(false);
-          }}
-          title="Category"
-          data={categories}
-          renderItem={item => {
-            return <Text style={styles.category}>{item}</Text>;
-          }}
-          onSelect={item => {
-            setAudioInfo({...audioInfo, category: item});
-          }}
-        />
-        <View style={{marginVertical: 20}}>
-          {busy ? <Progress progress={uploadProgress} /> : null}
+    <AppView>
+      <ScrollView style={styles.container}>
+        <View style={styles.fileSelectorContainer}>
+          <FileSelector
+            icon={
+              <MaterialCommunityIcons
+                name="image-outline"
+                size={35}
+                color={colors.SECONDARY}
+              />
+            }
+            btnTitle="Select Poster"
+            options={{type: [types.images]}}
+            onSelect={poster => {
+              setAudioInfo({...audioInfo, poster});
+            }}
+          />
+          <FileSelector
+            icon={
+              <MaterialCommunityIcons
+                name="file-music-outline"
+                size={35}
+                color={colors.SECONDARY}
+              />
+            }
+            btnTitle="Select Audio"
+            style={{marginLeft: 20}}
+            options={{type: [types.audio]}}
+            onSelect={file => {
+              setAudioInfo({...audioInfo, file});
+            }}
+          />
         </View>
+        <View style={styles.formContainer}>
+          <TextInput
+            placeholder="Title"
+            placeholderTextColor={colors.INACTIVE_CONTRAST}
+            style={styles.input}
+            onChangeText={text => {
+              setAudioInfo({...audioInfo, title: text});
+            }}
+            value={audioInfo.title}
+          />
+          <Pressable
+            onPress={() => {
+              setShowCategoryModal(true);
+            }}
+            style={styles.categorySelector}>
+            <Text style={styles.categorySelectorTitle}>Category</Text>
+            <Text style={styles.selectedCategory}>{audioInfo.category}</Text>
+          </Pressable>
+          <TextInput
+            placeholder="About"
+            placeholderTextColor={colors.INACTIVE_CONTRAST}
+            style={styles.input}
+            numberOfLines={10}
+            multiline
+            onChangeText={text => {
+              setAudioInfo({...audioInfo, about: text});
+            }}
+            value={audioInfo.about}
+          />
 
-        <AppButton
-          busy={busy}
-          borderRadius={7}
-          title="Submit"
-          onPress={handleUpload}
-        />
-      </View>
-    </ScrollView>
+          <CategorySelector
+            visible={showCategoryModal}
+            onRequestClose={() => {
+              setShowCategoryModal(false);
+            }}
+            title="Category"
+            data={categories}
+            renderItem={item => {
+              return <Text style={styles.category}>{item}</Text>;
+            }}
+            onSelect={item => {
+              setAudioInfo({...audioInfo, category: item});
+            }}
+          />
+          <View style={{marginVertical: 20}}>
+            {busy ? <Progress progress={uploadProgress} /> : null}
+          </View>
+
+          <AppButton
+            busy={busy}
+            borderRadius={7}
+            title="Submit"
+            onPress={handleUpload}
+          />
+        </View>
+      </ScrollView>
+    </AppView>
   );
 }
 
