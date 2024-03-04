@@ -144,3 +144,23 @@ export const useFetchRecentlyPlayed = () => {
 
   return {data, isLoading, isFetching};
 };
+
+const fetchRecommendedPlaylist = async (): Promise<Playlist[]> => {
+  const client = await getClient();
+  const {data} = await client.get('/profile/auto-generated-playlist');
+  return data.playlist;
+};
+
+export const useFetchRecommendedPlaylist = () => {
+  const dispatch = useDispatch();
+  const {data, isError, error, isLoading, isFetching} = useQuery({
+    queryKey: ['recently-played'],
+    queryFn: fetchRecommendedPlaylist,
+  });
+  if (isError) {
+    const errorMsg = catchAsyncError(error);
+    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+  }
+
+  return {data, isLoading, isFetching};
+};

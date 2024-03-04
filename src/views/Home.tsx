@@ -25,6 +25,7 @@ import useAudioController from '../hooks/useAudioController';
 import AppView from '../components/AppView';
 import AppModal from '../ui/AppModal';
 import RecentlyPlayed from '../components/RecentlyPlayed';
+import RecommendedPlaylist from '../components/RecommendedPlaylist';
 
 interface Props {}
 
@@ -113,6 +114,7 @@ export default function Home({}: Props) {
           onAudioPress={onAudioPress}
           onAudioLongPress={handleOnLongPress}
         />
+        <RecommendedPlaylist />
         <OptionsModal
           visible={showOptions}
           onRequestClose={() => {
