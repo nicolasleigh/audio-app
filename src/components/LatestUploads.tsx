@@ -56,7 +56,7 @@ export default function LatestUploads({onAudioLongPress, onAudioPress}: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 15,
+    // padding: 15,
   },
   title: {
     color: colors.CONTRAST,

@@ -24,6 +24,7 @@ import TrackPlayer, {Track} from 'react-native-track-player';
 import useAudioController from '../hooks/useAudioController';
 import AppView from '../components/AppView';
 import AppModal from '../ui/AppModal';
+import RecentlyPlayed from '../components/RecentlyPlayed';
 
 interface Props {}
 
@@ -100,11 +101,10 @@ export default function Home({}: Props) {
     }
   };
 
-
-
   return (
     <AppView>
       <ScrollView contentContainerStyle={styles.container}>
+        <RecentlyPlayed />
         <LatestUploads
           onAudioPress={onAudioPress}
           onAudioLongPress={handleOnLongPress}

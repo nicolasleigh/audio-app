@@ -42,7 +42,7 @@ export default function RecommendedAudios({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Recommend</Text>
+      <Text style={styles.title}>You may like this</Text>
       <GridView
         col={3}
         data={data || []}
@@ -65,7 +65,7 @@ export default function RecommendedAudios({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    // padding: 10,
   },
   title: {
     color: colors.CONTRAST,
