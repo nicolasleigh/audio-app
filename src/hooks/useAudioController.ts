@@ -146,7 +146,7 @@ const useAudioController = () => {
 
       await TrackPlayer.setupPlayer();
       await TrackPlayer.updateOptions({
-        progressUpdateEventInterval: 1, // in order to make Event.PlaybackProgressUpdated work, must set this value
+        progressUpdateEventInterval: 10, // in order to make Event.PlaybackProgressUpdated work, must set this value. Every 10s will emit event
         android: {
           appKilledPlaybackBehavior:
             AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotification,
