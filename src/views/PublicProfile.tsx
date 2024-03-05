@@ -36,6 +36,7 @@ export default function PublicProfile({route}: Props) {
             options={{
               tabBarLabel: 'Uploads',
             }}
+            initialParams={{profileId}}
           />
           <Tab.Screen
             name="PublicPlaylist"
@@ -43,6 +44,7 @@ export default function PublicProfile({route}: Props) {
             options={{
               tabBarLabel: 'Playlist',
             }}
+            initialParams={{profileId}}
           />
         </Tab.Navigator>
       </View>
