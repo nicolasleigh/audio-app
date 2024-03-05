@@ -1,26 +1,29 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {PublicProfile} from '../../@types/user';
 import AvatarField from '../../ui/AvatarField';
 import colors from '../../utils/colors';
+import {useFetchIsFollowing} from '../../hooks/query';
 
 interface Props {
   profile?: PublicProfile;
 }
 
 export default function PublicProfileContainer({profile}: Props) {
+  const {data: isFollowing} = useFetchIsFollowing(profile?.id || '');
   if (!profile) return null;
   return (
     <View style={styles.container}>
       <AvatarField source={profile.avatar} />
       <View style={styles.profileInfoContainer}>
         <Text style={styles.profileName}>{profile.name}</Text>
+        <Text style={styles.followerText}>{profile.followers} Followers</Text>
 
-        <View style={styles.flexRow}>
+        <Pressable style={styles.flexRow}>
           <Text style={styles.profileActionLink}>
-            {profile.followers} Followers
+            {isFollowing ? 'Unfollow' : 'Follow'}
           </Text>
-        </View>
+        </Pressable>
       </View>
     </View>
   );
@@ -54,6 +57,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.SECONDARY,
     color: colors.PRIMARY,
     paddingHorizontal: 4,
+    paddingVertical: 2,
+    marginTop: 5,
+  },
+  followerText: {
+    color: colors.CONTRAST,
     paddingVertical: 2,
     marginTop: 5,
   },

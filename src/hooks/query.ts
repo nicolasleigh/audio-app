@@ -270,3 +270,24 @@ export const useFetchPlaylistAudios = (id: string) => {
 
   return {data, isLoading, isFetching};
 };
+
+const fetchIsFollowing = async (id: string): Promise<boolean> => {
+  const client = await getClient();
+  const {data} = await client.get('/profile/is-following/' + id);
+  return data.status;
+};
+
+export const useFetchIsFollowing = (id: string) => {
+  const dispatch = useDispatch();
+  const {data, isError, error, isLoading, isFetching} = useQuery({
+    queryKey: ['is-following', id],
+    queryFn: () => fetchIsFollowing(id),
+    enabled: !!id, // only fetch if id is exist
+  });
+  if (isError) {
+    const errorMsg = catchAsyncError(error);
+    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+  }
+
+  return {data, isLoading, isFetching};
+};
