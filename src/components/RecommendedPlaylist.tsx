@@ -2,10 +2,13 @@ import React from 'react';
 import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useFetchRecommendedPlaylist} from '../hooks/query';
 import colors from '../utils/colors';
+import {Playlist} from '../@types/audio';
 
-interface Props {}
+interface Props {
+  onListPress(playlist: Playlist): void;
+}
 
-export default function RecommendedPlaylist({}: Props) {
+export default function RecommendedPlaylist({onListPress}: Props) {
   const {data} = useFetchRecommendedPlaylist();
   console.log(data);
   return (
@@ -20,7 +23,7 @@ export default function RecommendedPlaylist({}: Props) {
           return (
             <Pressable
               style={styles.container}
-              onPress={() => {}}
+              onPress={() => onListPress(item)}
               key={item.id}>
               <Image
                 source={require('../assets/music.png')}

@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import MiniAudioPlayer from './MiniAudioPlayer';
 import useAudioController from '../hooks/useAudioController';
+import PlaylistAudioModal from './PlaylistAudioModal';
 
 interface Props {
   children: React.ReactNode;
@@ -13,6 +14,7 @@ export default function AppView({children}: Props) {
     <View style={styles.container}>
       <View style={styles.children}>{children}</View>
       {isPlayerReady ? <MiniAudioPlayer /> : null}
+      <PlaylistAudioModal />
     </View>
   );
 }

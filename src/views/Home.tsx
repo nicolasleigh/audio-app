@@ -17,6 +17,10 @@ import {useFetchPlaylist} from '../hooks/query';
 import useAudioController from '../hooks/useAudioController';
 import {updateNotification} from '../store/notification';
 import colors from '../utils/colors';
+import {
+  updatePlaylistVisibility,
+  updateSelectedListId,
+} from '../store/playlistModal';
 
 interface Props {}
 
@@ -93,6 +97,11 @@ export default function Home({}: Props) {
     }
   };
 
+  const handleOnListPress = (playlist: Playlist) => {
+    dispatch(updateSelectedListId(playlist.id));
+    dispatch(updatePlaylistVisibility(true));
+  };
+
   return (
     <AppView>
       <ScrollView contentContainerStyle={styles.container}>
@@ -115,7 +124,7 @@ export default function Home({}: Props) {
         </View>
 
         <View style={styles.space}>
-          <RecommendedPlaylist />
+          <RecommendedPlaylist onListPress={handleOnListPress} />
         </View>
 
         <OptionsModal
