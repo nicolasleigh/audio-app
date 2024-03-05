@@ -34,7 +34,7 @@ export default function AudioCard({
       onPress={onPress}
       onLongPress={onLongPress}
       style={[styles.container, containerStyle]}>
-      <View>
+      <View style={styles.posterContainer}>
         <Image source={source} style={styles.poster} />
         <PlayAnimation visible={playing} />
       </View>
@@ -53,9 +53,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 5,
   },
-  poster: {
+  posterContainer: {
     width: '100%',
     aspectRatio: 1,
+    borderRadius: 7,
+    overflow: 'hidden',
+  },
+  poster: {
+    width: '100%',
+    height: '100%',
     borderRadius: 7,
   },
 });

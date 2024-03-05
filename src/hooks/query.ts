@@ -1,6 +1,6 @@
 import {useQuery} from '@tanstack/react-query';
 import {useDispatch} from 'react-redux';
-import {AudioData, History, Playlist} from '../@types/audio';
+import {AudioData, CompletePlaylist, History, Playlist} from '../@types/audio';
 import catchAsyncError from '../api/catchError';
 import {getClient} from '../api/client';
 import {updateNotification} from '../store/notification';
@@ -240,6 +240,27 @@ export const useFetchPublicPlaylist = (id: string) => {
   const {data, isError, error, isLoading, isFetching} = useQuery({
     queryKey: ['playlist', id],
     queryFn: () => fetchPublicPlaylist(id),
+    enabled: !!id, // only fetch if id is exist
+  });
+  if (isError) {
+    const errorMsg = catchAsyncError(error);
+    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+  }
+
+  return {data, isLoading, isFetching};
+};
+
+const fetchPlaylistAudios = async (id: string): Promise<CompletePlaylist> => {
+  const client = await getClient();
+  const {data} = await client.get('/profile/playlist-audios/' + id);
+  return data.list;
+};
+
+export const useFetchPlaylistAudios = (id: string) => {
+  const dispatch = useDispatch();
+  const {data, isError, error, isLoading, isFetching} = useQuery({
+    queryKey: ['playlist-audios', id],
+    queryFn: () => fetchPlaylistAudios(id),
     enabled: !!id, // only fetch if id is exist
   });
   if (isError) {
