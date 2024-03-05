@@ -10,6 +10,8 @@ import AppModal from '../ui/AppModal';
 import AudioListItem from '../ui/AudioListItem';
 import AudioListLoadingUI from '../ui/AudioListLoadingUI';
 import colors from '../utils/colors';
+import {getPlayerState} from '../store/player';
+import useAudioController from '../hooks/useAudioController';
 
 interface Props {}
 
@@ -17,6 +19,8 @@ export default function PlaylistAudioModal({}: Props) {
   const {visible, selectedListId} = useSelector(getPlaylistModalState);
   const dispatch = useDispatch();
   const {data, isLoading} = useFetchPlaylistAudios(selectedListId || '');
+  const {onGoingAudio} = useSelector(getPlayerState);
+  const {onAudioPress} = useAudioController();
   const handleClose = () => {
     dispatch(updatePlaylistVisibility(false));
   };
@@ -33,7 +37,13 @@ export default function PlaylistAudioModal({}: Props) {
             data={data?.audios}
             keyExtractor={item => item.id}
             renderItem={({item}) => {
-              return <AudioListItem audio={item} />;
+              return (
+                <AudioListItem
+                  audio={item}
+                  isPlaying={onGoingAudio?.id === item.id}
+                  onPress={() => onAudioPress(item, data?.audios || [])}
+                />
+              );
             }}
           />
         </>
