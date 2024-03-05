@@ -18,6 +18,7 @@ interface Props {}
 
 export default function UploadsTab({}: Props) {
   const [showOptions, setShowOptions] = useState(false);
+  const [selectedAudio, setSelectedAudio] = useState<AudioData>();
   const {data, isLoading} = useFetchUploadsByProfile();
   const {onAudioPress} = useAudioController();
   const {onGoingAudio} = useSelector(getPlayerState);
@@ -25,12 +26,16 @@ export default function UploadsTab({}: Props) {
     useNavigation<NavigationProp<ProfileNavigatorStackParamList>>();
 
   const handleOnLongPress = (audio: AudioData) => {
-    // setSelectedAudio(audio);
+    setSelectedAudio(audio);
     setShowOptions(true);
   };
   const handleOnEditPress = () => {
     setShowOptions(false);
-    navigate('UpdateAudio');
+    if (selectedAudio) {
+      navigate('UpdateAudio', {
+        audio: selectedAudio,
+      });
+    }
   };
 
   if (isLoading) {

@@ -1,14 +1,14 @@
 import React from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {useFetchPlaylist} from '../../hooks/query';
-import PlaylistItem from '../../ui/PlaylistItem';
-import EmptyRecords from '../../ui/EmptyRecords';
-import {Playlist} from '../../@types/audio';
+import {ScrollView, StyleSheet} from 'react-native';
 import {useDispatch} from 'react-redux';
+import {Playlist} from '../../@types/audio';
+import {useFetchPlaylist} from '../../hooks/query';
 import {
   updatePlaylistVisibility,
   updateSelectedListId,
 } from '../../store/playlistModal';
+import EmptyRecords from '../../ui/EmptyRecords';
+import PlaylistItem from '../../ui/PlaylistItem';
 
 interface Props {}
 

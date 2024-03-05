@@ -8,7 +8,7 @@ interface Props {
   audio: AudioData;
   isPlaying?: boolean;
   onPress?(): void;
-  onLongPress(): void;
+  onLongPress?(): void;
 }
 
 export default function AudioListItem({

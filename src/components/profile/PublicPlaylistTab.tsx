@@ -1,15 +1,15 @@
-import React from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
-import {useFetchPublicPlaylist} from '../../hooks/query';
-import PlaylistItem from '../../ui/PlaylistItem';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {PublicProfileTabParamsList} from '../../@types/navigation';
+import React from 'react';
+import {ScrollView, StyleSheet} from 'react-native';
 import {useDispatch} from 'react-redux';
+import {Playlist} from '../../@types/audio';
+import {PublicProfileTabParamsList} from '../../@types/navigation';
+import {useFetchPublicPlaylist} from '../../hooks/query';
 import {
   updatePlaylistVisibility,
   updateSelectedListId,
 } from '../../store/playlistModal';
-import {Playlist} from '../../@types/audio';
+import PlaylistItem from '../../ui/PlaylistItem';
 
 type Props = NativeStackScreenProps<
   PublicProfileTabParamsList,
