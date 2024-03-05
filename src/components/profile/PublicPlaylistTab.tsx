@@ -4,6 +4,12 @@ import {useFetchPublicPlaylist} from '../../hooks/query';
 import PlaylistItem from '../../ui/PlaylistItem';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PublicProfileTabParamsList} from '../../@types/navigation';
+import {useDispatch} from 'react-redux';
+import {
+  updatePlaylistVisibility,
+  updateSelectedListId,
+} from '../../store/playlistModal';
+import {Playlist} from '../../@types/audio';
 
 type Props = NativeStackScreenProps<
   PublicProfileTabParamsList,
@@ -12,10 +18,21 @@ type Props = NativeStackScreenProps<
 
 export default function PublicPlaylistTab(props: Props) {
   const {data} = useFetchPublicPlaylist(props.route.params.profileId);
+  const dispatch = useDispatch();
+  const handleOnListPress = (playlist: Playlist) => {
+    dispatch(updateSelectedListId(playlist.id));
+    dispatch(updatePlaylistVisibility(true));
+  };
   return (
     <ScrollView style={styles.container}>
       {data?.map(playlist => {
-        return <PlaylistItem key={playlist.id} playlist={playlist} />;
+        return (
+          <PlaylistItem
+            onPress={() => handleOnListPress(playlist)}
+            key={playlist.id}
+            playlist={playlist}
+          />
+        );
       })}
     </ScrollView>
   );
