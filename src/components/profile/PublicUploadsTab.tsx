@@ -7,8 +7,13 @@ import EmptyRecords from '../../ui/EmptyRecords';
 import useAudioController from '../../hooks/useAudioController';
 import {useSelector} from 'react-redux';
 import {getPlayerState} from '../../store/player';
+import {PublicProfileTabParamsList} from '../../@types/navigation';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-interface Props {}
+type Props = NativeStackScreenProps<
+  PublicProfileTabParamsList,
+  'PublicUploads'
+>;
 
 export default function PublicUploadsTab(props: Props) {
   const {data, isLoading} = useFetchPublicUploads(props.route.params.profileId);

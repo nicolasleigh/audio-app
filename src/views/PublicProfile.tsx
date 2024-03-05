@@ -1,7 +1,10 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {HomeNavigatorStackParamList} from '../@types/navigation';
+import {
+  HomeNavigatorStackParamList,
+  PublicProfileTabParamsList,
+} from '../@types/navigation';
 import AppView from '../components/AppView';
 import PublicProfileContainer from '../components/profile/PublicProfileContainer';
 import {useFetchPublicProfile} from '../hooks/query';
@@ -15,7 +18,7 @@ type Props = NativeStackScreenProps<
   'PublicProfile'
 >;
 
-const Tab = createMaterialTopTabNavigator();
+const Tab = createMaterialTopTabNavigator<PublicProfileTabParamsList>();
 
 export default function PublicProfile({route}: Props) {
   const {profileId} = route.params;

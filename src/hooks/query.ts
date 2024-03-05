@@ -228,3 +228,24 @@ export const useFetchPublicUploads = (id: string) => {
 
   return {data, isLoading, isFetching};
 };
+
+const fetchPublicPlaylist = async (id: string): Promise<Playlist[]> => {
+  const client = await getClient();
+  const {data} = await client.get('/profile/playlist/' + id);
+  return data.playlist;
+};
+
+export const useFetchPublicPlaylist = (id: string) => {
+  const dispatch = useDispatch();
+  const {data, isError, error, isLoading, isFetching} = useQuery({
+    queryKey: ['playlist', id],
+    queryFn: () => fetchPublicPlaylist(id),
+    enabled: !!id, // only fetch if id is exist
+  });
+  if (isError) {
+    const errorMsg = catchAsyncError(error);
+    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+  }
+
+  return {data, isLoading, isFetching};
+};

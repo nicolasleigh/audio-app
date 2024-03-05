@@ -1,10 +1,24 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
+import {useFetchPublicPlaylist} from '../../hooks/query';
+import PlaylistItem from '../../ui/PlaylistItem';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {PublicProfileTabParamsList} from '../../@types/navigation';
 
-interface Props {}
+type Props = NativeStackScreenProps<
+  PublicProfileTabParamsList,
+  'PublicPlaylist'
+>;
 
-export default function PublicPlaylistTab({}: Props) {
-  return <View style={styles.container}></View>;
+export default function PublicPlaylistTab(props: Props) {
+  const {data} = useFetchPublicPlaylist(props.route.params.profileId);
+  return (
+    <ScrollView style={styles.container}>
+      {data?.map(playlist => {
+        return <PlaylistItem key={playlist.id} playlist={playlist} />;
+      })}
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({

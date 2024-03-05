@@ -6,7 +6,7 @@ import PlaylistItem from '../../ui/PlaylistItem';
 interface Props {}
 
 export default function PlaylistTab({}: Props) {
-  const {data, isLoading} = useFetchPlaylist();
+  const {data} = useFetchPlaylist();
   return (
     <ScrollView style={styles.container}>
       {data?.map(playlist => {
