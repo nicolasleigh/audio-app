@@ -4,6 +4,7 @@ import ProfileSetting from '../components/profile/ProfileSetting';
 import Profile from '../views/Profile';
 import Verification from '../views/auth/Verification';
 import {ProfileNavigatorStackParamList} from '../@types/navigation';
+import UpdateAudio from '../components/profile/UpdateAudio';
 
 interface Props {}
 
@@ -15,6 +16,7 @@ export default function ProfileNavigator({}: Props) {
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="ProfileSetting" component={ProfileSetting} />
       <Stack.Screen name="Verification" component={Verification} />
+      <Stack.Screen name="UpdateAudio" component={UpdateAudio} />
     </Stack.Navigator>
   );
 }

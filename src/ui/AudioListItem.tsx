@@ -8,18 +8,24 @@ interface Props {
   audio: AudioData;
   isPlaying?: boolean;
   onPress?(): void;
+  onLongPress(): void;
 }
 
 export default function AudioListItem({
   audio,
   isPlaying = false,
   onPress,
+  onLongPress,
 }: Props) {
   const getSource = (poster?: string) => {
     return poster ? {uri: poster} : require('../assets/music_small.png');
   };
   return (
-    <Pressable onPress={onPress} style={styles.listItem} key={audio.id}>
+    <Pressable
+      onPress={onPress}
+      onLongPress={onLongPress}
+      style={styles.listItem}
+      key={audio.id}>
       <View>
         <Image source={getSource(audio.poster)} style={styles.poster} />
         <PlayAnimation visible={isPlaying} />
