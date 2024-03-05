@@ -30,11 +30,6 @@ const emailVerificationTokenSchema = new Schema<
     expires: 3600,
     default: Date.now,
   },
-  // createdAt: {
-  //   type: Date,
-  //   default: Date.now(),
-  //   expires: 3600, // 1 hour
-  // },
 });
 
 emailVerificationTokenSchema.pre('save', async function (next) {
