@@ -4,6 +4,11 @@ import {PublicProfile} from '../../@types/user';
 import AvatarField from '../../ui/AvatarField';
 import colors from '../../utils/colors';
 import {useFetchIsFollowing} from '../../hooks/query';
+import {getClient} from '../../api/client';
+import catchAsyncError from '../../api/catchError';
+import {useDispatch} from 'react-redux';
+import {updateNotification} from '../../store/notification';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 
 interface Props {
   profile?: PublicProfile;
@@ -11,6 +16,32 @@ interface Props {
 
 export default function PublicProfileContainer({profile}: Props) {
   const {data: isFollowing} = useFetchIsFollowing(profile?.id || '');
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+
+  const followingMutation = useMutation({
+    mutationFn: async id => toggleFollowing(id),
+    onMutate: (id: string) => {
+      queryClient.setQueryData<boolean>(
+        ['is-following', id],
+        oldData => !oldData,
+      );
+    },
+  });
+
+  const toggleFollowing = async (id: string) => {
+    try {
+      if (!id) return;
+
+      const client = await getClient();
+      await client.post('/profile/update-follower/' + id);
+      queryClient.invalidateQueries({queryKey: ['profile', id]});
+    } catch (error) {
+      const errorMeg = catchAsyncError(error);
+      dispatch(updateNotification({message: errorMeg, type: 'error'}));
+    }
+  };
+
   if (!profile) return null;
   return (
     <View style={styles.container}>
@@ -19,7 +50,9 @@ export default function PublicProfileContainer({profile}: Props) {
         <Text style={styles.profileName}>{profile.name}</Text>
         <Text style={styles.followerText}>{profile.followers} Followers</Text>
 
-        <Pressable style={styles.flexRow}>
+        <Pressable
+          onPress={() => followingMutation.mutate(profile.id)}
+          style={styles.flexRow}>
           <Text style={styles.profileActionLink}>
             {isFollowing ? 'Unfollow' : 'Follow'}
           </Text>
