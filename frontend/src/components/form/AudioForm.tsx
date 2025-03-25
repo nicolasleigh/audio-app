@@ -12,9 +12,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {useDispatch} from 'react-redux';
 import * as yup from 'yup';
 import catchAsyncError from '../../api/catchError';
-import AppView from '../../components/AppView';
-import CategorySelector from '../../components/CategorySelector';
-import FileSelector from '../../components/FileSelector';
+import AppView from '../AppView';
+import CategorySelector from '../CategorySelector';
+import FileSelector from '../FileSelector';
 import {updateNotification} from '../../store/notification';
 import AppButton from '../../ui/AppButton';
 import Progress from '../../ui/Progress';
