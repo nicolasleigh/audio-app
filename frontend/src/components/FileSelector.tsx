@@ -11,15 +11,15 @@ import colors from '../utils/colors';
 import DocumentPicker, {
   DocumentPickerOptions,
   DocumentPickerResponse,
-} from 'react-native-document-picker';
-import {SupportedPlatforms} from 'react-native-document-picker/lib/typescript/fileTypes';
+} from '@react-native-documents/picker';
+// import {SupportedPlatforms} from '@react-native-documents/picker/lib/typescript/fileTypes';
 
 interface Props {
   icon?: React.ReactNode;
   btnTitle?: string;
   style?: StyleProp<ViewStyle>;
   onSelect(file: DocumentPickerResponse): void;
-  options: DocumentPickerOptions<SupportedPlatforms>;
+  // options: DocumentPickerOptions<SupportedPlatforms>;
 }
 
 export default function FileSelector({
