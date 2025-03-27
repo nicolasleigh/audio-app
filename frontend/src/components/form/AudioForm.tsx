@@ -7,7 +7,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {DocumentPickerResponse, types} from 'react-native-document-picker';
+import {DocumentPickerResponse, types} from '@react-native-documents/picker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
 import * as yup from 'yup';
@@ -20,6 +20,7 @@ import AppButton from '../../ui/AppButton';
 import Progress from '../../ui/Progress';
 import {categories} from '../../utils/categories';
 import colors from '../../utils/colors';
+import ImagePicker from '../ImagePicker';
 
 interface Props {
   initialValues?: {
@@ -134,7 +135,7 @@ export default function AudioForm({
     <AppView>
       <ScrollView style={styles.container}>
         <View style={styles.fileSelectorContainer}>
-          <FileSelector
+          <ImagePicker
             icon={
               <MaterialCommunityIcons
                 name="image-outline"
@@ -148,6 +149,7 @@ export default function AudioForm({
               setAudioInfo({...audioInfo, poster});
             }}
           />
+
           {!isForUpdate && (
             <FileSelector
               icon={
@@ -236,6 +238,9 @@ const styles = StyleSheet.create({
   },
   fileSelectorContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 30,
   },
   formContainer: {
     marginTop: 20,

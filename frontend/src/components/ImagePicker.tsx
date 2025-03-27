@@ -15,7 +15,6 @@ import DocumentPicker, {
   pick,
 } from '@react-native-documents/picker';
 import {launchImageLibrary} from 'react-native-image-picker';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface Props {
   icon?: React.ReactNode;
@@ -32,58 +31,35 @@ export default function FileSelector({
   style,
   options,
 }: Props) {
-  const [uri, setUri] = useState('');
-  const handleDocumentSelect = async () => {
-    try {
-      const document = await pick(options);
-      const file = document[0];
-      console.log(file);
-      setUri(file.uri);
-      onSelect(file);
-    } catch (error) {
-      if (!DocumentPicker.isCancel(error)) {
-        console.log('Error picking document ', error);
-      }
-    }
+  const [imageUri, setImageUri] = useState(null);
+
+  const selectImage = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        quality: 1,
+        includeBase64: false,
+      },
+      response => {
+        if (response.didCancel) {
+          console.log('User canceled image picker');
+        } else if (response.errorCode) {
+          console.log('Error: ', response.errorMessage);
+        } else {
+          setImageUri(response.assets[0].uri);
+        }
+      },
+    );
   };
 
-  // const [imageUri, setImageUri] = useState(null);
-
-  // const selectImage = () => {
-  //   launchImageLibrary(
-  //     {
-  //       mediaType: 'photo',
-  //       quality: 1,
-  //       includeBase64: false,
-  //     },
-  //     response => {
-  //       if (response.didCancel) {
-  //         console.log('User canceled image picker');
-  //       } else if (response.errorCode) {
-  //         console.log('Error: ', response.errorMessage);
-  //       } else {
-  //         setImageUri(response.assets[0].uri);
-  //       }
-  //     },
-  //   );
-  // };
-
   return (
-    <Pressable
-      onPress={handleDocumentSelect}
-      style={[styles.btnContainer, style]}>
-      {uri ? (
-        <View style={styles.iconContainer}>
-          <MaterialCommunityIcons
-            name="file-check-outline"
-            size={35}
-            color={colors.SECONDARY}
-          />
-        </View>
+    <Pressable onPress={selectImage} style={[styles.btnContainer, style]}>
+      {imageUri ? (
+        <Image source={{uri: imageUri}} style={styles.image} />
       ) : (
         <View style={styles.iconContainer}>{icon}</View>
       )}
-      {uri ? (
+      {imageUri ? (
         <Text style={styles.btnTitle}>Selected</Text>
       ) : (
         <Text style={styles.btnTitle}>{btnTitle}</Text>
