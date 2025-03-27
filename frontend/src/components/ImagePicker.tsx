@@ -24,7 +24,7 @@ interface Props {
   options: DocumentPickerOptions;
 }
 
-export default function FileSelector({
+export default function ImagePicker({
   icon,
   onSelect,
   btnTitle,
@@ -47,6 +47,7 @@ export default function FileSelector({
           console.log('Error: ', response.errorMessage);
         } else {
           setImageUri(response.assets[0].uri);
+          onSelect(response.assets[0]);
         }
       },
     );

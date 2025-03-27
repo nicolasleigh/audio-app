@@ -29,7 +29,7 @@ interface Props {
     category: string;
     about: string;
   };
-  onSubmit(formData: FormData): void;
+  onSubmit(formData: FormData, reset: () => void): void;
   progress?: number;
   busy?: boolean;
 }
@@ -91,6 +91,12 @@ export default function AudioForm({
 
   const dispatch = useDispatch();
 
+  const reset = () => {
+    setAudioInfo({...defaultForm});
+    setFileName('');
+    setImageUri('');
+  };
+
   const handleSubmit = async () => {
     try {
       let finalData;
@@ -119,10 +125,7 @@ export default function AudioForm({
         });
       }
 
-      onSubmit(formData);
-      setAudioInfo({...defaultForm});
-      setFileName('');
-      setImageUri('');
+      onSubmit(formData, reset);
     } catch (error) {
       const errorMessage = catchAsyncError(error);
       Toast.show({

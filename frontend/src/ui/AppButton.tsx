@@ -14,6 +14,7 @@ export default function AppButton({title, onPress, busy, borderRadius}: Props) {
   return (
     <Pressable
       onPress={onPress}
+      disabled={busy}
       style={[
         styles.container,
         {
