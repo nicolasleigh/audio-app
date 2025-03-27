@@ -21,6 +21,7 @@ import Progress from '../../ui/Progress';
 import {categories} from '../../utils/categories';
 import colors from '../../utils/colors';
 import ImagePicker from '../ImagePicker';
+import Toast from 'react-native-toast-message';
 
 interface Props {
   initialValues?: {
@@ -85,6 +86,9 @@ export default function AudioForm({
     ...defaultForm,
   });
   const [isForUpdate, setIsForUpdate] = useState(false);
+  const [fileName, setFileName] = useState('');
+  const [imageUri, setImageUri] = useState('');
+
   const dispatch = useDispatch();
 
   const handleSubmit = async () => {
@@ -116,11 +120,24 @@ export default function AudioForm({
       }
 
       onSubmit(formData);
+      setAudioInfo({...defaultForm});
+      setFileName('');
+      setImageUri('');
     } catch (error) {
       const errorMessage = catchAsyncError(error);
-      dispatch(updateNotification({message: errorMessage, type: 'error'}));
+      Toast.show({
+        type: 'error',
+        text1: errorMessage,
+      });
+      // dispatch(updateNotification({message: errorMessage, type: 'error'}));
     }
   };
+
+  // const clearForm = () => {
+  //   setAudioInfo({...defaultForm});
+  //   setUri('');
+  //   setImageUri('');
+  // };
 
   useEffect(() => {
     if (initialValues) {
@@ -134,69 +151,100 @@ export default function AudioForm({
   return (
     <AppView>
       <ScrollView style={styles.container}>
-        <View style={styles.fileSelectorContainer}>
-          <ImagePicker
-            icon={
-              <MaterialCommunityIcons
-                name="image-outline"
-                size={35}
-                color={colors.SECONDARY}
-              />
-            }
-            btnTitle="Select Poster"
-            options={{type: [types.images]}}
-            onSelect={poster => {
-              setAudioInfo({...audioInfo, poster});
-            }}
-          />
+        <View style={styles.formContainer}>
+          {/* Title */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Title</Text>
+            <TextInput
+              placeholder="Enter audio title"
+              placeholderTextColor={colors.INACTIVE_CONTRAST}
+              style={styles.input}
+              onChangeText={text => {
+                setAudioInfo({...audioInfo, title: text});
+              }}
+              value={audioInfo.title}
+            />
+          </View>
 
+          {/* Category */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Category</Text>
+            <Pressable
+              onPress={() => {
+                setShowCategoryModal(true);
+              }}>
+              <View pointerEvents="none">
+                <TextInput
+                  style={styles.input}
+                  editable={false}
+                  selectTextOnFocus={false}
+                  value={audioInfo.category}
+                  placeholder="Select a category"
+                  placeholderTextColor={colors.INACTIVE_CONTRAST}
+                />
+              </View>
+            </Pressable>
+          </View>
+
+          {/* About */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>About</Text>
+            <TextInput
+              placeholder="Enter audio information"
+              placeholderTextColor={colors.INACTIVE_CONTRAST}
+              style={styles.input}
+              numberOfLines={10}
+              multiline
+              onChangeText={text => {
+                setAudioInfo({...audioInfo, about: text});
+              }}
+              value={audioInfo.about}
+            />
+          </View>
+
+          {/* Audio */}
           {!isForUpdate && (
-            <FileSelector
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Audio File</Text>
+              <FileSelector
+                icon={
+                  <MaterialCommunityIcons
+                    name="file-music-outline"
+                    size={35}
+                    color={colors.SECONDARY}
+                  />
+                }
+                btnTitle="Select Audio"
+                options={{type: [types.audio]}}
+                onSelect={file => {
+                  setAudioInfo({...audioInfo, file});
+                }}
+                fileName={fileName}
+                setFileName={setFileName}
+              />
+            </View>
+          )}
+
+          {/* Poster */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Poster File</Text>
+            <ImagePicker
               icon={
                 <MaterialCommunityIcons
-                  name="file-music-outline"
-                  size={35}
+                  name="image-outline"
+                  size={20}
                   color={colors.SECONDARY}
                 />
               }
-              btnTitle="Select Audio"
-              style={{marginLeft: 20}}
-              options={{type: [types.audio]}}
-              onSelect={file => {
-                setAudioInfo({...audioInfo, file});
+              btnTitle="Select Poster"
+              options={{type: [types.images]}}
+              onSelect={poster => {
+                setAudioInfo({...audioInfo, poster});
               }}
+              imageUri={imageUri}
+              setImageUri={setImageUri}
             />
-          )}
-        </View>
-        <View style={styles.formContainer}>
-          <TextInput
-            placeholder="Title"
-            placeholderTextColor={colors.INACTIVE_CONTRAST}
-            style={styles.input}
-            onChangeText={text => {
-              setAudioInfo({...audioInfo, title: text});
-            }}
-            value={audioInfo.title}
-          />
-          <Pressable
-            onPress={() => {
-              setShowCategoryModal(true);
-            }}
-            style={styles.categorySelector}>
-            <Text style={styles.categorySelectorTitle}>Category</Text>
-            <Text style={styles.selectedCategory}>{audioInfo.category}</Text>
-          </Pressable>
-          <TextInput
-            placeholder="About"
-            placeholderTextColor={colors.INACTIVE_CONTRAST}
-            style={styles.input}
-            numberOfLines={10}
-            multiline
-            onChangeText={text => {
-              setAudioInfo({...audioInfo, about: text});
-            }}
-            value={audioInfo.about}
-          />
+          </View>
 
           <CategorySelector
             visible={showCategoryModal}
@@ -212,9 +260,6 @@ export default function AudioForm({
               setAudioInfo({...audioInfo, category: item});
             }}
           />
-          <View style={{marginVertical: 20}}>
-            {busy ? <Progress progress={progress} /> : null}
-          </View>
 
           <AppButton
             busy={busy}
@@ -230,7 +275,8 @@ export default function AudioForm({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    // paddingVertical: 10,
+    paddingHorizontal: 20,
   },
   btnContainer: {
     alignItems: 'center',
@@ -240,17 +286,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 30,
+    gap: 50,
   },
   formContainer: {
-    marginTop: 20,
+    marginTop: 30,
+    gap: 20,
   },
   input: {
     borderWidth: 2,
     borderColor: colors.SECONDARY,
     borderRadius: 7,
     padding: 10,
-    fontSize: 18,
+    fontSize: 15,
     color: colors.CONTRAST,
     textAlignVertical: 'top',
   },
@@ -263,9 +310,13 @@ const styles = StyleSheet.create({
   categorySelectorTitle: {
     color: colors.CONTRAST,
   },
+  label: {color: colors.CONTRAST},
   selectedCategory: {
     color: colors.SECONDARY,
     marginLeft: 5,
     fontStyle: 'italic',
+  },
+  inputContainer: {
+    gap: 2,
   },
 });

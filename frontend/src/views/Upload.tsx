@@ -5,6 +5,7 @@ import {getClient} from '../api/client';
 import AudioForm from '../components/form/AudioForm';
 import {updateNotification} from '../store/notification';
 import {mapRange} from '../utils/math';
+import Toast from 'react-native-toast-message';
 
 interface Props {}
 
@@ -34,10 +35,19 @@ export default function Upload({}: Props) {
           setUploadProgress(Math.floor(uploaded));
         },
       });
+      Toast.show({
+        type: 'success',
+        text1: 'Audio created successfully',
+      });
       console.log(data);
     } catch (error) {
       const errorMessage = catchAsyncError(error);
-      dispatch(updateNotification({message: errorMessage, type: 'error'}));
+      Toast.show({
+        type: 'error',
+        text1: 'Failed to create audio',
+      });
+      console.error(errorMessage);
+      // dispatch(updateNotification({message: errorMessage, type: 'error'}));
     }
     setBusy(false);
   };

@@ -5,6 +5,7 @@ import {
   StyleProp,
   StyleSheet,
   Text,
+  TextInput,
   View,
   ViewStyle,
 } from 'react-native';
@@ -31,14 +32,16 @@ export default function FileSelector({
   btnTitle,
   style,
   options,
+  fileName,
+  setFileName,
 }: Props) {
-  const [uri, setUri] = useState('');
+  // const [uri, setUri] = useState('');
   const handleDocumentSelect = async () => {
     try {
       const document = await pick(options);
       const file = document[0];
       console.log(file);
-      setUri(file.uri);
+      setFileName(file.name);
       onSelect(file);
     } catch (error) {
       if (!DocumentPicker.isCancel(error)) {
@@ -72,22 +75,16 @@ export default function FileSelector({
     <Pressable
       onPress={handleDocumentSelect}
       style={[styles.btnContainer, style]}>
-      {uri ? (
-        <View style={styles.iconContainer}>
-          <MaterialCommunityIcons
-            name="file-check-outline"
-            size={35}
-            color={colors.SECONDARY}
-          />
-        </View>
-      ) : (
-        <View style={styles.iconContainer}>{icon}</View>
-      )}
-      {uri ? (
-        <Text style={styles.btnTitle}>Selected</Text>
-      ) : (
-        <Text style={styles.btnTitle}>{btnTitle}</Text>
-      )}
+      <View pointerEvents="none">
+        <TextInput
+          style={styles.input}
+          editable={false}
+          selectTextOnFocus={false}
+          value={fileName}
+          placeholder="Select an audio file"
+          placeholderTextColor={colors.INACTIVE_CONTRAST}
+        />
+      </View>
     </Pressable>
   );
 }
@@ -95,8 +92,8 @@ export default function FileSelector({
 const styles = StyleSheet.create({
   container: {},
   btnContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
   iconContainer: {
     height: 70,
@@ -118,5 +115,14 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     borderWidth: 2,
     borderColor: colors.SECONDARY,
+  },
+  input: {
+    borderWidth: 2,
+    borderColor: colors.SECONDARY,
+    borderRadius: 7,
+    padding: 10,
+    fontSize: 15,
+    color: colors.CONTRAST,
+    textAlignVertical: 'top',
   },
 });

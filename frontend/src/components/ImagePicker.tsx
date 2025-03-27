@@ -30,9 +30,9 @@ export default function FileSelector({
   btnTitle,
   style,
   options,
+  imageUri,
+  setImageUri,
 }: Props) {
-  const [imageUri, setImageUri] = useState(null);
-
   const selectImage = () => {
     launchImageLibrary(
       {
@@ -53,29 +53,32 @@ export default function FileSelector({
   };
 
   return (
-    <Pressable onPress={selectImage} style={[styles.btnContainer, style]}>
-      {imageUri ? (
-        <Image source={{uri: imageUri}} style={styles.image} />
-      ) : (
-        <View style={styles.iconContainer}>{icon}</View>
-      )}
-      {imageUri ? (
-        <Text style={styles.btnTitle}>Selected</Text>
-      ) : (
-        <Text style={styles.btnTitle}>{btnTitle}</Text>
-      )}
-    </Pressable>
+    <View style={styles.container}>
+      <Pressable onPress={selectImage} style={[styles.btnContainer, style]}>
+        {imageUri ? (
+          <Image source={{uri: imageUri}} style={styles.image} />
+        ) : (
+          <View style={styles.iconContainer}>
+            {icon}
+            <Text style={styles.btnTitle}>{btnTitle}</Text>
+          </View>
+        )}
+      </Pressable>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {},
-  btnContainer: {
+  container: {
     alignItems: 'center',
     justifyContent: 'center',
   },
+  btnContainer: {
+    height: 200,
+    width: 200,
+  },
   iconContainer: {
-    height: 70,
+    height: 200,
     aspectRatio: 1,
     borderWidth: 2,
     borderColor: colors.SECONDARY,
@@ -84,12 +87,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   btnTitle: {
-    color: colors.CONTRAST,
+    color: colors.INACTIVE_CONTRAST,
     marginTop: 5,
   },
   image: {
-    width: 70,
-    height: 70,
+    height: 200,
     aspectRatio: 1,
     borderRadius: 7,
     borderWidth: 2,
