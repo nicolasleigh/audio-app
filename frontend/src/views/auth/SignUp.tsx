@@ -38,10 +38,10 @@ const signupSchema = yup.object({
     .string()
     .trim()
     .min(6, 'Password is too short')
-    .matches(
-      /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#\$%\^&\*])[a-zA-Z\d!@#\$%\^&\*]+$/,
-      'Password is too simple',
-    )
+    // .matches(
+    //   /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#\$%\^&\*])[a-zA-Z\d!@#\$%\^&\*]+$/,
+    //   'Password is too simple',
+    // )
     .required('Password is required'),
 });
 
