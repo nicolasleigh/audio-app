@@ -14,6 +14,7 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = () => {
   return (
     <Tab.Navigator
+      // tabBar={props => <MyTabBar {...props} />}
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
@@ -22,6 +23,7 @@ const TabNavigator = () => {
       }}>
       <Tab.Screen
         name="HomeNavigator"
+        key="home"
         component={HomeNavigator}
         options={{
           tabBarIcon: props => {
@@ -36,6 +38,7 @@ const TabNavigator = () => {
       <Tab.Screen
         name="ProfileNavigator"
         component={ProfileNavigator}
+        key="profile"
         options={{
           tabBarIcon: props => {
             return (
@@ -48,6 +51,7 @@ const TabNavigator = () => {
       <Tab.Screen
         name="UploadScreen"
         component={Upload}
+        key="upload"
         options={{
           tabBarIcon: props => {
             return (

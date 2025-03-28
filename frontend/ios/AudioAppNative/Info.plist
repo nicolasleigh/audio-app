@@ -34,7 +34,9 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>To allow a user to select their profile picture</string>
+	<string>We need access to your photo library</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to your camera</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
