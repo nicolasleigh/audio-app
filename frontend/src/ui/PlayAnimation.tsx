@@ -2,13 +2,31 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import colors from '../utils/colors';
 import AnimatedStroke from './AnimatedStroke';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface Props {
-  visible: boolean;
+  isPlaying: boolean;
+  isPaused: boolean;
 }
 
-export default function PlayAnimation({visible}: Props) {
-  if (!visible) return null;
+export default function PlayAnimation({isPlaying, isPaused}: Props) {
+  // if (!visible) return null;
+  if (!isPaused && !isPlaying) {
+    return null;
+  }
+  if (isPaused) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.strokeContainer}>
+          <MaterialCommunityIcons
+            name="play"
+            size={25}
+            color={colors.CONTRAST}
+          />
+        </View>
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <View style={styles.strokeContainer}>

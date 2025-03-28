@@ -38,8 +38,6 @@ const useAudioController = () => {
   const dispatch = useDispatch();
   console.log(playbackState);
 
-  // const isPlayerReady = playbackState.state !== State.None;
-  // const isPlayerReady = playbackState.state === State.Ready;
   const isPlayerReady = Boolean(playbackState.state);
   const isPlaying = playbackState.state === State.Playing;
   const isPaused = playbackState.state === State.Paused;
@@ -48,8 +46,6 @@ const useAudioController = () => {
     playbackState.state === State.Loading;
 
   const onAudioPress = async (item: AudioData, data: AudioData[]) => {
-    // console.log(playbackState);
-    // if (isPlayerReady) {
     if (!playbackState.state) {
       await updateQueue(data);
       dispatch(updateOnGoingAudio(item)); // give us audio id before playing audio
@@ -180,6 +176,7 @@ const useAudioController = () => {
     isPlayerReady,
     isPlaying,
     isBusy,
+    isPaused,
   };
 };
 

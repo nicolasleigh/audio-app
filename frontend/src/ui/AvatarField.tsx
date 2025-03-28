@@ -1,6 +1,6 @@
 import React from 'react';
 import {Image, StyleSheet, View} from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../utils/colors';
 
 interface Props {
@@ -16,7 +16,11 @@ export default function AvatarField({source}: Props) {
         <Image source={{uri: source}} style={styles.avatarImage} />
       ) : (
         <View style={styles.avatarImage}>
-          <Entypo name="mic" size={30} color={colors.PRIMARY} />
+          <MaterialCommunityIcons
+            name="account"
+            size={30}
+            color={colors.PRIMARY}
+          />
         </View>
       )}
     </View>
@@ -31,7 +35,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.SECONDARY,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 4,
+    borderWidth: 2,
     borderColor: colors.CONTRAST,
   },
 });

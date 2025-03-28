@@ -22,12 +22,14 @@ import {categories} from '../../utils/categories';
 import colors from '../../utils/colors';
 import ImagePicker from '../ImagePicker';
 import Toast from 'react-native-toast-message';
+import AppHeader from '../AppHeader';
 
 interface Props {
   initialValues?: {
     title: string;
     category: string;
     about: string;
+    poster?: string;
   };
   onSubmit(formData: FormData, reset: () => void): void;
   progress?: number;
@@ -141,6 +143,7 @@ export default function AudioForm({
   //   setUri('');
   //   setImageUri('');
   // };
+  // console.log(initialValues);
 
   useEffect(() => {
     if (initialValues) {
@@ -148,12 +151,18 @@ export default function AudioForm({
         ...initialValues,
       });
       setIsForUpdate(true);
+      setImageUri(initialValues.poster);
     }
   }, [initialValues]);
 
   return (
     <AppView>
       <ScrollView style={styles.container}>
+        {isForUpdate ? (
+          <AppHeader title="Update" />
+        ) : (
+          <AppHeader title="Create" />
+        )}
         <View style={styles.formContainer}>
           {/* Title */}
           <View style={styles.inputContainer}>
@@ -262,6 +271,7 @@ export default function AudioForm({
             onSelect={item => {
               setAudioInfo({...audioInfo, category: item});
             }}
+            initialValue={initialValues?.category}
           />
 
           <AppButton
@@ -292,7 +302,7 @@ const styles = StyleSheet.create({
     gap: 50,
   },
   formContainer: {
-    marginTop: 30,
+    marginTop: 5,
     gap: 20,
   },
   input: {
