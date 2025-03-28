@@ -16,9 +16,7 @@ interface Props {
 export default function ProfileContainer({profile}: Props) {
   const {navigate} =
     useNavigation<NavigationProp<ProfileNavigatorStackParamList>>();
-  if (!profile) {
-    return null;
-  }
+  if (!profile) return null;
   return (
     <View style={styles.container}>
       <AvatarField source={profile.avatar} />

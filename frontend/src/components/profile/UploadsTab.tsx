@@ -20,7 +20,7 @@ export default function UploadsTab({}: Props) {
   const [showOptions, setShowOptions] = useState(false);
   const [selectedAudio, setSelectedAudio] = useState<AudioData>();
   const {data, isLoading} = useFetchUploadsByProfile();
-  const {onAudioPress, isPlaying, isPaused} = useAudioController();
+  const {onAudioPress} = useAudioController();
   const {onGoingAudio} = useSelector(getPlayerState);
   const {navigate} =
     useNavigation<NavigationProp<ProfileNavigatorStackParamList>>();
@@ -37,7 +37,6 @@ export default function UploadsTab({}: Props) {
       });
     }
   };
-  // console.log('selectedAudio:', selectedAudio);
 
   if (isLoading) {
     return <AudioListLoadingUI />;
@@ -55,8 +54,7 @@ export default function UploadsTab({}: Props) {
               onPress={() => onAudioPress(item, data)}
               audio={item}
               key={item.id}
-              isPlaying={isPlaying && onGoingAudio?.id === item.id}
-              isPaused={isPaused && onGoingAudio?.id === item.id}
+              isPlaying={onGoingAudio?.id === item.id}
               onLongPress={() => handleOnLongPress(item)}
             />
           );
@@ -77,7 +75,7 @@ export default function UploadsTab({}: Props) {
         renderItem={item => {
           return (
             <Pressable onPress={item.onPress} style={styles.optionContainer}>
-              <AntDesign size={20} color={colors.PRIMARY} name={item.icon} />
+              <AntDesign size={24} color={colors.PRIMARY} name={item.icon} />
               <Text style={styles.optionLabel}>{item.title}</Text>
             </Pressable>
           );
@@ -118,7 +116,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
-    gap: 4,
   },
   optionLabel: {color: colors.PRIMARY, fontSize: 16, marginLeft: 5},
 });
