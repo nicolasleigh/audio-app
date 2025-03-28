@@ -5,7 +5,6 @@ import {getClient} from '../api/client';
 import AudioForm from '../components/form/AudioForm';
 import {updateNotification} from '../store/notification';
 import {mapRange} from '../utils/math';
-import Toast from 'react-native-toast-message';
 
 interface Props {}
 
@@ -14,40 +13,31 @@ export default function Upload({}: Props) {
   const [busy, setBusy] = useState(false);
   const dispatch = useDispatch();
 
-  const handleUpload = async (formData: FormData, reset: () => void) => {
+  const handleUpload = async (formData: FormData) => {
     setBusy(true);
     try {
       const client = await getClient({'Content-Type': 'multipart/form-data'});
       const {data} = await client.post('/audio/create', formData, {
-        // onUploadProgress(progressEvent) {
-        //   const uploaded = mapRange({
-        //     inputMin: 0,
-        //     inputMax: progressEvent.total || 0,
-        //     outputMin: 0,
-        //     outputMax: 100,
-        //     inputValue: progressEvent.loaded,
-        //   });
-        //   if (uploaded >= 100) {
-        //     setBusy(false);
-        //   }
-        //   setUploadProgress(Math.floor(uploaded));
-        // },
+        onUploadProgress(progressEvent) {
+          const uploaded = mapRange({
+            inputMin: 0,
+            inputMax: progressEvent.total || 0,
+            outputMin: 0,
+            outputMax: 100,
+            inputValue: progressEvent.loaded,
+          });
+
+          if (uploaded >= 100) {
+            setBusy(false);
+          }
+
+          setUploadProgress(Math.floor(uploaded));
+        },
       });
-      Toast.show({
-        type: 'success',
-        text1: 'Audio created successfully',
-      });
-      setBusy(false);
-      reset();
-      // console.log(data);
+      console.log(data);
     } catch (error) {
       const errorMessage = catchAsyncError(error);
-      Toast.show({
-        type: 'error',
-        text1: 'Failed to create audio',
-      });
-      console.error(errorMessage);
-      // dispatch(updateNotification({message: errorMessage, type: 'error'}));
+      dispatch(updateNotification({message: errorMessage, type: 'error'}));
     }
     setBusy(false);
   };
