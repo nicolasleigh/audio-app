@@ -20,12 +20,16 @@ import AppButton from '../../ui/AppButton';
 import Progress from '../../ui/Progress';
 import {categories} from '../../utils/categories';
 import colors from '../../utils/colors';
+import ImagePicker from '../ImagePicker';
+import Toast from 'react-native-toast-message';
+import AppHeader from '../AppHeader';
 
 interface Props {
   initialValues?: {
     title: string;
     category: string;
     about: string;
+    poster?: string;
   };
   onSubmit(formData: FormData): void;
   progress?: number;
@@ -121,25 +125,101 @@ export default function AudioForm({
     }
   };
 
+  // const clearForm = () => {
+  //   setAudioInfo({...defaultForm});
+  //   setUri('');
+  //   setImageUri('');
+  // };
+  // console.log(initialValues);
+
   useEffect(() => {
     if (initialValues) {
       setAudioInfo({
         ...initialValues,
       });
       setIsForUpdate(true);
+      setImageUri(initialValues.poster);
     }
   }, [initialValues]);
 
   return (
     <AppView>
       <ScrollView style={styles.container}>
-        <View style={styles.fileSelectorContainer}>
-          <FileSelector
-            icon={
-              <MaterialCommunityIcons
-                name="image-outline"
-                size={35}
-                color={colors.SECONDARY}
+        {isForUpdate ? (
+          <AppHeader title="Update" />
+        ) : (
+          <AppHeader title="Create" />
+        )}
+        <View style={styles.formContainer}>
+          {/* Title */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Title</Text>
+            <TextInput
+              placeholder="Enter audio title"
+              placeholderTextColor={colors.INACTIVE_CONTRAST}
+              style={styles.input}
+              onChangeText={text => {
+                setAudioInfo({...audioInfo, title: text});
+              }}
+              value={audioInfo.title}
+            />
+          </View>
+
+          {/* Category */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Category</Text>
+            <Pressable
+              onPress={() => {
+                setShowCategoryModal(true);
+              }}>
+              <View pointerEvents="none">
+                <TextInput
+                  style={styles.input}
+                  editable={false}
+                  selectTextOnFocus={false}
+                  value={audioInfo.category}
+                  placeholder="Select a category"
+                  placeholderTextColor={colors.INACTIVE_CONTRAST}
+                />
+              </View>
+            </Pressable>
+          </View>
+
+          {/* About */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>About</Text>
+            <TextInput
+              placeholder="Enter audio information"
+              placeholderTextColor={colors.INACTIVE_CONTRAST}
+              style={styles.input}
+              numberOfLines={10}
+              multiline
+              onChangeText={text => {
+                setAudioInfo({...audioInfo, about: text});
+              }}
+              value={audioInfo.about}
+            />
+          </View>
+
+          {/* Audio */}
+          {!isForUpdate && (
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Audio File</Text>
+              <FileSelector
+                icon={
+                  <MaterialCommunityIcons
+                    name="file-music-outline"
+                    size={35}
+                    color={colors.SECONDARY}
+                  />
+                }
+                btnTitle="Select Audio"
+                options={{type: [types.audio]}}
+                onSelect={file => {
+                  setAudioInfo({...audioInfo, file});
+                }}
+                fileName={fileName}
+                setFileName={setFileName}
               />
             }
             btnTitle="Select Poster"
@@ -209,6 +289,7 @@ export default function AudioForm({
             onSelect={item => {
               setAudioInfo({...audioInfo, category: item});
             }}
+            initialValue={initialValues?.category}
           />
           <View style={{marginVertical: 20}}>
             {busy ? <Progress progress={progress} /> : null}
@@ -238,7 +319,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   formContainer: {
-    marginTop: 20,
+    marginTop: 5,
+    gap: 20,
   },
   input: {
     borderWidth: 2,

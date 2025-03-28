@@ -62,6 +62,7 @@ export default function UpdateAudio({route}: Props) {
         title: audio.title,
         category: audio.category,
         about: audio.about,
+        poster: audio.poster,
       }}
       onSubmit={handleUpdate}
       busy={busy}

@@ -16,6 +16,7 @@ export default function AudioListItem({
   isPlaying = false,
   onPress,
   onLongPress,
+  isPaused = true,
 }: Props) {
   const getSource = (poster?: string) => {
     return poster ? {uri: poster} : require('../assets/music_small.png');
@@ -28,7 +29,7 @@ export default function AudioListItem({
       key={audio.id}>
       <View>
         <Image source={getSource(audio.poster)} style={styles.poster} />
-        <PlayAnimation visible={isPlaying} />
+        <PlayAnimation isPlaying={isPlaying} isPaused={isPaused} />
       </View>
 
       <View style={styles.titleContainer}>

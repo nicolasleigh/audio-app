@@ -15,7 +15,7 @@ export default function AppHeader({title}: Props) {
   return (
     <View style={styles.container}>
       <Pressable onPress={goBack}>
-        <AntDesign name="arrowleft" size={24} color={colors.CONTRAST} />
+        <AntDesign name="arrowleft" size={20} color={colors.CONTRAST} />
       </Pressable>
       <Text style={styles.title}>{title}</Text>
     </View>
@@ -26,12 +26,14 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    gap: 20,
+    // justifyContent: 'space-between',
     backgroundColor: colors.PRIMARY,
     height: 45,
+    // marginTop: 5,
   },
   title: {
     color: colors.CONTRAST,
-    fontSize: 18,
+    fontSize: 17,
   },
 });

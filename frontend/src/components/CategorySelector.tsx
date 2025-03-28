@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Pressable, ScrollView, StyleSheet, Text} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import BasicModalContainer from '../ui/BasicModalContainer';
@@ -20,6 +20,7 @@ export default function CategorySelector<T extends any>({
   renderItem,
   onSelect,
   onRequestClose,
+  initialValue,
 }: Props<T>) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const handleSelect = (item: T, index: number) => {
@@ -27,6 +28,11 @@ export default function CategorySelector<T extends any>({
     onSelect(item, index);
     onRequestClose && onRequestClose();
   };
+
+  useEffect(() => {
+    const initialSelectedIndex = data.findIndex(item => item === initialValue);
+    setSelectedIndex(initialSelectedIndex);
+  }, []);
 
   return (
     <BasicModalContainer visible={visible} onRequestClose={onRequestClose}>
