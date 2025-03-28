@@ -1,10 +1,9 @@
 import {useQuery} from '@tanstack/react-query';
-import {useDispatch} from 'react-redux';
 import {AudioData, CompletePlaylist, History, Playlist} from '../@types/audio';
 import catchAsyncError from '../api/catchError';
 import {getClient} from '../api/client';
-import {updateNotification} from '../store/notification';
 import {PublicProfile} from '../@types/user';
+import Toast from 'react-native-toast-message';
 
 const fetchLatest = async (): Promise<AudioData[]> => {
   const client = await getClient();
@@ -13,14 +12,13 @@ const fetchLatest = async (): Promise<AudioData[]> => {
 };
 
 export const useFetchLatestAudios = () => {
-  const dispatch = useDispatch();
   const {data, isError, error, isLoading} = useQuery({
     queryKey: ['latest-uploads'],
     queryFn: fetchLatest,
   });
   if (isError) {
     const errorMsg = catchAsyncError(error);
-    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    Toast.show({type: 'error', text1: errorMsg});
   }
 
   return {data, isLoading};
@@ -33,14 +31,15 @@ const fetchRecommended = async (): Promise<AudioData[]> => {
 };
 
 export const useFetchRecommendedAudios = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const {data, isError, error, isLoading} = useQuery({
     queryKey: ['recommended'],
     queryFn: fetchRecommended,
   });
   if (isError) {
     const errorMsg = catchAsyncError(error);
-    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    // dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    Toast.show({type: 'error', text1: errorMsg});
   }
 
   return {data, isLoading};
@@ -53,14 +52,13 @@ const fetchPlaylist = async (): Promise<Playlist[]> => {
 };
 
 export const useFetchPlaylist = () => {
-  const dispatch = useDispatch();
   const {data, isError, error, isLoading} = useQuery({
     queryKey: ['playlist'],
     queryFn: fetchPlaylist,
   });
   if (isError) {
     const errorMsg = catchAsyncError(error);
-    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    Toast.show({type: 'error', text1: errorMsg});
   }
 
   return {data, isLoading};
@@ -73,14 +71,15 @@ const fetchUploadsByProfile = async (): Promise<AudioData[]> => {
 };
 
 export const useFetchUploadsByProfile = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const {data, isError, error, isLoading} = useQuery({
     queryKey: ['uploads-by-profile'],
     queryFn: fetchUploadsByProfile,
   });
   if (isError) {
     const errorMsg = catchAsyncError(error);
-    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    // dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    Toast.show({type: 'error', text1: errorMsg});
   }
 
   return {data, isLoading};
@@ -93,14 +92,15 @@ const fetchFavorite = async (): Promise<AudioData[]> => {
 };
 
 export const useFetchFavorite = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const {data, isError, error, isLoading, isFetching} = useQuery({
     queryKey: ['favorite'],
     queryFn: fetchFavorite,
   });
   if (isError) {
     const errorMsg = catchAsyncError(error);
-    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    // dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    Toast.show({type: 'error', text1: errorMsg});
   }
 
   return {data, isLoading, isFetching};
@@ -113,14 +113,15 @@ const fetchHistories = async (): Promise<History[]> => {
 };
 
 export const useFetchHistories = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const {data, isError, error, isLoading, isFetching} = useQuery({
     queryKey: ['histories'],
     queryFn: fetchHistories,
   });
   if (isError) {
     const errorMsg = catchAsyncError(error);
-    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    // dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    Toast.show({type: 'error', text1: errorMsg});
   }
 
   return {data, isLoading, isFetching};
@@ -133,14 +134,15 @@ const fetchRecentlyPlayed = async (): Promise<AudioData[]> => {
 };
 
 export const useFetchRecentlyPlayed = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const {data, isError, error, isLoading, isFetching} = useQuery({
     queryKey: ['recently-played'],
     queryFn: fetchRecentlyPlayed,
   });
   if (isError) {
     const errorMsg = catchAsyncError(error);
-    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    // dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    Toast.show({type: 'error', text1: errorMsg});
   }
 
   return {data, isLoading, isFetching};
@@ -153,14 +155,15 @@ const fetchRecommendedPlaylist = async (): Promise<Playlist[]> => {
 };
 
 export const useFetchRecommendedPlaylist = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const {data, isError, error, isLoading, isFetching} = useQuery({
     queryKey: ['recommended-playlist'],
     queryFn: fetchRecommendedPlaylist,
   });
   if (isError) {
     const errorMsg = catchAsyncError(error);
-    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    // dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    Toast.show({type: 'error', text1: errorMsg});
   }
 
   return {data, isLoading, isFetching};
@@ -173,7 +176,7 @@ const fetchIsFavorite = async (id: string): Promise<boolean[]> => {
 };
 
 export const useFetchIsFavorite = (id: string) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const {data, isError, error, isLoading, isFetching} = useQuery({
     queryKey: ['favorite', id],
     queryFn: () => fetchIsFavorite(id),
@@ -181,7 +184,8 @@ export const useFetchIsFavorite = (id: string) => {
   });
   if (isError) {
     const errorMsg = catchAsyncError(error);
-    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    // dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    Toast.show({type: 'error', text1: errorMsg});
   }
 
   return {data, isLoading, isFetching};
@@ -194,7 +198,7 @@ const fetchPublicProfile = async (id: string): Promise<PublicProfile> => {
 };
 
 export const useFetchPublicProfile = (id: string) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const {data, isError, error, isLoading, isFetching} = useQuery({
     queryKey: ['profile', id],
     queryFn: () => fetchPublicProfile(id),
@@ -202,7 +206,8 @@ export const useFetchPublicProfile = (id: string) => {
   });
   if (isError) {
     const errorMsg = catchAsyncError(error);
-    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    // dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    Toast.show({type: 'error', text1: errorMsg});
   }
 
   return {data, isLoading, isFetching};
@@ -215,7 +220,7 @@ const fetchPublicUploads = async (id: string): Promise<AudioData[]> => {
 };
 
 export const useFetchPublicUploads = (id: string) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const {data, isError, error, isLoading, isFetching} = useQuery({
     queryKey: ['uploads', id],
     queryFn: () => fetchPublicUploads(id),
@@ -223,7 +228,8 @@ export const useFetchPublicUploads = (id: string) => {
   });
   if (isError) {
     const errorMsg = catchAsyncError(error);
-    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    // dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    Toast.show({type: 'error', text1: errorMsg});
   }
 
   return {data, isLoading, isFetching};
@@ -236,7 +242,7 @@ const fetchPublicPlaylist = async (id: string): Promise<Playlist[]> => {
 };
 
 export const useFetchPublicPlaylist = (id: string) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const {data, isError, error, isLoading, isFetching} = useQuery({
     queryKey: ['playlist', id],
     queryFn: () => fetchPublicPlaylist(id),
@@ -244,7 +250,8 @@ export const useFetchPublicPlaylist = (id: string) => {
   });
   if (isError) {
     const errorMsg = catchAsyncError(error);
-    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    // dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    Toast.show({type: 'error', text1: errorMsg});
   }
 
   return {data, isLoading, isFetching};
@@ -257,7 +264,7 @@ const fetchPlaylistAudios = async (id: string): Promise<CompletePlaylist> => {
 };
 
 export const useFetchPlaylistAudios = (id: string) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const {data, isError, error, isLoading, isFetching} = useQuery({
     queryKey: ['playlist-audios', id],
     queryFn: () => fetchPlaylistAudios(id),
@@ -265,7 +272,8 @@ export const useFetchPlaylistAudios = (id: string) => {
   });
   if (isError) {
     const errorMsg = catchAsyncError(error);
-    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    // dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    Toast.show({type: 'error', text1: errorMsg});
   }
 
   return {data, isLoading, isFetching};
@@ -278,7 +286,7 @@ const fetchIsFollowing = async (id: string): Promise<boolean> => {
 };
 
 export const useFetchIsFollowing = (id: string) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const {data, isError, error, isLoading, isFetching} = useQuery({
     queryKey: ['is-following', id],
     queryFn: () => fetchIsFollowing(id),
@@ -286,7 +294,8 @@ export const useFetchIsFollowing = (id: string) => {
   });
   if (isError) {
     const errorMsg = catchAsyncError(error);
-    dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    // dispatch(updateNotification({message: errorMsg, type: 'error'}));
+    Toast.show({type: 'error', text1: errorMsg});
   }
 
   return {data, isLoading, isFetching};
