@@ -14,6 +14,7 @@ export default function AppButton({title, onPress, busy, borderRadius}: Props) {
   return (
     <Pressable
       onPress={onPress}
+      disabled={busy}
       style={[
         styles.container,
         {
@@ -32,6 +33,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.SECONDARY,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 10,
   },
   title: {
     color: colors.CONTRAST,
