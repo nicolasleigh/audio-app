@@ -32,6 +32,7 @@ export default function ImagePicker({
   options,
   imageUri,
   setImageUri,
+  busy,
 }: Props) {
   const selectImage = () => {
     launchImageLibrary(
@@ -55,7 +56,10 @@ export default function ImagePicker({
 
   return (
     <View style={styles.container}>
-      <Pressable onPress={selectImage} style={[styles.btnContainer, style]}>
+      <Pressable
+        onPress={selectImage}
+        disabled={busy}
+        style={[styles.btnContainer, style]}>
         {imageUri ? (
           <Image source={{uri: imageUri}} style={styles.image} />
         ) : (

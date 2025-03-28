@@ -9,6 +9,7 @@ import {getClient} from '../../api/client';
 import {updateNotification} from '../../store/notification';
 import {mapRange} from '../../utils/math';
 import AudioForm from '../form/AudioForm';
+import Toast from 'react-native-toast-message';
 
 type Props = NativeStackScreenProps<
   ProfileNavigatorStackParamList,
@@ -30,30 +31,30 @@ export default function UpdateAudio({route}: Props) {
     try {
       const client = await getClient({'Content-Type': 'multipart/form-data'});
       const {data} = await client.patch('/audio/' + audio.id, formData, {
-        onUploadProgress(progressEvent) {
-          const uploaded = mapRange({
-            inputMin: 0,
-            inputMax: progressEvent.total || 0,
-            outputMin: 0,
-            outputMax: 100,
-            inputValue: progressEvent.loaded,
-          });
-
-          if (uploaded >= 100) {
-            setBusy(false);
-          }
-
-          setUploadProgress(Math.floor(uploaded));
-        },
+        // onUploadProgress(progressEvent) {
+        //   const uploaded = mapRange({
+        //     inputMin: 0,
+        //     inputMax: progressEvent.total || 0,
+        //     outputMin: 0,
+        //     outputMax: 100,
+        //     inputValue: progressEvent.loaded,
+        //   });
+        //   if (uploaded >= 100) {
+        //     setBusy(false);
+        //   }
+        //   setUploadProgress(Math.floor(uploaded));
+        // },
       });
-
       queryClient.invalidateQueries({queryKey: ['uploads-by-profile']});
       navigate('Profile');
+      Toast.show({type: 'success', text1: 'Updated successfully'});
+      setBusy(false);
     } catch (error) {
       const errorMessage = catchAsyncError(error);
-      dispatch(updateNotification({message: errorMessage, type: 'error'}));
+      Toast.show({type: 'error', text1: 'Failed to update'});
+      console.error(errorMessage);
+      setBusy(false);
     }
-    setBusy(false);
   };
 
   return (
@@ -62,11 +63,11 @@ export default function UpdateAudio({route}: Props) {
         title: audio.title,
         category: audio.category,
         about: audio.about,
-        poster: audio.poster,
       }}
       onSubmit={handleUpdate}
       busy={busy}
       progress={uploadProgress}
+      initialPoster={audio.poster}
     />
   );
 }

@@ -34,6 +34,7 @@ export default function FileSelector({
   options,
   fileName,
   setFileName,
+  busy,
 }: Props) {
   // const [uri, setUri] = useState('');
   const handleDocumentSelect = async () => {
@@ -73,6 +74,7 @@ export default function FileSelector({
 
   return (
     <Pressable
+      disabled={busy}
       onPress={handleDocumentSelect}
       style={[styles.btnContainer, style]}>
       <View pointerEvents="none">

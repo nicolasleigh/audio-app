@@ -9,15 +9,12 @@ import {
 } from 'react-native';
 import {DocumentPickerResponse, types} from '@react-native-documents/picker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useDispatch} from 'react-redux';
 import * as yup from 'yup';
 import catchAsyncError from '../../api/catchError';
 import AppView from '../AppView';
 import CategorySelector from '../CategorySelector';
 import FileSelector from '../FileSelector';
-import {updateNotification} from '../../store/notification';
 import AppButton from '../../ui/AppButton';
-import Progress from '../../ui/Progress';
 import {categories} from '../../utils/categories';
 import colors from '../../utils/colors';
 import ImagePicker from '../ImagePicker';
@@ -29,11 +26,11 @@ interface Props {
     title: string;
     category: string;
     about: string;
-    poster?: string;
   };
   onSubmit(formData: FormData, reset: () => void): void;
   progress?: number;
   busy?: boolean;
+  initialPoster?: string;
 }
 
 interface FormFields {
@@ -79,9 +76,9 @@ const oldAudioSchema = yup.object().shape({
 
 export default function AudioForm({
   initialValues,
-  progress = 0,
   busy,
   onSubmit,
+  initialPoster,
 }: Props) {
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [audioInfo, setAudioInfo] = useState({
@@ -90,8 +87,6 @@ export default function AudioForm({
   const [isForUpdate, setIsForUpdate] = useState(false);
   const [fileName, setFileName] = useState('');
   const [imageUri, setImageUri] = useState('');
-
-  const dispatch = useDispatch();
 
   const reset = () => {
     setAudioInfo({...defaultForm});
@@ -130,9 +125,10 @@ export default function AudioForm({
       onSubmit(formData, reset);
     } catch (error) {
       const errorMessage = catchAsyncError(error);
+      console.error(errorMessage);
       Toast.show({
         type: 'error',
-        text1: errorMessage,
+        text1: 'Failed to update',
       });
       // dispatch(updateNotification({message: errorMessage, type: 'error'}));
     }
@@ -151,9 +147,10 @@ export default function AudioForm({
         ...initialValues,
       });
       setIsForUpdate(true);
-      setImageUri(initialValues.poster);
+      setImageUri(initialPoster);
     }
-  }, [initialValues]);
+    console.log('initialValues:', initialValues);
+  }, []);
 
   return (
     <AppView>
@@ -175,6 +172,7 @@ export default function AudioForm({
                 setAudioInfo({...audioInfo, title: text});
               }}
               value={audioInfo.title}
+              editable={!busy}
             />
           </View>
 
@@ -182,6 +180,7 @@ export default function AudioForm({
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Category</Text>
             <Pressable
+              disabled={busy}
               onPress={() => {
                 setShowCategoryModal(true);
               }}>
@@ -211,6 +210,7 @@ export default function AudioForm({
                 setAudioInfo({...audioInfo, about: text});
               }}
               value={audioInfo.about}
+              editable={!busy}
             />
           </View>
 
@@ -233,6 +233,7 @@ export default function AudioForm({
                 }}
                 fileName={fileName}
                 setFileName={setFileName}
+                busy={busy}
               />
             </View>
           )}
@@ -255,6 +256,7 @@ export default function AudioForm({
               }}
               imageUri={imageUri}
               setImageUri={setImageUri}
+              busy={busy}
             />
           </View>
 
