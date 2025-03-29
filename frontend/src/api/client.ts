@@ -11,7 +11,9 @@ type headers = CreateAxiosDefaults<any>['headers'];
 
 export const getClient = async (headers?: headers) => {
   const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
-  if (!token) return axios.create({baseURL});
+  if (!token) {
+    return axios.create({baseURL});
+  }
 
   const defaultHeaders = {
     Authorization: `Bearer ${token}`,

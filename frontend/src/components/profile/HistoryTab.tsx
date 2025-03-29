@@ -33,15 +33,15 @@ export default function HistoryTab({}: Props) {
   };
 
   const removeMutate = useMutation({
-    mutationFn: async histories => removeHistories(histories),
-    onMutate: (histories: string[]) => {
+    mutationFn: async historyIds => removeHistories(historyIds),
+    onMutate: (historyIds: string[]) => {
       queryClient.setQueryData<History[]>(['histories'], oldData => {
         let newData: History[] = [];
         if (!oldData) return newData;
 
         for (let data of oldData) {
           const filteredData = data.audios.filter(
-            item => !histories.includes(item.id),
+            item => !historyIds.includes(item.id),
           );
           if (filteredData.length) {
             newData.push({date: data.date, audios: filteredData});
@@ -54,13 +54,11 @@ export default function HistoryTab({}: Props) {
 
   const handleSingleHistoryRemove = async (history: historyAudio) => {
     removeMutate.mutate([history.id]);
-    // await removeHistories([history.id]);
   };
 
   const handleMultipleHistoryRemove = async () => {
-    setSelectedHistories([]);
     removeMutate.mutate([...selectedHistories]);
-    // await removeHistories([...selectedHistories]);
+    setSelectedHistories([]);
   };
 
   const handleOnLongPress = (history: historyAudio) => {
@@ -95,20 +93,10 @@ export default function HistoryTab({}: Props) {
     return <AudioListLoadingUI />;
   }
 
-  // if (!data || !data[0]?.audios.length) {
-  //   return <EmptyRecords title="There is no history" />;
-  // }
   if (data) console.log(data[0]?.audios); //{"audioId": "", "date": "", "id": "", "title": ""}
   // console.log(data);
   return (
     <>
-      {selectedHistories.length ? (
-        <Pressable
-          style={styles.removeBtn}
-          onPress={handleMultipleHistoryRemove}>
-          <Text style={styles.removeBtnText}>Remove</Text>
-        </Pressable>
-      ) : null}
       <ScrollView
         refreshControl={
           <RefreshControl
@@ -150,6 +138,13 @@ export default function HistoryTab({}: Props) {
             </View>
           );
         })}
+        {selectedHistories.length ? (
+          <Pressable
+            style={styles.removeBtn}
+            onPress={handleMultipleHistoryRemove}>
+            <Text style={styles.removeBtnText}>Remove</Text>
+          </Pressable>
+        ) : null}
       </ScrollView>
     </>
   );

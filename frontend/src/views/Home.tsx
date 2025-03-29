@@ -21,6 +21,7 @@ import {
   updatePlaylistVisibility,
   updateSelectedListId,
 } from '../store/playlistModal';
+import Toast from 'react-native-toast-message';
 
 interface Props {}
 
@@ -45,7 +46,7 @@ export default function Home({}: Props) {
       const {data} = await client.post('/favorite?audioId=' + selectedAudio.id);
     } catch (error) {
       const errorMsg = catchAsyncError(error);
-      dispatch(updateNotification({message: errorMsg, type: 'error'}));
+      Toast.show({type: 'error', text1: errorMsg});
     }
     setSelectedAudio(undefined);
     setShowOptions(false);
@@ -73,7 +74,8 @@ export default function Home({}: Props) {
       console.log(data);
     } catch (error) {
       const errorMsg = catchAsyncError(error);
-      console.log(errorMsg);
+      Toast.show({type: 'error', text1: errorMsg});
+      console.error(errorMsg);
     }
   };
 

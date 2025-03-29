@@ -1,6 +1,6 @@
-import { historyType, paginationQuery } from '#/@types/other';
-import History from '#/models/history';
-import { RequestHandler } from 'express';
+import { historyType, paginationQuery } from "#/@types/other";
+import History from "#/models/history";
+import { RequestHandler } from "express";
 
 export const updateHistory: RequestHandler = async (req, res) => {
   const oldHistory = await History.findOne({ owner: req.user.id });
@@ -19,23 +19,15 @@ export const updateHistory: RequestHandler = async (req, res) => {
   }
 
   const today = new Date();
-  const startOfDay = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate()
-  );
-  const endOfDay = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate() + 1
-  );
+  const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
 
   const histories = await History.aggregate([
     { $match: { owner: req.user.id } },
-    { $unwind: '$all' },
+    { $unwind: "$all" },
     {
       $match: {
-        'all.date': {
+        "all.date": {
           $gte: startOfDay,
           $lt: endOfDay,
         },
@@ -44,7 +36,7 @@ export const updateHistory: RequestHandler = async (req, res) => {
     {
       $project: {
         _id: 0,
-        audio: '$all.audio',
+        audio: "$all.audio",
       },
     },
   ]);
@@ -52,21 +44,19 @@ export const updateHistory: RequestHandler = async (req, res) => {
   // const sameDayHistory = histories.find((item) => {
   //   if (item.audio.toString() === audio) return item;
   // });
-  const sameDayHistory = histories.find(
-    (item) => item.audio.toString() === audio
-  );
+  const sameDayHistory = histories.find((item) => item.audio.toString() === audio);
 
   if (sameDayHistory) {
     await History.findOneAndUpdate(
       {
         owner: req.user.id,
-        'all.audio': audio,
+        "all.audio": audio,
       },
       {
         // https://www.mongodb.com/docs/manual/reference/operator/update/positional/
         $set: {
-          'all.$.progress': progress,
-          'all.$.date': date,
+          "all.$.progress": progress,
+          "all.$.date": date,
         },
         // $set: {
         //   'all.progress': progress,
@@ -85,7 +75,7 @@ export const updateHistory: RequestHandler = async (req, res) => {
 };
 
 export const removeHistory: RequestHandler = async (req, res) => {
-  const removeAll = req.query.all === 'yes';
+  const removeAll = req.query.all === "yes";
 
   if (removeAll) {
     await History.findOneAndDelete({ owner: req.user.id });
@@ -97,60 +87,63 @@ export const removeHistory: RequestHandler = async (req, res) => {
   await History.findOneAndUpdate(
     { owner: req.user.id },
     {
-      $pull: { all: { _id: ids } },
+      // $pull: { all: { _id: ids } },
+      $pull: { all: { _id: { $in: ids } } },
     }
   );
   res.json({ success: true });
 };
 
 export const getHistories: RequestHandler = async (req, res) => {
-  const { limit = '20', pageNo = '0' } = req.query as paginationQuery;
+  const { limit = "20", pageNo = "0" } = req.query as paginationQuery;
   const histories = await History.aggregate([
     { $match: { owner: req.user.id } },
     {
       $project: {
         all: {
-          $slice: ['$all', parseInt(limit) * parseInt(pageNo), parseInt(limit)],
+          $slice: ["$all", parseInt(limit) * parseInt(pageNo), parseInt(limit)],
         },
       },
     },
-    { $unwind: '$all' },
+    { $unwind: "$all" },
     {
       $lookup: {
-        from: 'audios',
-        localField: 'all.audio',
-        foreignField: '_id',
-        as: 'audioInfo',
+        from: "audios",
+        localField: "all.audio",
+        foreignField: "_id",
+        as: "audioInfo",
       },
     },
-    { $unwind: '$audioInfo' },
+    { $unwind: "$audioInfo" },
     {
       $project: {
         _id: 0,
-        id: '$all._id',
-        audioId: '$audioInfo._id',
-        date: '$all.date',
-        title: '$audioInfo.title',
+        id: "$all._id",
+        audioId: "$audioInfo._id",
+        date: "$all.date",
+        title: "$audioInfo.title",
       },
     },
     {
       $group: {
         _id: {
-          $dateToString: { format: '%Y-%m-%d', date: '$date' },
+          $dateToString: { format: "%Y-%m-%d", date: "$date" },
         },
-        audios: { $push: '$$ROOT' },
+        audios: { $push: "$$ROOT" },
       },
     },
     {
       $project: {
         _id: 0,
         // id: '$id',
-        date: '$_id',
-        audios: '$$ROOT.audios',
+        date: "$_id",
+        audios: "$$ROOT.audios",
       },
     },
     { $sort: { date: -1 } },
   ]);
+
+  // console.log(histories);
 
   res.json({ histories });
 };
@@ -160,56 +153,56 @@ export const getRecentlyPlayed: RequestHandler = async (req, res) => {
     { $match: { owner: req.user.id } },
     {
       $project: {
-        myHistory: { $slice: ['$all', 10] },
+        myHistory: { $slice: ["$all", 10] },
       },
     },
     {
       $project: {
         histories: {
           $sortArray: {
-            input: '$myHistory',
+            input: "$myHistory",
             sortBy: { date: -1 },
           },
         },
       },
     },
     {
-      $unwind: { path: '$histories', includeArrayIndex: 'index' },
+      $unwind: { path: "$histories", includeArrayIndex: "index" },
     },
     {
       $lookup: {
-        from: 'audios',
-        localField: 'histories.audio',
-        foreignField: '_id',
-        as: 'audioInfo',
+        from: "audios",
+        localField: "histories.audio",
+        foreignField: "_id",
+        as: "audioInfo",
       },
     },
     {
-      $unwind: '$audioInfo',
+      $unwind: "$audioInfo",
     },
     {
       $lookup: {
-        from: 'users',
-        localField: 'audioInfo.owner',
-        foreignField: '_id',
-        as: 'userInfo',
+        from: "users",
+        localField: "audioInfo.owner",
+        foreignField: "_id",
+        as: "userInfo",
       },
     },
     {
-      $unwind: '$userInfo',
+      $unwind: "$userInfo",
     },
     {
       $project: {
         _id: 0,
-        id: '$audioInfo._id',
-        date: '$histories.date',
-        progress: '$histories.progress',
-        title: '$audioInfo.title',
-        about: '$audioInfo.about',
-        poster: '$audioInfo.poster.url',
-        file: '$audioInfo.file.url',
-        category: '$audioInfo.category',
-        owner: { name: '$userInfo.name', id: '$userInfo._id' },
+        id: "$audioInfo._id",
+        date: "$histories.date",
+        progress: "$histories.progress",
+        title: "$audioInfo.title",
+        about: "$audioInfo.about",
+        poster: "$audioInfo.poster.url",
+        file: "$audioInfo.file.url",
+        category: "$audioInfo.category",
+        owner: { name: "$userInfo.name", id: "$userInfo._id" },
         // index: '$index',
       },
     },

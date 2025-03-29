@@ -6,9 +6,9 @@ import {getClient} from '../api/client';
 import {useDispatch, useSelector} from 'react-redux';
 import {getAuthState} from '../store/auth';
 import catchAsyncError from '../api/catchError';
-import {updateNotification} from '../store/notification';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {ProfileNavigatorStackParamList} from '../@types/navigation';
+import Toast from 'react-native-toast-message';
 
 interface Props {
   time?: number;
@@ -49,7 +49,7 @@ export default function ReVerificationLink({
     } catch (error) {
       // console.log('Request for new otp ', error.response.data.error);
       const errorMessage = catchAsyncError(error);
-      dispatch(updateNotification({message: errorMessage, type: 'error'}));
+      Toast.show({type: 'error', text1: errorMessage});
     }
   };
 

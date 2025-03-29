@@ -18,7 +18,6 @@ import AppButton from '../../ui/AppButton';
 import {getClient} from '../../api/client';
 import catchAsyncError from '../../api/catchError';
 import {useDispatch, useSelector} from 'react-redux';
-import {updateNotification} from '../../store/notification';
 import {Keys, removeFromAsyncStorage} from '../../utils/asyncStorage';
 import {
   getAuthState,
@@ -30,6 +29,7 @@ import deepEqual from 'deep-equal';
 import {getPermissionToReadImages} from '../../utils/helper';
 import ReVerificationLink from '../ReVerificationLink';
 import {useQueryClient} from '@tanstack/react-query';
+import Toast from 'react-native-toast-message';
 
 interface Props {}
 interface ProfileInfo {
@@ -58,23 +58,21 @@ export default function ProfileSetting({}: Props) {
       await removeFromAsyncStorage(Keys.AUTH_TOKEN);
       dispatch(updateProfile(null));
       dispatch(updateLoggedIn(false));
+      Toast.show({type: 'success', text1: 'Log out successfully'});
     } catch (error) {
       const errorMsg = catchAsyncError(error);
-      dispatch(updateNotification({message: errorMsg, type: 'error'}));
+      console.error(errorMsg);
+      Toast.show({type: 'error', text1: 'Failed to log out'});
+    } finally {
+      dispatch(updateBusy(false));
     }
-    dispatch(updateBusy(false));
   };
 
   const handleSubmit = async () => {
     setBusy(true);
     try {
       if (!userInfo.name.trim()) {
-        return dispatch(
-          updateNotification({
-            message: 'Profile name is required',
-            type: 'error',
-          }),
-        );
+        return Toast.show({type: 'error', text1: 'Profile name is required'});
       }
       const formData = new FormData();
       formData.append('name', userInfo.name);
@@ -90,14 +88,13 @@ export default function ProfileSetting({}: Props) {
       const client = await getClient({'Content-Type': 'multipart/form-data'});
       const {data} = await client.post('/auth/update-profile', formData);
       dispatch(updateProfile(data.profile));
-      dispatch(
-        updateNotification({message: 'Profile updated', type: 'success'}),
-      );
+      Toast.show({type: 'success', text1: 'Profile updated'});
     } catch (error) {
       const errorMsg = catchAsyncError(error);
-      dispatch(updateNotification({message: errorMsg, type: 'error'}));
+      Toast.show({type: 'error', text1: errorMsg});
+    } finally {
+      setBusy(false);
     }
-    setBusy(false);
   };
 
   const handleImageSelect = async () => {
@@ -110,24 +107,20 @@ export default function ProfileSetting({}: Props) {
       });
       setUserInfo({...userInfo, avatar: path});
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   const clearHistory = async () => {
     try {
       const client = await getClient();
-      dispatch(
-        updateNotification({
-          message: 'Your histories will be removed!',
-          type: 'success',
-        }),
-      );
       await client.delete('/history?all=yes');
       queryClient.invalidateQueries({queryKey: ['histories']});
+      Toast.show({type: 'success', text1: 'Histories removed'});
     } catch (error) {
       const errorMsg = catchAsyncError(error);
-      dispatch(updateNotification({message: errorMsg, type: 'error'}));
+      Toast.show({type: 'error', text1: 'Failed to remove'});
+      console.error(errorMsg);
     }
   };
 
@@ -213,13 +206,13 @@ export default function ProfileSetting({}: Props) {
           onPress={() => handleLogout(true)}
           style={styles.buttonContainer}>
           <AntDesign name="logout" size={20} color={colors.CONTRAST} />
-          <Text style={styles.buttonTitle}>Logout From All</Text>
+          <Text style={styles.buttonTitle}>Log Out From All Devices</Text>
         </Pressable>
         <Pressable
           onPress={() => handleLogout()}
           style={styles.buttonContainer}>
           <AntDesign name="logout" size={20} color={colors.CONTRAST} />
-          <Text style={styles.buttonTitle}>Logout</Text>
+          <Text style={styles.buttonTitle}>Log Out</Text>
         </Pressable>
       </View>
 

@@ -26,6 +26,7 @@ export default function AudioInfoContainer({visible, closeHandler}: Props) {
       </Pressable>
       <ScrollView>
         <Text style={styles.title}>{onGoingAudio?.title}</Text>
+        <Text style={styles.title}>{onGoingAudio?.category}</Text>
         <View style={styles.ownerInfo}>
           <Text style={styles.title}>Creator: </Text>
           <AppLink title={onGoingAudio?.owner.name || ''} />

@@ -17,6 +17,7 @@ import {getClient} from '../api/client';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {HomeNavigatorStackParamList} from '../@types/navigation';
 import {getAuthState} from '../store/auth';
+import Toast from 'react-native-toast-message';
 
 interface Props {}
 
@@ -49,6 +50,9 @@ export default function MiniAudioPlayer({}: Props) {
   const favoriteMutate = useMutation({
     mutationFn: async id => toggleIsFav(id),
     onMutate: (_: string) => {
+      if (!profile?.verified) {
+        return Toast.show({type: 'error', text1: 'User is not verified'});
+      }
       queryClient.setQueryData<boolean>(
         ['favorite', onGoingAudio?.id],
         oldData => !oldData,

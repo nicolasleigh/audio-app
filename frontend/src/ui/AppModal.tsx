@@ -30,10 +30,13 @@ export default function AppModal({
   onRequestClose,
   animation,
 }: Props) {
-  const translateY = useSharedValue(modalHeight);
-  const translateStyle = useAnimatedStyle(() => ({
-    transform: [{translateY: translateY.value}],
-  }));
+  // const translateY = useSharedValue(modalHeight);
+  const translateY = useSharedValue(0);
+  const translateStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{translateY: translateY.value}],
+    };
+  });
 
   const handleClose = () => {
     translateY.value = modalHeight;
@@ -44,6 +47,7 @@ export default function AppModal({
     .onUpdate(e => {
       if (e.translationY < 0) return;
       translateY.value = e.translationY;
+      // console.log(e.translationY);
     })
     .onFinalize(e => {
       if (e.translationY <= modalHeight / 2) {
@@ -56,7 +60,7 @@ export default function AppModal({
 
   useEffect(() => {
     if (visible)
-      translateY.value = withTiming(0, {duration: animation ? 200 : 0});
+      translateY.value = withTiming(0, {duration: animation ? 400 : 0});
   }, [visible, animation]);
 
   return (
@@ -67,7 +71,6 @@ export default function AppModal({
       transparent>
       <GestureHandlerRootView style={{flex: 1}}>
         <Pressable style={styles.backdrop}>
-          {/* <Pressable onResponderEnd={handleClose} style={styles.backdrop}> */}
           <GestureDetector gesture={gesture}>
             <Animated.View style={[styles.modal, translateStyle]}>
               {children}
