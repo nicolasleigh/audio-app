@@ -128,7 +128,7 @@ export default function AudioForm({
       console.error(errorMessage);
       Toast.show({
         type: 'error',
-        text1: 'Failed to update',
+        text1: errorMessage,
       });
       // dispatch(updateNotification({message: errorMessage, type: 'error'}));
     }

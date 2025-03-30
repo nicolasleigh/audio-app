@@ -14,6 +14,8 @@ import {
 } from '../store/player';
 import deepEqual from 'deep-equal';
 import {useEffect} from 'react';
+import RNFS from 'react-native-fs';
+import Toast from 'react-native-toast-message';
 
 let isReady = false;
 
@@ -22,7 +24,8 @@ const updateQueue = async (data: AudioData[]) => {
     return {
       id: item.id,
       title: item.title,
-      url: item.file,
+      // url: item.file,
+      url: RNFS.CachesDirectoryPath + `/${item.publicId}.mp3`,
       artwork: item.poster || require('../assets/music.png'),
       artist: item.owner.name,
       genre: item.category,
@@ -32,11 +35,45 @@ const updateQueue = async (data: AudioData[]) => {
   await TrackPlayer.add([...lists]);
 };
 
+const downLoadFile = async (url: string, publicId: string) => {
+  const filePath = RNFS.CachesDirectoryPath + `/${publicId}.mp3`;
+  const isExists = await RNFS.exists(filePath);
+  if (isExists) {
+    return;
+  }
+
+  RNFS.downloadFile({
+    fromUrl: url,
+    toFile: filePath,
+    background: true, // Enable downloading in the background (iOS only)
+    discretionary: true, // Allow the OS to control the timing and speed (iOS only)
+    begin: res => {
+      console.log(res.contentLength);
+    },
+    progress: res => {
+      const progress = (res.bytesWritten / res.contentLength) * 100;
+      const progressText = `${progress.toFixed(2)}%`;
+      Toast.show({
+        type: 'info',
+        text1: `Downloading progress: ${progressText}`,
+      });
+    },
+  })
+    .promise.then(response => {
+      console.log('File downloaded!', response);
+      Toast.show({type: 'success', text1: 'Audio downloaded successfully'});
+    })
+    .catch(err => {
+      console.error('Download error:', err);
+      Toast.show({type: 'error', text1: 'Failed to download'});
+    });
+};
+
 const useAudioController = () => {
   const playbackState = usePlaybackState();
   const {onGoingAudio, onGoingList} = useSelector(getPlayerState);
   const dispatch = useDispatch();
-  console.log(playbackState);
+  console.log('playbackState--:', playbackState);
 
   const isPlayerReady = Boolean(playbackState.state);
   const isPlaying = playbackState.state === State.Playing;
@@ -46,6 +83,8 @@ const useAudioController = () => {
     playbackState.state === State.Loading;
 
   const onAudioPress = async (item: AudioData, data: AudioData[]) => {
+    await downLoadFile(item.file, item.publicId);
+
     if (!playbackState.state) {
       await updateQueue(data);
       dispatch(updateOnGoingAudio(item)); // give us audio id before playing audio
