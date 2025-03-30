@@ -209,5 +209,8 @@ export const getRecentlyPlayed: RequestHandler = async (req, res) => {
     },
   ]);
 
-  res.json({ audios });
+  const ids = new Set();
+  const uniqueAudios = audios.filter(({ publicId }) => !ids.has(publicId) && ids.add(publicId));
+
+  res.json({ audios: uniqueAudios });
 };
