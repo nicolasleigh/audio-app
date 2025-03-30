@@ -14,7 +14,7 @@ interface Props {}
 
 export default function FavoriteTab({}: Props) {
   const {data, isLoading, isFetching} = useFetchFavorite();
-  const {onAudioPress} = useAudioController();
+  const {onAudioPress, isPlaying, isPaused} = useAudioController();
   const {onGoingAudio} = useSelector(getPlayerState);
 
   const queryClient = useQueryClient();
@@ -46,7 +46,8 @@ export default function FavoriteTab({}: Props) {
             onPress={() => onAudioPress(item, data)}
             audio={item}
             key={item.id}
-            isPlaying={onGoingAudio?.id === item.id}
+            isPlaying={isPlaying && onGoingAudio?.id === item.id}
+            isPaused={isPaused && onGoingAudio?.id === item.id}
           />
         );
       })}

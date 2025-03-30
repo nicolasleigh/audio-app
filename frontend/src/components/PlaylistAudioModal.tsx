@@ -20,7 +20,7 @@ export default function PlaylistAudioModal({}: Props) {
   const dispatch = useDispatch();
   const {data, isLoading} = useFetchPlaylistAudios(selectedListId || '');
   const {onGoingAudio} = useSelector(getPlayerState);
-  const {onAudioPress} = useAudioController();
+  const {onAudioPress, isPlaying, isPaused} = useAudioController();
   const handleClose = () => {
     dispatch(updatePlaylistVisibility(false));
   };
@@ -40,8 +40,9 @@ export default function PlaylistAudioModal({}: Props) {
               return (
                 <AudioListItem
                   audio={item}
-                  isPlaying={onGoingAudio?.id === item.id}
                   onPress={() => onAudioPress(item, data?.audios || [])}
+                  isPlaying={isPlaying && onGoingAudio?.id === item.id}
+                  isPaused={isPaused && onGoingAudio?.id === item.id}
                 />
               );
             }}

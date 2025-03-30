@@ -6,9 +6,10 @@ import PlayAnimation from './PlayAnimation';
 
 interface Props {
   audio: AudioData;
-  isPlaying?: boolean;
-  onPress?(): void;
+  isPlaying: boolean;
+  onPress(): void;
   onLongPress?(): void;
+  isPaused: boolean;
 }
 
 export default function AudioListItem({

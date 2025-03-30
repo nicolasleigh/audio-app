@@ -22,6 +22,7 @@ import {
   updateSelectedListId,
 } from '../store/playlistModal';
 import Toast from 'react-native-toast-message';
+import {useQueryClient} from '@tanstack/react-query';
 
 interface Props {}
 
@@ -32,6 +33,7 @@ export default function Home({}: Props) {
   const [showPlaylistForm, setShowPlaylistForm] = useState(false);
   const {onAudioPress} = useAudioController();
   const [show, setShow] = useState(false);
+  const queryClient = useQueryClient();
 
   const {data: list} = useFetchPlaylist();
 
@@ -43,7 +45,11 @@ export default function Home({}: Props) {
     // send request with the audio id that we want to add to fav
     try {
       const client = await getClient();
-      const {data} = await client.post('/favorite?audioId=' + selectedAudio.id);
+      const {data} = await client.post(
+        '/favorite/add?audioId=' + selectedAudio.id,
+      );
+      queryClient.invalidateQueries({queryKey: ['favorite', selectedAudio.id]});
+      Toast.show({type: data.toast, text1: data.message});
     } catch (error) {
       const errorMsg = catchAsyncError(error);
       Toast.show({type: 'error', text1: errorMsg});
