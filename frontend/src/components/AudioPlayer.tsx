@@ -11,7 +11,6 @@ import Slider from '@react-native-community/slider';
 import useAudioController from '../hooks/useAudioController';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import PlayPauseBtn from '../ui/PlayPauseBtn';
 import PlayerController from '../ui/PlayerController';
 import Loader from '../ui/Loader';
@@ -162,21 +161,12 @@ export default function AudioPlayer({
               <AntDesign name="stepforward" size={24} color={colors.CONTRAST} />
             </PlayerController>
           </View>
+
           <PlaybackRateSelector
-            containerStyle={{marginTop: 20}}
             onPress={onPlaybackRatePress}
             activeRate={playbackRate.toString()}
+            onListOptionPress={onListOptionPress}
           />
-
-          <View style={styles.listOptionBtnContainer}>
-            <PlayerController ignoreContainer onPress={onListOptionPress}>
-              <MaterialCommunityIcons
-                name="playlist-music"
-                size={24}
-                color={colors.CONTRAST}
-              />
-            </PlayerController>
-          </View>
         </View>
       </View>
     </AppModal>

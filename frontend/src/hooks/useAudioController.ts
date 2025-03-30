@@ -125,9 +125,9 @@ const useAudioController = () => {
 
     const preIndex = currentIndex - 1;
 
-    const nextAudio = currentList[preIndex];
-    if (nextAudio) {
-      await TrackPlayer.skipToNext();
+    const prevAudio = currentList[preIndex];
+    if (prevAudio) {
+      await TrackPlayer.skipToPrevious();
       dispatch(updateOnGoingAudio(onGoingList[preIndex]));
     }
   };

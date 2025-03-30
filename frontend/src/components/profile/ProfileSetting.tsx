@@ -30,6 +30,8 @@ import {getPermissionToReadImages} from '../../utils/helper';
 import ReVerificationLink from '../ReVerificationLink';
 import {useQueryClient} from '@tanstack/react-query';
 import Toast from 'react-native-toast-message';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {AuthStackParamList} from '../../@types/navigation';
 
 interface Props {}
 interface ProfileInfo {
@@ -43,6 +45,7 @@ export default function ProfileSetting({}: Props) {
   const dispatch = useDispatch();
   const {profile} = useSelector(getAuthState);
   const queryClient = useQueryClient();
+  const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
 
   const isSame = deepEqual(userInfo, {
     name: profile?.name,
@@ -62,6 +65,12 @@ export default function ProfileSetting({}: Props) {
     } catch (error) {
       const errorMsg = catchAsyncError(error);
       console.error(errorMsg);
+      if (errorMsg === 'Unauthorized request!') {
+        await removeFromAsyncStorage(Keys.AUTH_TOKEN);
+        dispatch(updateProfile(null));
+        dispatch(updateLoggedIn(false));
+        return;
+      }
       Toast.show({type: 'error', text1: 'Failed to log out'});
     } finally {
       dispatch(updateBusy(false));
