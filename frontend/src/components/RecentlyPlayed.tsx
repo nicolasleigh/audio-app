@@ -15,7 +15,7 @@ const dummyData = new Array(4).fill('');
 
 export default function RecentlyPlayed({}: Props) {
   const {data = [], isLoading} = useFetchRecentlyPlayed();
-  const {onAudioPress} = useAudioController();
+  const {onAudioPress, isPaused, isPlaying} = useAudioController();
   const {onGoingAudio} = useSelector(getPlayerState);
   if (isLoading) {
     return (
@@ -56,7 +56,8 @@ export default function RecentlyPlayed({}: Props) {
                 onPress={() => {
                   onAudioPress(item, data);
                 }}
-                isPlaying={onGoingAudio?.id === item.id}
+                isPlaying={isPlaying && onGoingAudio?.id === item.id}
+                isPaused={isPaused && onGoingAudio?.id === item.id}
               />
             </View>
           );

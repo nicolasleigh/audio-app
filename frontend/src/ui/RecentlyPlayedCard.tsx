@@ -7,12 +7,14 @@ interface Props {
   title: string;
   poster?: string;
   isPlaying?: boolean;
+  isPaused?: boolean;
   onPress?(): void;
 }
 
 export default function RecentlyPlayedCard({
   title,
   isPlaying = false,
+  isPaused = true,
   onPress,
   poster,
 }: Props) {
@@ -21,7 +23,7 @@ export default function RecentlyPlayedCard({
     <Pressable onPress={onPress} style={styles.container}>
       <View>
         <Image source={source} style={styles.poster} />
-        <PlayAnimation visible={isPlaying} />
+        <PlayAnimation isPlaying={isPlaying} isPaused={isPaused} />
       </View>
 
       <View style={styles.titleContainer}>

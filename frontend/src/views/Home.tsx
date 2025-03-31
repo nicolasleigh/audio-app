@@ -77,7 +77,9 @@ export default function Home({}: Props) {
         title: value.title,
         visibility: value.private ? 'private' : 'public',
       });
-      console.log(data);
+      queryClient.invalidateQueries({queryKey: ['playlist']});
+      Toast.show({type: 'success', text1: 'Playlist created'});
+      // console.log(data);
     } catch (error) {
       const errorMsg = catchAsyncError(error);
       Toast.show({type: 'error', text1: errorMsg});
@@ -96,9 +98,8 @@ export default function Home({}: Props) {
       });
       setSelectedAudio(undefined);
       setShowPlaylistModal(false);
-      dispatch(
-        updateNotification({message: 'Added to playlist', type: 'success'}),
-      );
+
+      Toast.show({type: 'success', text1: 'Added to playlist'});
     } catch (error) {
       const errorMsg = catchAsyncError(error);
       console.log(errorMsg);

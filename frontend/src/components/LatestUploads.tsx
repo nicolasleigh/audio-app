@@ -7,6 +7,7 @@ import colors from '../utils/colors';
 import {AudioData} from '../@types/audio';
 import {useSelector} from 'react-redux';
 import {getPlayerState} from '../store/player';
+import useAudioController from '../hooks/useAudioController';
 
 interface Props {
   onAudioPress(item: AudioData, data: AudioData[]): void;
@@ -18,6 +19,7 @@ const dummyData = new Array(4).fill('');
 export default function LatestUploads({onAudioLongPress, onAudioPress}: Props) {
   const {data, isLoading} = useFetchLatestAudios();
   const {onGoingAudio} = useSelector(getPlayerState);
+  const {isPaused, isPlaying} = useAudioController();
   if (isLoading) {
     return (
       <PulseAnimationContainer>
@@ -45,7 +47,8 @@ export default function LatestUploads({onAudioLongPress, onAudioPress}: Props) {
               poster={item.poster}
               onPress={() => onAudioPress(item, data)}
               onLongPress={() => onAudioLongPress(item, data)}
-              playing={item.id === onGoingAudio?.id}
+              isPlaying={isPlaying && onGoingAudio?.id === item.id}
+              isPaused={isPaused && onGoingAudio?.id === item.id}
             />
           );
         })}

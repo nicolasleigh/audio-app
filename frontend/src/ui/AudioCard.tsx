@@ -16,7 +16,8 @@ interface Props {
   poster?: string;
   onPress?(): void;
   onLongPress?(): void;
-  playing?: boolean;
+  isPlaying?: boolean;
+  isPaused?: boolean;
   containerStyle?: StyleProp<ViewStyle>;
 }
 
@@ -27,6 +28,8 @@ export default function AudioCard({
   containerStyle,
   onPress,
   onLongPress,
+  isPlaying = false,
+  isPaused = true,
 }: Props) {
   const source = poster ? {uri: poster} : require('../assets/music.png');
   return (
@@ -36,7 +39,7 @@ export default function AudioCard({
       style={[styles.container, containerStyle]}>
       <View style={styles.posterContainer}>
         <Image source={source} style={styles.poster} />
-        <PlayAnimation visible={playing} />
+        <PlayAnimation isPlaying={isPlaying} isPaused={isPaused} />
       </View>
       <Text numberOfLines={2} ellipsizeMode="tail" style={styles.title}>
         {title}

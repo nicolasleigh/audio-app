@@ -8,6 +8,7 @@ import AudioCard from '../ui/AudioCard';
 import GridView from '../ui/GridView';
 import PulseAnimationContainer from '../ui/PulseAnimationContainer';
 import colors from '../utils/colors';
+import useAudioController from '../hooks/useAudioController';
 
 interface Props {
   onAudioPress(item: AudioData, data: AudioData[]): void;
@@ -22,6 +23,7 @@ export default function RecommendedAudios({
 }: Props) {
   const {data = [], isLoading} = useFetchRecommendedAudios();
   const {onGoingAudio} = useSelector(getPlayerState);
+  const {isPaused, isPlaying} = useAudioController();
 
   if (isLoading) {
     return (
@@ -54,7 +56,8 @@ export default function RecommendedAudios({
               onPress={() => onAudioPress(item, data)}
               onLongPress={() => onAudioLongPress(item, data)}
               containerStyle={{width: '100%'}}
-              playing={onGoingAudio?.id === item.id}
+              isPlaying={isPlaying && onGoingAudio?.id === item.id}
+              isPaused={isPaused && onGoingAudio?.id === item.id}
             />
           );
         }}

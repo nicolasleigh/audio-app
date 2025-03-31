@@ -37,7 +37,7 @@ export default function PlaylistForm({
 
   return (
     <BasicModalContainer visible={visible} onRequestClose={handleClose}>
-      <View>
+      <View style={styles.container}>
         <Text style={styles.title}>Create New Playlist</Text>
         <TextInput
           placeholder="Title"
@@ -55,13 +55,15 @@ export default function PlaylistForm({
           style={styles.privateSelector}>
           {playlistInfo.private ? (
             <MaterialCommunityIcons
-              name="radiobox-marked"
+              name="checkbox-marked-outline"
               color={colors.PRIMARY}
+              size={20}
             />
           ) : (
             <MaterialCommunityIcons
-              name="radiobox-blank"
+              name="checkbox-blank-outline"
               color={colors.PRIMARY}
+              size={20}
             />
           )}
           <Text style={styles.privateLabel}>Private</Text>
@@ -76,6 +78,9 @@ export default function PlaylistForm({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    gap: 5,
+  },
   title: {
     fontSize: 18,
     fontWeight: '700',
@@ -85,17 +90,20 @@ const styles = StyleSheet.create({
     height: 45,
     paddingVertical: 10,
     borderBottomColor: colors.PRIMARY,
-    borderBottomWidth: 2,
+    borderBottomWidth: 1,
     color: colors.PRIMARY,
+    fontSize: 15,
   },
   privateSelector: {
-    height: 45,
+    height: 50,
     alignItems: 'center',
     flexDirection: 'row',
   },
   privateLabel: {
     color: colors.PRIMARY,
     marginLeft: 5,
+    fontSize: 15,
+    fontWeight: '600',
   },
   submitBtn: {
     height: 45,
