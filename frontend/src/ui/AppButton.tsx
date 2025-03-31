@@ -18,7 +18,7 @@ export default function AppButton({title, onPress, busy, borderRadius}: Props) {
       style={[
         styles.container,
         {
-          borderRadius: borderRadius || 25,
+          borderRadius: borderRadius || 10,
         },
       ]}>
       {!busy ? <Text style={styles.title}>{title}</Text> : <Loader />}
@@ -30,14 +30,14 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: 45,
-    backgroundColor: colors.SECONDARY,
+    backgroundColor: colors.BLUE,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
     marginBottom: 10,
   },
   title: {
-    color: colors.CONTRAST,
+    color: colors.WHITE,
     fontSize: 18,
   },
 });

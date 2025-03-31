@@ -39,6 +39,10 @@ export default function LostPassword() {
     actions.setSubmitting(true);
     try {
       const {data} = await client.post('auth/forget-password', values);
+      Toast.show({
+        type: 'info',
+        text1: 'Password reset link has been sent',
+      });
       // console.log(data);
     } catch (error) {
       const errorMessage = catchAsyncError(error);

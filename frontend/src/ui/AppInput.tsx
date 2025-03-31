@@ -17,11 +17,12 @@ export default function AppInput(props: Props) {
 const styles = StyleSheet.create({
   container: {},
   input: {
-    borderWidth: 2,
-    borderColor: colors.SECONDARY,
+    borderWidth: 1,
+    borderColor: colors.LIGHTBLUE,
     height: 45,
-    borderRadius: 25,
-    color: colors.CONTRAST,
+    borderRadius: 10,
+    color: colors.BLUE,
+    fontWeight: '600',
     padding: 10,
   },
 });

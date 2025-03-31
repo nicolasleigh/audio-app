@@ -47,7 +47,6 @@ const signupSchema = yup.object({
 export default function SignUp() {
   const [secureEntry, setSecureEntry] = useState(true);
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
-  const dispatch = useDispatch();
   const handleSubmit = async (
     values: NewUser,
     actions: FormikHelpers<NewUser>,
