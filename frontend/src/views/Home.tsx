@@ -15,7 +15,6 @@ import RecommendedAudios from '../components/RecommendedAudios';
 import RecommendedPlaylist from '../components/RecommendedPlaylist';
 import {useFetchPlaylist} from '../hooks/query';
 import useAudioController from '../hooks/useAudioController';
-import {updateNotification} from '../store/notification';
 import colors from '../utils/colors';
 import {
   updatePlaylistVisibility,

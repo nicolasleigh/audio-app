@@ -15,7 +15,7 @@ import {updateLoggedIn, updateProfile} from '../../store/auth';
 import {useDispatch} from 'react-redux';
 import {Keys, saveToAsyncStorage} from '../../utils/asyncStorage';
 import catchAsyncError from '../../api/catchError';
-import {updateNotification} from '../../store/notification';
+import Toast from 'react-native-toast-message';
 
 const initialValues = {
   email: '',
@@ -59,7 +59,7 @@ export default function SignIn({}) {
       dispatch(updateLoggedIn(true));
     } catch (error) {
       const errorMessage = catchAsyncError(error);
-      dispatch(updateNotification({message: errorMessage, type: 'error'}));
+      Toast.show({type: 'error', text1: errorMessage});
     }
     actions.setSubmitting(false);
   };

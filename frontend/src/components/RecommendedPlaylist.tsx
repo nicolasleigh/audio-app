@@ -10,7 +10,7 @@ interface Props {
 
 export default function RecommendedPlaylist({onListPress}: Props) {
   const {data} = useFetchRecommendedPlaylist();
-  console.log(data);
+  // console.log(data);
   return (
     <View>
       <Text style={styles.header}>Playlist for you</Text>

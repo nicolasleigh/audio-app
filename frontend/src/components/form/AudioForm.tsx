@@ -20,6 +20,8 @@ import colors from '../../utils/colors';
 import ImagePicker from '../ImagePicker';
 import Toast from 'react-native-toast-message';
 import AppHeader from '../AppHeader';
+import {useSelector} from 'react-redux';
+import {getAuthState} from '../../store/auth';
 
 interface Props {
   initialValues?: {
@@ -87,6 +89,7 @@ export default function AudioForm({
   const [isForUpdate, setIsForUpdate] = useState(false);
   const [fileName, setFileName] = useState('');
   const [imageUri, setImageUri] = useState('');
+  const {profile} = useSelector(getAuthState);
 
   const reset = () => {
     setAudioInfo({...defaultForm});
@@ -95,6 +98,12 @@ export default function AudioForm({
   };
 
   const handleSubmit = async () => {
+    if (!profile?.verified) {
+      return Toast.show({
+        type: 'error',
+        text1: 'Please verify your email',
+      });
+    }
     try {
       let finalData;
       const formData = new FormData();
@@ -130,7 +139,6 @@ export default function AudioForm({
         type: 'error',
         text1: errorMessage,
       });
-      // dispatch(updateNotification({message: errorMessage, type: 'error'}));
     }
   };
 

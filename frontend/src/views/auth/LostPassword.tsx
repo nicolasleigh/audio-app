@@ -1,18 +1,17 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {FormikHelpers} from 'formik';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
+import Toast from 'react-native-toast-message';
 import * as yup from 'yup';
+import {AuthStackParamList} from '../../@types/navigation';
+import catchAsyncError from '../../api/catchError';
+import client from '../../api/client';
 import AuthFormContainer from '../../components/AuthFormContainer';
 import AuthInputField from '../../components/AuthInputField';
 import Form from '../../components/form';
 import SubmitBtn from '../../components/form/SubmitBtn';
 import AppLink from '../../ui/AppLink';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {AuthStackParamList} from '../../@types/navigation';
-import {FormikHelpers} from 'formik';
-import client from '../../api/client';
-import catchAsyncError from '../../api/catchError';
-import {useDispatch} from 'react-redux';
-import {updateNotification} from '../../store/notification';
 
 interface initialValues {
   email: string;
@@ -31,7 +30,6 @@ const lostPasswordSchema = yup.object({
 });
 
 export default function LostPassword() {
-  const dispatch = useDispatch();
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
 
   const handleSubmit = async (
@@ -41,10 +39,10 @@ export default function LostPassword() {
     actions.setSubmitting(true);
     try {
       const {data} = await client.post('auth/forget-password', values);
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       const errorMessage = catchAsyncError(error);
-      dispatch(updateNotification({message: errorMessage, type: 'error'}));
+      Toast.show({type: 'error', text1: errorMessage});
     }
     actions.setSubmitting(false);
   };

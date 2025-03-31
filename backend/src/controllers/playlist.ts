@@ -1,23 +1,16 @@
-import {
-  CreatePlaylistRequest,
-  PopulatedFavoriteList,
-  UpdatePlaylistRequest,
-} from '#/@types/audio';
-import Audio from '#/models/audio';
-import Playlist from '#/models/playlist';
-import { RequestHandler } from 'express';
-import { isValidObjectId } from 'mongoose';
+import { CreatePlaylistRequest, PopulatedFavoriteList, UpdatePlaylistRequest } from "#/@types/audio";
+import Audio from "#/models/audio";
+import Playlist from "#/models/playlist";
+import { RequestHandler } from "express";
+import { isValidObjectId } from "mongoose";
 
-export const createPlaylist: RequestHandler = async (
-  req: CreatePlaylistRequest,
-  res
-) => {
+export const createPlaylist: RequestHandler = async (req: CreatePlaylistRequest, res) => {
   const { title, resId, visibility } = req.body;
   const ownerId = req.user.id;
 
   if (resId) {
     const audio = await Audio.findById(resId);
-    if (!audio) return res.status(404).json({ error: 'Audio not found!' });
+    if (!audio) return res.status(404).json({ error: "Audio not found!" });
   }
 
   const newPlaylist = new Playlist({
@@ -38,10 +31,7 @@ export const createPlaylist: RequestHandler = async (
   });
 };
 
-export const updatePlaylist: RequestHandler = async (
-  req: UpdatePlaylistRequest,
-  res
-) => {
+export const updatePlaylist: RequestHandler = async (req: UpdatePlaylistRequest, res) => {
   const { title, id, item, visibility } = req.body;
 
   const playlist = await Playlist.findOneAndUpdate(
@@ -50,11 +40,11 @@ export const updatePlaylist: RequestHandler = async (
     { new: true }
   );
 
-  if (!playlist) return res.status(404).json({ error: 'Playlist not found!' });
+  if (!playlist) return res.status(404).json({ error: "Playlist not found!" });
 
   if (item) {
     const audio = await Audio.findById(item);
-    if (!audio) return res.status(404).json({ error: 'Audio not found!' });
+    if (!audio) return res.status(404).json({ error: "Audio not found!" });
     // playlist.items.push(audio._id);
     // await playlist.save();
 
@@ -76,22 +66,19 @@ export const updatePlaylist: RequestHandler = async (
 export const removePlaylist: RequestHandler = async (req, res) => {
   const { playlistId, resId, all } = req.query;
 
-  if (!isValidObjectId(playlistId))
-    return res.status(422).json({ error: 'Invalid playlist id!' });
+  if (!isValidObjectId(playlistId)) return res.status(422).json({ error: "Invalid playlist id!" });
 
-  if (all === 'yes') {
+  if (all === "yes") {
     const playlist = await Playlist.findOneAndDelete({
       _id: playlistId,
       owner: req.user.id,
     });
 
-    if (!playlist)
-      return res.status(404).json({ error: 'Playlist not found!' });
+    if (!playlist) return res.status(404).json({ error: "Playlist not found!" });
   }
 
   if (resId) {
-    if (!isValidObjectId(resId))
-      return res.status(422).json({ error: 'Invalid audio id!' });
+    if (!isValidObjectId(resId)) return res.status(422).json({ error: "Invalid audio id!" });
 
     const playlist = await Playlist.findOneAndUpdate(
       {
@@ -102,25 +89,24 @@ export const removePlaylist: RequestHandler = async (req, res) => {
         $pull: { items: resId },
       }
     );
-    if (!playlist)
-      return res.status(404).json({ error: 'Playlist not found!' });
+    if (!playlist) return res.status(404).json({ error: "Playlist not found!" });
   }
 
   res.json({ success: true });
 };
 
 export const getPlaylistByProfile: RequestHandler = async (req, res) => {
-  const { pageNo = '0', limit = '20' } = req.query as {
+  const { pageNo = "0", limit = "20" } = req.query as {
     pageNo: string;
     limit: string;
   };
   const data = await Playlist.find({
     owner: req.user.id,
-    visibility: { $ne: 'auto' },
+    visibility: { $ne: "auto" },
   })
     .skip(parseInt(pageNo) * parseInt(limit))
     .limit(parseInt(limit))
-    .sort('-createdAt');
+    .sort("-createdAt");
 
   const playlist = data.map((item) => {
     return {
@@ -137,17 +123,16 @@ export const getPlaylistByProfile: RequestHandler = async (req, res) => {
 export const getAudios: RequestHandler = async (req, res) => {
   const { playlistId } = req.params;
 
-  if (!isValidObjectId(playlistId))
-    return res.status(422).json({ error: 'Invalid playlist id!' });
+  if (!isValidObjectId(playlistId)) return res.status(422).json({ error: "Invalid playlist id!" });
 
   const playlist = await Playlist.findOne({
     _id: playlistId,
     owner: req.user.id,
   }).populate<{ items: PopulatedFavoriteList[] }>({
-    path: 'items',
+    path: "items",
     populate: {
-      path: 'owner',
-      select: 'name',
+      path: "owner",
+      select: "name",
     },
   });
 
@@ -159,6 +144,7 @@ export const getAudios: RequestHandler = async (req, res) => {
       title: item.title,
       category: item.category,
       file: item.file.url,
+      publicId: item.file.publicId,
       poster: item.poster?.url,
       owner: { name: item.owner.name, id: item.owner._id },
     };

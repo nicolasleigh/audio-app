@@ -6,9 +6,8 @@ import colors from '../../utils/colors';
 import {useFetchIsFollowing} from '../../hooks/query';
 import {getClient} from '../../api/client';
 import catchAsyncError from '../../api/catchError';
-import {useDispatch} from 'react-redux';
-import {updateNotification} from '../../store/notification';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
+import Toast from 'react-native-toast-message';
 
 interface Props {
   profile?: PublicProfile;
@@ -16,7 +15,6 @@ interface Props {
 
 export default function PublicProfileContainer({profile}: Props) {
   const {data: isFollowing} = useFetchIsFollowing(profile?.id || '');
-  const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
   const followingMutation = useMutation({
@@ -38,7 +36,8 @@ export default function PublicProfileContainer({profile}: Props) {
       queryClient.invalidateQueries({queryKey: ['profile', id]});
     } catch (error) {
       const errorMeg = catchAsyncError(error);
-      dispatch(updateNotification({message: errorMeg, type: 'error'}));
+      Toast.show({type: 'error', text1: errorMeg});
+      console.error(errorMeg);
     }
   };
 
@@ -68,6 +67,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
+    gap: 5,
   },
   profileName: {
     color: colors.CONTRAST,

@@ -2,14 +2,12 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useQueryClient} from '@tanstack/react-query';
 import React, {useState} from 'react';
+import Toast from 'react-native-toast-message';
 import {useDispatch} from 'react-redux';
 import {ProfileNavigatorStackParamList} from '../../@types/navigation';
 import catchAsyncError from '../../api/catchError';
 import {getClient} from '../../api/client';
-import {updateNotification} from '../../store/notification';
-import {mapRange} from '../../utils/math';
 import AudioForm from '../form/AudioForm';
-import Toast from 'react-native-toast-message';
 
 type Props = NativeStackScreenProps<
   ProfileNavigatorStackParamList,

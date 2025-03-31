@@ -1,20 +1,19 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {FormikHelpers} from 'formik';
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
+import Toast from 'react-native-toast-message';
+import {useDispatch} from 'react-redux';
 import * as yup from 'yup';
+import {AuthStackParamList} from '../../@types/navigation';
+import catchAsyncError from '../../api/catchError';
+import client from '../../api/client';
 import AuthFormContainer from '../../components/AuthFormContainer';
 import AuthInputField from '../../components/AuthInputField';
 import Form from '../../components/form';
 import SubmitBtn from '../../components/form/SubmitBtn';
 import AppLink from '../../ui/AppLink';
 import PasswordVisibilityIcon from '../../ui/PasswordVisibilityIcon';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {AuthStackParamList} from '../../@types/navigation';
-import {FormikHelpers} from 'formik';
-import client from '../../api/client';
-import {isAxiosError} from 'axios';
-import catchAsyncError from '../../api/catchError';
-import {useDispatch} from 'react-redux';
-import {updateNotification} from '../../store/notification';
 
 interface NewUser {
   name: string;
@@ -61,7 +60,7 @@ export default function SignUp() {
       navigation.navigate('Verification', {userInfo: data.user});
     } catch (error) {
       const errorMessage = catchAsyncError(error);
-      dispatch(updateNotification({message: errorMessage, type: 'error'}));
+      Toast.show({type: 'error', text1: errorMessage});
     }
     actions.setSubmitting(false);
   };
