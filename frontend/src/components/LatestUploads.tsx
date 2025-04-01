@@ -59,10 +59,14 @@ export default function LatestUploads({onAudioLongPress, onAudioPress}: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    // padding: 15,
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    backgroundColor: colors.DARKWHITE,
   },
   title: {
-    color: colors.CONTRAST,
+    color: colors.BLACK,
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 15,
@@ -70,14 +74,14 @@ const styles = StyleSheet.create({
   dummyTitleView: {
     height: 20,
     width: 150,
-    backgroundColor: colors.INACTIVE_CONTRAST,
+    backgroundColor: colors.LIGHTGREY,
     marginBottom: 15,
     borderRadius: 5,
   },
   dummyView: {
     height: 100,
     width: 100,
-    backgroundColor: colors.INACTIVE_CONTRAST,
+    backgroundColor: colors.LIGHTGREY,
     marginRight: 15,
     borderRadius: 5,
   },

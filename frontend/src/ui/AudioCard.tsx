@@ -51,9 +51,9 @@ export default function AudioCard({
 const styles = StyleSheet.create({
   container: {width: 100, marginRight: 15},
   title: {
-    color: colors.CONTRAST,
-    fontWeight: '500',
-    fontSize: 16,
+    color: colors.GREY,
+    fontWeight: '600',
+    fontSize: 14,
     marginTop: 5,
   },
   posterContainer: {

@@ -80,13 +80,14 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     height: 200,
-    width: 200,
+    width: '100%',
   },
   iconContainer: {
     height: 200,
-    aspectRatio: 1,
-    borderWidth: 2,
-    borderColor: colors.SECONDARY,
+    width: '100%',
+    // aspectRatio: 1,
+    borderWidth: 1,
+    borderColor: colors.WHITE,
     borderRadius: 7,
     alignItems: 'center',
     justifyContent: 'center',
@@ -97,9 +98,9 @@ const styles = StyleSheet.create({
   },
   image: {
     height: 200,
-    aspectRatio: 1,
+    // aspectRatio: 1,
     borderRadius: 7,
-    borderWidth: 2,
-    borderColor: colors.SECONDARY,
+    borderWidth: 1,
+    borderColor: colors.WHITE,
   },
 });

@@ -68,32 +68,30 @@ export default function RecommendedAudios({
 
 const styles = StyleSheet.create({
   container: {
-    // padding: 10,
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    backgroundColor: colors.DARKWHITE,
   },
   title: {
-    color: colors.CONTRAST,
+    color: colors.BLACK,
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 15,
-  },
-  audioTitle: {
-    color: colors.CONTRAST,
-    fontWeight: '500',
-    fontSize: 16,
-    marginTop: 5,
   },
   poster: {width: '100%', aspectRatio: 1, borderRadius: 7},
   dummyTitleView: {
     height: 20,
     width: 150,
-    backgroundColor: colors.INACTIVE_CONTRAST,
+    backgroundColor: colors.LIGHTGREY,
     marginBottom: 15,
     borderRadius: 5,
   },
   dummyView: {
     width: '100%',
     aspectRatio: 1,
-    backgroundColor: colors.INACTIVE_CONTRAST,
+    backgroundColor: colors.LIGHTGREY,
     borderRadius: 7,
   },
   dummyContainer: {

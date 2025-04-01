@@ -18,7 +18,7 @@ const TabNavigator = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: colors.PRIMARY,
+          backgroundColor: colors.ABSOLUTEWHITE,
         },
       }}>
       <Tab.Screen

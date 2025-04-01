@@ -22,6 +22,8 @@ import Toast from 'react-native-toast-message';
 import AppHeader from '../AppHeader';
 import {useSelector} from 'react-redux';
 import {getAuthState} from '../../store/auth';
+import AppHeaderNormal from '../AppHeaderNormal';
+import SubmitButton from '../../ui/AppButtonSubmit';
 
 interface Props {
   initialValues?: {
@@ -162,12 +164,12 @@ export default function AudioForm({
 
   return (
     <AppView>
+      {isForUpdate ? (
+        <AppHeader title="Update" />
+      ) : (
+        <AppHeaderNormal title="Create Audio" />
+      )}
       <ScrollView style={styles.container}>
-        {isForUpdate ? (
-          <AppHeader title="Update" />
-        ) : (
-          <AppHeader title="Create" />
-        )}
         <View style={styles.formContainer}>
           {/* Title */}
           <View style={styles.inputContainer}>
@@ -181,6 +183,7 @@ export default function AudioForm({
               }}
               value={audioInfo.title}
               editable={!busy}
+              selectionColor={colors.LIGHTGREY}
             />
           </View>
 
@@ -200,6 +203,7 @@ export default function AudioForm({
                   value={audioInfo.category}
                   placeholder="Select a category"
                   placeholderTextColor={colors.INACTIVE_CONTRAST}
+                  selectionColor={colors.LIGHTGREY}
                 />
               </View>
             </Pressable>
@@ -211,14 +215,15 @@ export default function AudioForm({
             <TextInput
               placeholder="Enter audio information"
               placeholderTextColor={colors.INACTIVE_CONTRAST}
-              style={styles.input}
-              numberOfLines={10}
+              style={[styles.input, {height: 80}]}
+              numberOfLines={5}
               multiline
               onChangeText={text => {
                 setAudioInfo({...audioInfo, about: text});
               }}
               value={audioInfo.about}
               editable={!busy}
+              selectionColor={colors.LIGHTGREY}
             />
           </View>
 
@@ -230,8 +235,8 @@ export default function AudioForm({
                 icon={
                   <MaterialCommunityIcons
                     name="file-music-outline"
-                    size={35}
-                    color={colors.SECONDARY}
+                    size={15}
+                    color={colors.WHITE}
                   />
                 }
                 btnTitle="Select Audio"
@@ -254,7 +259,7 @@ export default function AudioForm({
                 <MaterialCommunityIcons
                   name="image-outline"
                   size={20}
-                  color={colors.SECONDARY}
+                  color={colors.WHITE}
                 />
               }
               btnTitle="Select Poster"
@@ -284,7 +289,7 @@ export default function AudioForm({
             initialValue={initialValues?.category}
           />
 
-          <AppButton
+          <SubmitButton
             busy={busy}
             borderRadius={7}
             title={isForUpdate ? 'Update' : 'Submit'}
@@ -299,7 +304,9 @@ export default function AudioForm({
 const styles = StyleSheet.create({
   container: {
     // paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
+    // marginTop: 20,
+    backgroundColor: colors.BLUE,
   },
   btnContainer: {
     alignItems: 'center',
@@ -313,18 +320,18 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     marginTop: 5,
-    gap: 20,
+    gap: 10,
   },
   input: {
-    borderWidth: 2,
-    borderColor: colors.SECONDARY,
+    borderWidth: 1,
+    borderColor: colors.WHITE,
     borderRadius: 7,
     padding: 10,
     fontSize: 15,
-    color: colors.CONTRAST,
+    color: colors.WHITE,
     textAlignVertical: 'top',
   },
-  category: {padding: 10, color: colors.PRIMARY},
+  category: {padding: 10, color: colors.BLACK},
   categorySelector: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -333,7 +340,7 @@ const styles = StyleSheet.create({
   categorySelectorTitle: {
     color: colors.CONTRAST,
   },
-  label: {color: colors.CONTRAST},
+  label: {color: colors.WHITE, fontWeight: '600'},
   selectedCategory: {
     color: colors.SECONDARY,
     marginLeft: 5,

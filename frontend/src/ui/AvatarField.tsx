@@ -18,8 +18,8 @@ export default function AvatarField({source}: Props) {
         <View style={styles.avatarImage}>
           <MaterialCommunityIcons
             name="account"
-            size={30}
-            color={colors.PRIMARY}
+            size={40}
+            color={colors.DARKBLUE}
           />
         </View>
       )}
@@ -32,10 +32,10 @@ const styles = StyleSheet.create({
     width: avatarSize,
     height: avatarSize,
     borderRadius: avatarSize / 2,
-    backgroundColor: colors.SECONDARY,
+    backgroundColor: colors.LIGHTBLUE,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    borderColor: colors.CONTRAST,
+    borderColor: colors.WHITE,
   },
 });

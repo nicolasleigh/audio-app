@@ -42,13 +42,11 @@ export default function UploadsTab({}: Props) {
   if (isLoading) {
     return <AudioListLoadingUI />;
   }
-  if (!data?.length) {
-    return <EmptyRecords title="There is no audio." />;
-  }
 
   return (
     <>
       <ScrollView style={styles.container}>
+        {!data?.length && <EmptyRecords title="There is no audio." />}
         {data?.map(item => {
           return (
             <AudioListItem
@@ -91,6 +89,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
+    backgroundColor: colors.DARKWHITE,
   },
   listItem: {
     flexDirection: 'row',
@@ -103,7 +102,7 @@ const styles = StyleSheet.create({
     height: 50,
   },
   title: {
-    color: colors.CONTRAST,
+    color: colors.BLACK,
     fontWeight: '700',
   },
   owner: {

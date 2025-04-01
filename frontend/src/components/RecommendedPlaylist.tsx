@@ -12,7 +12,7 @@ export default function RecommendedPlaylist({onListPress}: Props) {
   const {data} = useFetchRecommendedPlaylist();
   // console.log(data);
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.header}>Playlist for you</Text>
       <FlatList
         horizontal
@@ -22,7 +22,7 @@ export default function RecommendedPlaylist({onListPress}: Props) {
         renderItem={({item}) => {
           return (
             <Pressable
-              style={styles.container}
+              style={styles.pressContainer}
               onPress={() => onListPress(item)}
               key={item.id}>
               <Image
@@ -45,6 +45,13 @@ const cardSize = 150;
 
 const styles = StyleSheet.create({
   container: {
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    backgroundColor: colors.DARKWHITE,
+  },
+  pressContainer: {
     width: cardSize,
     marginRight: 15,
   },
@@ -66,7 +73,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   header: {
-    color: colors.CONTRAST,
+    color: colors.BLACK,
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 15,

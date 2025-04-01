@@ -28,7 +28,7 @@ export default function RecentlyPlayed({}: Props) {
               <View
                 style={{
                   height: 50,
-                  backgroundColor: colors.INACTIVE_CONTRAST,
+                  backgroundColor: colors.LIGHTGREY,
                   borderRadius: 5,
                   marginBottom: 10,
                 }}
@@ -68,16 +68,22 @@ export default function RecentlyPlayed({}: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    borderWidth: 1,
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    borderRadius: 5,
+    backgroundColor: colors.DARKWHITE,
+  },
   dummyTitleView: {
     height: 20,
     width: 150,
-    backgroundColor: colors.INACTIVE_CONTRAST,
+    backgroundColor: colors.LIGHTGREY,
     marginBottom: 15,
     borderRadius: 5,
   },
   title: {
-    color: colors.CONTRAST,
+    color: colors.BLACK,
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 15,

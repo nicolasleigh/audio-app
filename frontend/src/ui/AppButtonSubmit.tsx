@@ -10,7 +10,12 @@ interface Props {
   borderRadius?: number;
 }
 
-export default function AppButton({title, onPress, busy, borderRadius}: Props) {
+export default function SubmitButton({
+  title,
+  onPress,
+  busy,
+  borderRadius,
+}: Props) {
   return (
     <Pressable
       onPress={onPress}
@@ -30,7 +35,7 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: 45,
-    backgroundColor: colors.BLUE,
+    backgroundColor: colors.WHITE,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
@@ -39,7 +44,8 @@ const styles = StyleSheet.create({
     borderColor: colors.LIGHTBLUE,
   },
   title: {
-    color: colors.WHITE,
+    color: colors.BLUE,
     fontSize: 18,
+    fontWeight: '600',
   },
 });

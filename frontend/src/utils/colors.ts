@@ -16,6 +16,12 @@ const LIGHTBLUE = 'cornflowerblue';
 // const DARKBLUE = 'midnightblue';
 const DARKBLUE = 'navy';
 const YELLOW = 'darkorange';
+const LIGHTGREY = 'lightgrey';
+// const BLACK = '#212529';
+const BLACK = '#343a40';
+const GREY = 'dimgrey';
+const ABSOLUTEWHITE = 'white';
+const DARKWHITE = 'floralwhite';
 
 const colors = {
   PRIMARY,
@@ -32,6 +38,11 @@ const colors = {
   LIGHTBLUE,
   DARKBLUE,
   YELLOW,
+  LIGHTGREY,
+  BLACK,
+  GREY,
+  ABSOLUTEWHITE,
+  DARKWHITE,
 };
 
 export default colors;

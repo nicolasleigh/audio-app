@@ -23,10 +23,10 @@ export default function AppLink({title, onPress, active = true}: Props) {
 const styles = StyleSheet.create({
   titleWrapper: {
     borderBottomWidth: 1,
-    borderBottomColor: colors.DARKBLUE,
+    borderBottomColor: colors.YELLOW,
   },
   title: {
-    color: colors.DARKBLUE,
+    color: colors.YELLOW,
     fontWeight: '600',
     lineHeight: 20,
   },

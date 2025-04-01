@@ -77,7 +77,8 @@ export default function FileSelector({
       disabled={busy}
       onPress={handleDocumentSelect}
       style={[styles.btnContainer, style]}>
-      <View pointerEvents="none">
+      <View pointerEvents="none" style={styles.inputWrapper}>
+        {icon}
         <TextInput
           style={styles.input}
           editable={false}
@@ -96,6 +97,14 @@ const styles = StyleSheet.create({
   btnContainer: {
     // alignItems: 'center',
     // justifyContent: 'center',
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    gap: 5,
+    borderWidth: 1,
+    borderColor: colors.WHITE,
+    borderRadius: 7,
+    padding: 10,
   },
   iconContainer: {
     height: 70,
@@ -119,12 +128,8 @@ const styles = StyleSheet.create({
     borderColor: colors.SECONDARY,
   },
   input: {
-    borderWidth: 2,
-    borderColor: colors.SECONDARY,
-    borderRadius: 7,
-    padding: 10,
-    fontSize: 15,
-    color: colors.CONTRAST,
+    color: colors.WHITE,
     textAlignVertical: 'top',
+    // fontSize: 15,
   },
 });
