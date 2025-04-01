@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Pressable,
   StyleProp,
@@ -21,7 +21,7 @@ interface Props {
   containerStyle?: StyleProp<ViewStyle>;
   activeRate?: string;
   onPress?(rate: number): void;
-  onListOptionPress?(): void;
+  onListOptionPress(show: boolean): void;
 }
 
 const speedRates = ['0.25', '0.5', '0.75', '1', '1.25', '1.5', '1.75', '2'];
@@ -34,9 +34,13 @@ export default function PlaybackRateSelector({
   onListOptionPress,
 }: Props) {
   const [showSelector, setShowSelector] = useState(false);
+
   const width = useSharedValue(0);
   const handleOnPress = () => {
     setShowSelector(prev => !prev);
+  };
+
+  useEffect(() => {
     if (showSelector) {
       width.value = withTiming(selectorSize * speedRates.length, {
         duration: 300,
@@ -47,7 +51,7 @@ export default function PlaybackRateSelector({
         duration: 300,
       });
     }
-  };
+  }, [showSelector]);
 
   const widthStyle = useAnimatedStyle(() => ({
     width: width.value,
@@ -57,13 +61,15 @@ export default function PlaybackRateSelector({
     <View style={[styles.container, containerStyle]}>
       <View style={styles.btnContainer}>
         <Pressable onPress={handleOnPress}>
-          <FontAwesome5 name="running" color={colors.CONTRAST} size={24} />
+          <FontAwesome5 name="running" color={colors.WHITE} size={24} />
         </Pressable>
-        <PlayerController ignoreContainer onPress={onListOptionPress}>
+        <PlayerController
+          ignoreContainer
+          onPress={() => onListOptionPress(true)}>
           <MaterialCommunityIcons
             name="playlist-music"
             size={24}
-            color={colors.CONTRAST}
+            color={colors.WHITE}
           />
         </PlayerController>
       </View>
@@ -96,7 +102,7 @@ function Selector({value, active, onPress}: SelectorProps) {
       onPress={onPress}
       style={[
         styles.selector,
-        active ? {backgroundColor: colors.SECONDARY} : undefined,
+        active ? {backgroundColor: colors.DARKBLUE} : undefined,
       ]}>
       <Text style={styles.selectorText}>{value}</Text>
     </Pressable>
@@ -114,7 +120,7 @@ const styles = StyleSheet.create({
   },
   buttons: {
     flexDirection: 'row',
-    backgroundColor: colors.OVERLAY,
+    backgroundColor: colors.BLUE,
     overflow: 'hidden',
     alignSelf: 'center',
     justifyContent: 'center',
@@ -127,6 +133,6 @@ const styles = StyleSheet.create({
     // marginHorizontal: 2,
   },
   selectorText: {
-    color: colors.CONTRAST,
+    color: colors.WHITE,
   },
 });

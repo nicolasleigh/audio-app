@@ -18,6 +18,7 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {HomeNavigatorStackParamList} from '../@types/navigation';
 import {getAuthState} from '../store/auth';
 import Toast from 'react-native-toast-message';
+import AudioListContainer from '../ui/AudioListContainer';
 
 interface Props {}
 
@@ -75,13 +76,16 @@ export default function MiniAudioPlayer({}: Props) {
   };
   const handleOnProfileLinkPress = () => {
     closePlayerModal();
-    if (profile?.id === onGoingAudio?.owner.id) {
-      navigate('Profile');
-    } else {
-      navigate('PublicProfile', {
-        profileId: onGoingAudio?.owner.id || '',
-      });
-    }
+    navigate('PublicProfile', {
+      profileId: onGoingAudio?.owner.id || '',
+    });
+    // if (profile?.id === onGoingAudio?.owner.id) {
+    //   navigate('Profile');
+    // } else {
+    //   navigate('PublicProfile', {
+    //     profileId: onGoingAudio?.owner.id || '',
+    //   });
+    // }
   };
 
   return (
@@ -127,10 +131,10 @@ export default function MiniAudioPlayer({}: Props) {
         onListOptionPress={handleOnListOptionPress}
         onProfileLinkPress={handleOnProfileLinkPress}
       />
-      <CurrentAudioList
+      {/* <CurrentAudioList
         visible={showCurrentList}
         onRequestClose={handleOnCurrentListClose}
-      />
+      /> */}
     </>
   );
 }

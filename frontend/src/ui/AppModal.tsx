@@ -22,7 +22,7 @@ interface Props {
 
 const {height} = Dimensions.get('window');
 
-const modalHeight = height - 150;
+const modalHeight = height;
 
 export default function AppModal({
   children,
@@ -39,8 +39,13 @@ export default function AppModal({
   });
 
   const handleClose = () => {
-    translateY.value = modalHeight;
-    onRequestClose();
+    // translateY.value = modalHeight;
+    translateY.value = withTiming(modalHeight, {
+      duration: animation ? 400 : 0,
+    });
+    setTimeout(() => {
+      onRequestClose();
+    }, 500);
   };
 
   const gesture = Gesture.Pan()
@@ -50,17 +55,22 @@ export default function AppModal({
       // console.log(e.translationY);
     })
     .onFinalize(e => {
-      if (e.translationY <= modalHeight / 2) {
-        translateY.value = 0;
+      if (e.translationY <= modalHeight / 6) {
+        translateY.value = withTiming(0, {
+          duration: animation ? 200 : 0,
+        });
       } else {
-        translateY.value = modalHeight;
+        translateY.value = withTiming(modalHeight, {
+          duration: animation ? 400 : 0,
+        });
+
         runOnJS(handleClose)();
       }
     });
 
   useEffect(() => {
     if (visible)
-      translateY.value = withTiming(0, {duration: animation ? 400 : 0});
+      translateY.value = withTiming(0, {duration: animation ? 500 : 0});
   }, [visible, animation]);
 
   return (
@@ -86,17 +96,21 @@ const styles = StyleSheet.create({
   container: {},
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: colors.INACTIVE_CONTRAST,
+    // backgroundColor: colors.TRANSPARENT_BLUE,
+    // backgroundColor: colors.WHITE,
   },
   modal: {
-    backgroundColor: colors.PRIMARY,
+    backgroundColor: colors.PLAYER_BLUE,
+    // backgroundColor: 'darkslateblue',
+    // backgroundColor: 'steelblue',
+    // backgroundColor: 'teal',
     height: modalHeight,
     position: 'absolute',
     bottom: 0,
     right: 0,
     left: 0,
-    borderTopEndRadius: 10,
-    borderTopStartRadius: 10,
+    borderTopEndRadius: 7,
+    borderTopStartRadius: 7,
     overflow: 'hidden',
   },
 });

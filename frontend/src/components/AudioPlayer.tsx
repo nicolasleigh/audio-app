@@ -10,12 +10,14 @@ import formatDuration from 'format-duration';
 import Slider from '@react-native-community/slider';
 import useAudioController from '../hooks/useAudioController';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import PlayPauseBtn from '../ui/PlayPauseBtn';
 import PlayerController from '../ui/PlayerController';
 import Loader from '../ui/Loader';
 import PlaybackRateSelector from '../ui/PlaybackRateSelector';
 import AudioInfoContainer from './AudioInfoContainer';
+import AudioListContainer from './AudioListContainer';
 
 interface Props {
   visible: boolean;
@@ -37,6 +39,7 @@ export default function AudioPlayer({
   onProfileLinkPress,
 }: Props) {
   const [showAudioInfo, setShowAudioInfo] = useState(false);
+  const [showAudioList, setShowAudioList] = useState(false);
   const {onGoingAudio, playbackRate} = useSelector(getPlayerState);
   const {
     isPlaying,
@@ -78,24 +81,42 @@ export default function AudioPlayer({
 
   return (
     <AppModal animation visible={visible} onRequestClose={onRequestClose}>
-      <View style={styles.container}>
-        <Pressable
-          style={styles.infoBtn}
-          onPress={() => setShowAudioInfo(true)}>
-          <AntDesign name="infocirlceo" color={colors.CONTRAST} size={24} />
-        </Pressable>
-        <AudioInfoContainer
-          visible={showAudioInfo}
-          closeHandler={setShowAudioInfo}
-        />
-        <Image source={source} style={styles.poster} />
-        <View style={styles.contentContainer}>
-          <Text style={styles.title}>{onGoingAudio?.title}</Text>
+      <AudioInfoContainer
+        visible={showAudioInfo}
+        closeHandler={setShowAudioInfo}
+      />
+      <AudioListContainer
+        visible={showAudioList}
+        closeHandler={setShowAudioList}
+      />
 
-          <AppLink
-            onPress={onProfileLinkPress}
-            title={onGoingAudio?.owner.name || ''}
-          />
+      <View style={styles.container}>
+        <Image source={source} style={styles.poster} />
+
+        <View style={styles.contentContainer}>
+          <View style={styles.infoContainer}>
+            <View style={styles.titleWrapper}>
+              <Text style={styles.title} onPress={() => setShowAudioInfo(true)}>
+                {onGoingAudio?.title}
+                <MaterialCommunityIcons
+                  name="dots-vertical"
+                  color={colors.WHITE}
+                  size={18}
+                />
+              </Text>
+            </View>
+
+            <View style={styles.titleWrapper}>
+              <Text style={styles.name} onPress={onProfileLinkPress}>
+                {onGoingAudio?.owner.name || ''}
+                <MaterialCommunityIcons
+                  name="dots-vertical"
+                  color={colors.YELLOW}
+                  size={15}
+                />
+              </Text>
+            </View>
+          </View>
 
           <View style={styles.durationContainer}>
             <Text style={styles.duration}>
@@ -108,7 +129,7 @@ export default function AudioPlayer({
           <Slider
             minimumValue={0}
             maximumValue={duration}
-            minimumTrackTintColor={colors.CONTRAST}
+            minimumTrackTintColor={colors.WHITE}
             maximumTrackTintColor={colors.INACTIVE_CONTRAST}
             value={position}
             onSlidingComplete={updateSeek}
@@ -116,31 +137,23 @@ export default function AudioPlayer({
 
           <View style={styles.controls}>
             <PlayerController ignoreContainer onPress={handleOnPreviousPress}>
-              <AntDesign
-                name="stepbackward"
-                size={24}
-                color={colors.CONTRAST}
-              />
+              <AntDesign name="stepbackward" size={24} color={colors.WHITE} />
             </PlayerController>
 
             <PlayerController
               onPress={() => handleSkipTo('reverse')}
               ignoreContainer>
-              <FontAwesome
-                name="rotate-left"
-                size={18}
-                color={colors.CONTRAST}
-              />
+              <FontAwesome name="rotate-left" size={18} color={colors.WHITE} />
               <Text style={styles.skipText}>-10s</Text>
             </PlayerController>
 
             <PlayerController>
               {isBusy ? (
-                <Loader color={colors.PRIMARY} />
+                <Loader color={colors.BLACK} />
               ) : (
                 <PlayPauseBtn
                   playing={isPlaying}
-                  color={colors.PRIMARY}
+                  color={colors.BLACK}
                   onPress={togglePlayPause}
                 />
               )}
@@ -149,23 +162,19 @@ export default function AudioPlayer({
             <PlayerController
               ignoreContainer
               onPress={() => handleSkipTo('forward')}>
-              <FontAwesome
-                name="rotate-right"
-                size={18}
-                color={colors.CONTRAST}
-              />
+              <FontAwesome name="rotate-right" size={18} color={colors.WHITE} />
               <Text style={styles.skipText}>+10s</Text>
             </PlayerController>
 
             <PlayerController ignoreContainer onPress={handleOnNextPress}>
-              <AntDesign name="stepforward" size={24} color={colors.CONTRAST} />
+              <AntDesign name="stepforward" size={24} color={colors.WHITE} />
             </PlayerController>
           </View>
 
           <PlaybackRateSelector
             onPress={onPlaybackRatePress}
             activeRate={playbackRate.toString()}
-            onListOptionPress={onListOptionPress}
+            onListOptionPress={setShowAudioList}
           />
         </View>
       </View>
@@ -178,22 +187,39 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     padding: 20,
-    // backgroundColor: 'white',
+    marginTop: 80,
+  },
+  titleWrapper: {
+    flexDirection: 'row',
+  },
+  infoContainer: {
+    gap: 5,
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: colors.WHITE,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  name: {
+    color: colors.YELLOW,
+    fontSize: 15,
+    fontWeight: '600',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   poster: {
-    width: 200,
-    height: 200,
+    width: 330,
+    height: 250,
     borderRadius: 10,
+    marginBottom: 10,
   },
   contentContainer: {
     width: '100%',
     flex: 1,
     marginTop: 20,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: colors.CONTRAST,
   },
   durationContainer: {
     flexDirection: 'row',
@@ -201,7 +227,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   duration: {
-    color: colors.CONTRAST,
+    color: colors.WHITE,
   },
   controls: {
     flexDirection: 'row',
@@ -212,12 +238,7 @@ const styles = StyleSheet.create({
   skipText: {
     fontSize: 12,
     marginTop: 2,
-    color: colors.CONTRAST,
-  },
-  infoBtn: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
+    color: colors.WHITE,
   },
   listOptionBtnContainer: {
     alignItems: 'flex-end',
