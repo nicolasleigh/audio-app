@@ -13,11 +13,11 @@ import {
   updateOnGoingList,
 } from '../store/player';
 import deepEqual from 'deep-equal';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import RNFS from 'react-native-fs';
 import Toast from 'react-native-toast-message';
 
-let isReady = false;
+// let isReady = false;
 
 const updateQueue = async (data: AudioData[]) => {
   const lists: Track[] = data.map(item => {
@@ -70,6 +70,7 @@ const downLoadFile = async (url: string, publicId: string) => {
 };
 
 const useAudioController = () => {
+  const [isReady, setIsReady] = useState(false);
   const playbackState = usePlaybackState();
   const {onGoingAudio, onGoingList} = useSelector(getPlayerState);
   const dispatch = useDispatch();
@@ -147,7 +148,9 @@ const useAudioController = () => {
   const onNextPress = async () => {
     const currentList = await TrackPlayer.getQueue();
     const currentIndex = await TrackPlayer.getActiveTrackIndex();
-    if (!currentIndex) return;
+    if (!currentIndex) {
+      return;
+    }
 
     const nextIndex = currentIndex + 1;
 
@@ -160,7 +163,9 @@ const useAudioController = () => {
   const onPreviousPress = async () => {
     const currentList = await TrackPlayer.getQueue();
     const currentIndex = await TrackPlayer.getActiveTrackIndex();
-    if (!currentIndex) return;
+    if (!currentIndex) {
+      return;
+    }
 
     const preIndex = currentIndex - 1;
 
@@ -177,7 +182,9 @@ const useAudioController = () => {
 
   useEffect(() => {
     const setupPlayer = async () => {
-      if (isReady) return;
+      if (isReady) {
+        return;
+      }
 
       await TrackPlayer.setupPlayer();
       await TrackPlayer.updateOptions({
@@ -201,8 +208,8 @@ const useAudioController = () => {
       });
     };
     setupPlayer();
-    isReady = true;
-  }, []);
+    setIsReady(true);
+  }, [isReady]);
 
   return {
     onAudioPress,

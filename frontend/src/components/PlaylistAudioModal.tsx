@@ -11,7 +11,6 @@ import AudioListLoadingUI from '../ui/AudioListLoadingUI';
 import colors from '../utils/colors';
 import {getPlayerState} from '../store/player';
 import useAudioController from '../hooks/useAudioController';
-import AppModalPlaylist from '../ui/AppModalPlaylist';
 import AppModal from '../ui/AppModal';
 
 interface Props {}
