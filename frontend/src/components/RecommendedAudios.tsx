@@ -28,7 +28,7 @@ export default function RecommendedAudios({
   if (isLoading) {
     return (
       <PulseAnimationContainer>
-        <View style={styles.container}>
+        <View>
           <View style={styles.dummyTitleView} />
           <GridView
             col={3}
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
     borderRadius: 5,
-    paddingHorizontal: 5,
+    // paddingHorizontal: 5,
     paddingVertical: 10,
     backgroundColor: colors.DARKWHITE,
   },
@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     color: colors.BLACK,
     fontSize: 20,
     fontWeight: 'bold',
+    paddingLeft: 5,
     marginBottom: 15,
   },
   poster: {width: '100%', aspectRatio: 1, borderRadius: 7},
@@ -87,6 +88,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.LIGHTGREY,
     marginBottom: 15,
     borderRadius: 5,
+    marginLeft: 5,
+    marginTop: 5,
   },
   dummyView: {
     width: '100%',

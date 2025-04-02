@@ -29,6 +29,7 @@ export default function PublicProfile({route}: Props) {
         <PublicProfileContainer profile={data} />
 
         <Tab.Navigator
+          style={styles.nav}
           screenOptions={{
             tabBarStyle: styles.tabBarStyle,
             tabBarLabelStyle: styles.tabBarLabelStyle,
@@ -57,7 +58,7 @@ export default function PublicProfile({route}: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    marginHorizontal: 7,
     flex: 1,
   },
   tabBarStyle: {
@@ -70,7 +71,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0,
   },
   tabBarLabelStyle: {
-    color: colors.CONTRAST,
+    color: colors.BLACK,
     fontSize: 12,
+    fontWeight: '600',
+  },
+  nav: {
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    backgroundColor: colors.DARKWHITE,
+    marginBottom: 5,
   },
 });

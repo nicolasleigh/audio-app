@@ -45,5 +45,7 @@ export default function PublicUploadsTab(props: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    paddingRight: 12,
+  },
 });

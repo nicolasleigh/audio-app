@@ -29,7 +29,6 @@ export default function ReVerificationLink({
   const {profile} = useSelector(getAuthState);
   const {navigate} =
     useNavigation<NavigationProp<ProfileNavigatorStackParamList>>();
-  const dispatch = useDispatch();
 
   const requestForOTP = async () => {
     setCountDown(time);
@@ -72,14 +71,14 @@ export default function ReVerificationLink({
 
   return (
     <View style={styles.container}>
-      {countDown > 0 && !canSendNewOtpRequest ? (
-        <Text style={styles.countDown}>{countDown} sec</Text>
-      ) : null}
       <AppLink
         active={canSendNewOtpRequest}
         title={linkTitle}
         onPress={requestForOTP}
       />
+      {countDown > 0 && !canSendNewOtpRequest ? (
+        <Text style={styles.countDown}>{countDown} second</Text>
+      ) : null}
     </View>
   );
 }
@@ -90,7 +89,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   countDown: {
-    color: colors.SECONDARY,
-    marginRight: 7,
+    color: colors.BLUE,
+    marginLeft: 10,
   },
 });

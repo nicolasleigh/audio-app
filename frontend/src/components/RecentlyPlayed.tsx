@@ -40,7 +40,9 @@ export default function RecentlyPlayed({}: Props) {
     );
   }
 
-  if (!data.length) return null;
+  if (!data.length) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
@@ -70,7 +72,7 @@ export default function RecentlyPlayed({}: Props) {
 const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
-    paddingHorizontal: 5,
+    // paddingHorizontal: 5,
     paddingVertical: 10,
     borderRadius: 5,
     backgroundColor: colors.DARKWHITE,
@@ -81,14 +83,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.LIGHTGREY,
     marginBottom: 15,
     borderRadius: 5,
+    marginTop: 5,
+    marginLeft: 5,
   },
   title: {
     color: colors.BLACK,
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 15,
+    marginLeft: 5,
   },
   listStyle: {
-    marginBottom: 10,
+    // marginBottom: 10,
+    // paddingHorizontal: 5,
   },
 });

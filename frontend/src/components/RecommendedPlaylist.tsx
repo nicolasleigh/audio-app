@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   pressContainer: {
     width: cardSize,
-    marginRight: 15,
+    marginRight: 10,
   },
   image: {
     width: cardSize,
@@ -62,13 +62,13 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: colors.OVERLAY,
+    backgroundColor: colors.OVERLAY_DARK,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 5,
   },
   title: {
-    color: colors.CONTRAST,
+    color: colors.WHITE,
     fontWeight: '700',
     fontSize: 18,
   },

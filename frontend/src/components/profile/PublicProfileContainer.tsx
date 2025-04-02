@@ -29,7 +29,9 @@ export default function PublicProfileContainer({profile}: Props) {
 
   const toggleFollowing = async (id: string) => {
     try {
-      if (!id) return;
+      if (!id) {
+        return;
+      }
 
       const client = await getClient();
       await client.post('/profile/update-follower/' + id);
@@ -41,22 +43,23 @@ export default function PublicProfileContainer({profile}: Props) {
     }
   };
 
-  if (!profile) return null;
+  if (!profile) {
+    return null;
+  }
   return (
     <View style={styles.container}>
       <AvatarField source={profile.avatar} />
       <View style={styles.profileInfoContainer}>
         <Text style={styles.profileName}>{profile.name}</Text>
         <Text style={styles.followerText}>{profile.followers} Followers</Text>
-
-        <Pressable
-          onPress={() => followingMutation.mutate(profile.id)}
-          style={styles.flexRow}>
-          <Text style={styles.profileActionLink}>
-            {isFollowing ? 'Unfollow' : 'Follow'}
-          </Text>
-        </Pressable>
       </View>
+      <Pressable
+        onPress={() => followingMutation.mutate(profile.id)}
+        style={styles.flexRow}>
+        <Text style={styles.profileActionLink}>
+          {isFollowing ? 'Unfollow' : 'Follow'}
+        </Text>
+      </Pressable>
     </View>
   );
 }
@@ -67,41 +70,42 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
-    gap: 5,
+    gap: 20,
+    borderWidth: 1,
+    borderRadius: 5,
+    // paddingHorizontal: 5,
+    paddingVertical: 10,
+    backgroundColor: colors.DARKWHITE,
+    marginBottom: 10,
   },
   profileName: {
-    color: colors.CONTRAST,
+    color: colors.BLACK,
     fontSize: 18,
     fontWeight: '700',
-  },
-  email: {
-    color: colors.CONTRAST,
-    marginRight: 5,
   },
   flexRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 7,
   },
   profileInfoContainer: {
-    // paddingHorizontal: 10,
-    paddingLeft: 10,
+    width: 75,
   },
   profileActionLink: {
-    backgroundColor: colors.SECONDARY,
-    color: colors.PRIMARY,
-    paddingHorizontal: 4,
-    paddingVertical: 2,
+    backgroundColor: colors.BLUE,
+    // paddingHorizontal: 10,
+    paddingVertical: 5,
     marginTop: 5,
+    overflow: 'hidden',
+    color: colors.WHITE,
+    borderRadius: 5,
+    width: 70,
+    textAlign: 'center',
   },
   followerText: {
-    color: colors.CONTRAST,
+    color: colors.BLACK,
     paddingVertical: 2,
-    marginTop: 5,
-  },
-  settingBtn: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // marginTop: 5,
+    fontSize: 12,
   },
 });

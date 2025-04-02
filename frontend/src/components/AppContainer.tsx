@@ -6,12 +6,7 @@ interface Props {
 }
 
 export default function AppContainer({children}: Props) {
-  return (
-    <SafeAreaView style={styles.container}>
-      {/* <AppNotification /> */}
-      {children}
-    </SafeAreaView>
-  );
+  return <SafeAreaView style={styles.container}>{children}</SafeAreaView>;
 }
 
 const styles = StyleSheet.create({

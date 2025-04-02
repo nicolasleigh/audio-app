@@ -14,7 +14,7 @@ interface Props {
   onAudioLongPress(item: AudioData, data: AudioData[]): void;
 }
 
-const dummyData = new Array(4).fill('');
+const dummyData = new Array(3).fill('');
 
 export default function LatestUploads({onAudioLongPress, onAudioPress}: Props) {
   const {data, isLoading} = useFetchLatestAudios();
@@ -23,7 +23,7 @@ export default function LatestUploads({onAudioLongPress, onAudioPress}: Props) {
   if (isLoading) {
     return (
       <PulseAnimationContainer>
-        <View style={styles.container}>
+        <View>
           <View style={styles.dummyTitleView} />
           <View style={styles.dummyContainer}>
             {dummyData.map((_, index) => {
@@ -77,15 +77,19 @@ const styles = StyleSheet.create({
     backgroundColor: colors.LIGHTGREY,
     marginBottom: 15,
     borderRadius: 5,
+    marginLeft: 5,
+    marginTop: 5,
   },
   dummyView: {
     height: 100,
     width: 100,
     backgroundColor: colors.LIGHTGREY,
-    marginRight: 15,
+    marginRight: 5,
     borderRadius: 5,
+    marginLeft: 5,
   },
   dummyContainer: {
     flexDirection: 'row',
+    marginBottom: 10,
   },
 });

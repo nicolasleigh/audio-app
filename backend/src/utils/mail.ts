@@ -31,7 +31,7 @@ export const sendVerificationMail = async (token: string, profile: Profile) => {
 
   const welcomeMessage = `Hi ${name}, welcome to my app! Please verify your email by clicking on the link below:`;
 
-  console.log("sendVerificationMail");
+  // console.log("sendVerificationMail");
 
   transport.sendMail({
     to: email,
@@ -47,8 +47,8 @@ export const sendVerificationMail = async (token: string, profile: Profile) => {
     }),
     attachments: [
       {
-        filename: "logo.png",
-        path: path.join(__dirname, "../mail/logo.png"),
+        filename: "logo.webp",
+        path: path.join(__dirname, "../mail/logo.webp"),
         cid: "logo",
       },
       {
@@ -84,8 +84,8 @@ export const sendPassResetSuccessEmail = async (name: string, email: string) => 
     }),
     attachments: [
       {
-        filename: "logo.png",
-        path: path.join(__dirname, "../mail/logo.png"),
+        filename: "logo.webp",
+        path: path.join(__dirname, "../mail/logo.webp"),
         cid: "logo",
       },
       {
@@ -117,8 +117,8 @@ export const sendForgetPasswordLink = async (options: Options) => {
     }),
     attachments: [
       {
-        filename: "logo.png",
-        path: path.join(__dirname, "../mail/logo.png"),
+        filename: "logo.webp",
+        path: path.join(__dirname, "../mail/logo.webp"),
         cid: "logo",
       },
       {

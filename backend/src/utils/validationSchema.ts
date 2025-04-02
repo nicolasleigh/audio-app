@@ -39,12 +39,8 @@ export const UpdatePasswordSchema = yup.object().shape({
       }
     })
     .required("Invalid user id!"),
-  password: yup
-    .string()
-    .trim()
-    .required("Password is missing!")
-    .min(6, "Password is too short!")
-    .matches(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#\$%\^&\*])[a-zA-Z\d!@#\$%\^&\*]+$/, "Password is too simple!"),
+  password: yup.string().trim().required("Password is missing!").min(6, "Password is too short!"),
+  // .matches(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#\$%\^&\*])[a-zA-Z\d!@#\$%\^&\*]+$/, "Password is too simple!"),
 });
 
 export const SignInValidationSchema = yup.object().shape({

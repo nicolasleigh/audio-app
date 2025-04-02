@@ -49,7 +49,7 @@ export default function AudioCard({
 }
 
 const styles = StyleSheet.create({
-  container: {width: 100, marginRight: 15},
+  container: {width: 100, marginRight: 10},
   title: {
     color: colors.GREY,
     fontWeight: '600',

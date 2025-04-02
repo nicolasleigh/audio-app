@@ -3,6 +3,7 @@ import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import BasicModalContainer from '../ui/BasicModalContainer';
 import colors from '../utils/colors';
+import Toast from 'react-native-toast-message';
 
 interface Props {
   visible: boolean;
@@ -26,6 +27,9 @@ export default function PlaylistForm({
   });
 
   const handleSubmit = () => {
+    if (!playlistInfo.title) {
+      return Toast.show({type: 'error', text1: 'Title cannot be empty'});
+    }
     onSubmit(playlistInfo);
     handleClose();
   };
@@ -46,6 +50,8 @@ export default function PlaylistForm({
             setPlaylistInfo({...playlistInfo, title: text});
           }}
           value={playlistInfo.title}
+          placeholderTextColor={colors.LIGHTGREY}
+          selectionColor={colors.WHITE}
         />
 
         <Pressable
@@ -56,13 +62,13 @@ export default function PlaylistForm({
           {playlistInfo.private ? (
             <MaterialCommunityIcons
               name="checkbox-marked-outline"
-              color={colors.PRIMARY}
+              color={colors.WHITE}
               size={20}
             />
           ) : (
             <MaterialCommunityIcons
               name="checkbox-blank-outline"
-              color={colors.PRIMARY}
+              color={colors.WHITE}
               size={20}
             />
           )}
@@ -70,7 +76,7 @@ export default function PlaylistForm({
         </Pressable>
 
         <Pressable style={styles.submitBtn} onPress={handleSubmit}>
-          <Text>Create</Text>
+          <Text style={styles.btnTitle}>Create</Text>
         </Pressable>
       </View>
     </BasicModalContainer>
@@ -84,15 +90,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: colors.PRIMARY,
+    color: colors.WHITE,
   },
   input: {
     height: 45,
     paddingVertical: 10,
-    borderBottomColor: colors.PRIMARY,
+    borderBottomColor: colors.WHITE,
     borderBottomWidth: 1,
-    color: colors.PRIMARY,
-    fontSize: 15,
+    color: colors.WHITE,
+    fontSize: 17,
   },
   privateSelector: {
     height: 50,
@@ -100,7 +106,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   privateLabel: {
-    color: colors.PRIMARY,
+    color: colors.WHITE,
     marginLeft: 5,
     fontSize: 15,
     fontWeight: '600',
@@ -110,7 +116,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 0.5,
-    borderColor: colors.PRIMARY,
+    borderColor: colors.WHITE,
     borderRadius: 7,
+    color: colors.WHITE,
+    backgroundColor: colors.WHITE,
+  },
+  btnTitle: {
+    color: colors.BLUE,
+    fontWeight: '600',
+    fontSize: 18,
   },
 });

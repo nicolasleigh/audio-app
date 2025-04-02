@@ -6,6 +6,7 @@ const TRANSPARENT_BLUE = 'rgba(24, 17, 242, 0.3)';
 const ERROR = '#FF5B14';
 const SUCCESS = '#3BEF1E';
 const OVERLAY = 'rgba(45, 35, 35, 0.3)';
+const OVERLAY_DARK = 'rgba(45, 35, 35, 0.7)';
 const BLUE = 'royalblue';
 const RED = 'crimson';
 const GREEN = 'seagreen';
@@ -33,6 +34,7 @@ const colors = {
   ERROR,
   SUCCESS,
   OVERLAY,
+  OVERLAY_DARK,
   BLUE,
   RED,
   GREEN,
