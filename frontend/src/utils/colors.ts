@@ -1,11 +1,11 @@
 const PRIMARY = '#443333';
 const SECONDARY = '#EEA849';
 const CONTRAST = '#FFFFFF';
-const INACTIVE_CONTRAST = 'rgba(255, 255, 255, 0.5)';
+const INACTIVE_CONTRAST = 'rgba(255, 255, 255, 0.4)';
 const TRANSPARENT_BLUE = 'rgba(24, 17, 242, 0.3)';
 const ERROR = '#FF5B14';
 const SUCCESS = '#3BEF1E';
-const OVERLAY = 'rgba(45, 35, 35, 0.5)';
+const OVERLAY = 'rgba(45, 35, 35, 0.3)';
 const BLUE = 'royalblue';
 const RED = 'crimson';
 const GREEN = 'seagreen';

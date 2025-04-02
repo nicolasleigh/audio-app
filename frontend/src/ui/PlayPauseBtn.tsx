@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function PlayPauseBtn({
-  color = colors.CONTRAST,
+  color = colors.WHITE,
   playing,
   onPress,
 }: Props) {

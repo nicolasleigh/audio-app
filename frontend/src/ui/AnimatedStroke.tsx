@@ -32,7 +32,7 @@ export default function AnimatedStroke({delay, height}: Props) {
 const styles = StyleSheet.create({
   stroke: {
     width: 4,
-    backgroundColor: colors.CONTRAST,
+    backgroundColor: colors.WHITE,
     marginRight: 5,
   },
 });

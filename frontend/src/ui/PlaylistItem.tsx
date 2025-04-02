@@ -17,7 +17,7 @@ export default function PlaylistItem({playlist, onPress}: Props) {
         <MaterialCommunityIcons
           name="playlist-music"
           size={30}
-          color={colors.CONTRAST}
+          color={colors.WHITE}
         />
       </View>
       <View style={styles.contentContainer}>
@@ -27,11 +27,11 @@ export default function PlaylistItem({playlist, onPress}: Props) {
         <View style={styles.iconContainer}>
           <FontAwesome
             name={visibility === 'public' ? 'globe' : 'lock'}
-            color={colors.SECONDARY}
+            color={'tomato'}
             size={15}
           />
           <Text style={styles.count}>
-            {itemsCount} {itemsCount > 1 ? 'audios' : 'audio'}
+            {itemsCount} {itemsCount > 1 ? 'Audios' : 'Audio'}
           </Text>
         </View>
       </View>
@@ -44,8 +44,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 5,
     overflow: 'hidden',
-    backgroundColor: colors.OVERLAY,
-    marginBottom: 15,
+    backgroundColor: colors.BLACK,
+    marginBottom: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   postContainer: {
     backgroundColor: colors.OVERLAY,
@@ -56,7 +58,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    color: colors.CONTRAST,
+    color: colors.WHITE,
     fontWeight: 'bold',
   },
   contentContainer: {
@@ -64,7 +66,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   count: {
-    color: colors.SECONDARY,
+    // color: colors.RED,
+    color: 'tomato',
     fontWeight: 'bold',
     marginLeft: 5,
   },

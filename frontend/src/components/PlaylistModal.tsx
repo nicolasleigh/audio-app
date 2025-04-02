@@ -40,7 +40,7 @@ export default function PlaylistModal({
                 <FontAwesome
                   size={20}
                   name={item.visibility === 'public' ? 'globe' : 'lock'}
-                  color={colors.PRIMARY}
+                  color={colors.WHITE}
                 />
               }
               title={item.title}
@@ -51,8 +51,8 @@ export default function PlaylistModal({
 
       {/* create playlist button */}
       <ListItem
-        icon={<AntDesign size={20} name="plus" color={colors.PRIMARY} />}
-        title="Create New"
+        icon={<AntDesign size={20} name="plus" color={colors.WHITE} />}
+        title="Create New Playlist"
         onPress={onCreateNew}
       />
     </BasicModalContainer>
@@ -61,8 +61,17 @@ export default function PlaylistModal({
 
 const styles = StyleSheet.create({
   container: {},
-  listItemContainer: {flexDirection: 'row', alignItems: 'center', height: 45},
-  listItemTitle: {fontSize: 16, color: colors.PRIMARY, marginLeft: 5},
+  listItemContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 45,
+    padding: 5,
+  },
+  listItemTitle: {
+    fontSize: 16,
+    color: colors.WHITE,
+    marginLeft: 5,
+  },
 });
 
 const ListItem = ({title, icon, onPress}: ListItemProps) => {

@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   dummyListItem: {
     height: 50,
     width: '100%',
-    backgroundColor: colors.INACTIVE_CONTRAST,
+    backgroundColor: colors.LIGHTGREY,
     borderRadius: 5,
     marginBottom: 15,
   },

@@ -75,7 +75,7 @@ export default function UploadsTab({}: Props) {
         renderItem={item => {
           return (
             <Pressable onPress={item.onPress} style={styles.optionContainer}>
-              <AntDesign size={20} color={colors.PRIMARY} name={item.icon} />
+              <AntDesign size={20} color={colors.WHITE} name={item.icon} />
               <Text style={styles.optionLabel}>{item.title}</Text>
             </Pressable>
           );
@@ -88,18 +88,9 @@ export default function UploadsTab({}: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    // padding: 10,
+    paddingRight: 12,
     backgroundColor: colors.DARKWHITE,
-  },
-  listItem: {
-    flexDirection: 'row',
-    backgroundColor: colors.OVERLAY,
-    marginBottom: 15,
-    borderRadius: 5,
-  },
-  poster: {
-    width: 50,
-    height: 50,
   },
   title: {
     color: colors.BLACK,
@@ -116,8 +107,13 @@ const styles = StyleSheet.create({
   optionContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
-    gap: 4,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    gap: 10,
   },
-  optionLabel: {color: colors.PRIMARY, fontSize: 16, marginLeft: 5},
+  optionLabel: {
+    color: colors.WHITE,
+    fontSize: 17,
+    fontWeight: '600',
+  },
 });

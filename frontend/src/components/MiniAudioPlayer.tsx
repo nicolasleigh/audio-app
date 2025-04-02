@@ -93,7 +93,7 @@ export default function MiniAudioPlayer({}: Props) {
       <View
         style={{
           height: 2,
-          backgroundColor: colors.SECONDARY,
+          backgroundColor: colors.PLAYER_BLUE,
           width: `${mapRange({
             outputMin: 0,
             outputMax: 100,
@@ -102,6 +102,7 @@ export default function MiniAudioPlayer({}: Props) {
             inputValue: progress.position,
           })}%`,
         }}></View>
+
       <View style={styles.container}>
         <Image source={source} style={styles.poster} />
 
@@ -115,14 +116,19 @@ export default function MiniAudioPlayer({}: Props) {
           <AntDesign
             name={isFav ? 'heart' : 'hearto'}
             size={24}
-            color={colors.CONTRAST}
+            // color={colors.RED}
+            color={'tomato'}
           />
         </Pressable>
 
         {isBusy ? (
           <Loader />
         ) : (
-          <PlayPauseBtn playing={isPlaying} onPress={togglePlayPause} />
+          <PlayPauseBtn
+            playing={isPlaying}
+            onPress={togglePlayPause}
+            color={colors.WHITE}
+          />
         )}
       </View>
       <AudioPlayer
@@ -131,10 +137,6 @@ export default function MiniAudioPlayer({}: Props) {
         onListOptionPress={handleOnListOptionPress}
         onProfileLinkPress={handleOnProfileLinkPress}
       />
-      {/* <CurrentAudioList
-        visible={showCurrentList}
-        onRequestClose={handleOnCurrentListClose}
-      /> */}
     </>
   );
 }
@@ -143,7 +145,9 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: MiniPlayerHeight,
-    backgroundColor: colors.PRIMARY,
+    backgroundColor: colors.PLAYER_BLUE,
+    // backgroundColor: 'lightskyblue',
+    // backgroundColor: 'powderblue',
     padding: 5,
     flexDirection: 'row',
     alignItems: 'center',
@@ -155,9 +159,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   title: {
-    color: colors.CONTRAST,
+    color: colors.WHITE,
     fontWeight: '700',
     paddingHorizontal: 5,
+    fontSize: 17,
   },
   contentContainer: {
     flex: 1,
@@ -165,8 +170,9 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   name: {
-    color: colors.SECONDARY,
-    fontWeight: '700',
+    color: colors.LIGHTGREY,
+    fontWeight: '500',
     paddingHorizontal: 5,
+    fontSize: 13,
   },
 });

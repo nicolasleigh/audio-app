@@ -1,17 +1,18 @@
 import React from 'react';
-import {FlatList, StyleSheet, Text} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useFetchPlaylistAudios} from '../hooks/query';
 import {
   getPlaylistModalState,
   updatePlaylistVisibility,
 } from '../store/playlistModal';
-import AppModal from '../ui/AppModal';
 import AudioListItem from '../ui/AudioListItem';
 import AudioListLoadingUI from '../ui/AudioListLoadingUI';
 import colors from '../utils/colors';
 import {getPlayerState} from '../store/player';
 import useAudioController from '../hooks/useAudioController';
+import AppModalPlaylist from '../ui/AppModalPlaylist';
+import AppModal from '../ui/AppModal';
 
 interface Props {}
 
@@ -27,14 +28,22 @@ export default function PlaylistAudioModal({}: Props) {
   };
 
   return (
-    <AppModal visible={visible} onRequestClose={handleClose}>
+    <AppModal
+      animation
+      visible={visible}
+      onRequestClose={handleClose}
+      heightOffset={150}
+      modalColor={colors.BLACK}
+      backdropColor={colors.INACTIVE_CONTRAST}>
       {isLoading ? (
-        <AudioListLoadingUI />
+        <View style={styles.container}>
+          <AudioListLoadingUI />
+        </View>
       ) : (
-        <>
+        <View style={styles.container}>
           <Text style={styles.title}>{data?.title}</Text>
           <FlatList
-            contentContainerStyle={styles.container}
+            // contentContainerStyle={styles.container}
             data={data?.audios}
             keyExtractor={item => item.id}
             renderItem={({item}) => {
@@ -48,7 +57,7 @@ export default function PlaylistAudioModal({}: Props) {
               );
             }}
           />
-        </>
+        </View>
       )}
     </AppModal>
   );
@@ -56,12 +65,13 @@ export default function PlaylistAudioModal({}: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    marginTop: 20,
+    paddingHorizontal: 10,
   },
   title: {
-    color: colors.CONTRAST,
+    color: colors.WHITE,
     fontWeight: '700',
     fontSize: 18,
-    padding: 10,
+    marginBottom: 10,
   },
 });

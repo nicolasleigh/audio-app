@@ -41,6 +41,6 @@ const styles = StyleSheet.create({
     maxHeight: '50%',
     borderRadius: 10,
     padding: 10,
-    backgroundColor: colors.CONTRAST,
+    backgroundColor: colors.LIGHTBLUE,
   },
 });

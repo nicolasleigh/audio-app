@@ -102,7 +102,7 @@ export default function HistoryTab({}: Props) {
           <RefreshControl
             refreshing={isFetching}
             onRefresh={handleOnRefresh}
-            tintColor={colors.CONTRAST}
+            tintColor={colors.BLUE}
           />
         }
         style={styles.container}>
@@ -122,14 +122,31 @@ export default function HistoryTab({}: Props) {
                         styles.history,
                         {
                           backgroundColor: selectedHistories.includes(audio.id)
-                            ? colors.INACTIVE_CONTRAST
-                            : colors.OVERLAY,
+                            ? colors.BLACK
+                            : colors.LIGHTGREY,
                         },
                       ]}>
-                      <Text style={styles.historyTitle}>{audio.title}</Text>
+                      <Text
+                        style={[
+                          styles.historyTitle,
+                          {
+                            color: selectedHistories.includes(audio.id)
+                              ? colors.WHITE
+                              : colors.BLACK,
+                          },
+                        ]}>
+                        {audio.title}
+                      </Text>
                       <Pressable
                         onPress={() => handleSingleHistoryRemove(audio)}>
-                        <AntDesign name="close" color={colors.CONTRAST} />
+                        <AntDesign
+                          name="close"
+                          color={
+                            selectedHistories.includes(audio.id)
+                              ? colors.WHITE
+                              : 'black'
+                          }
+                        />
                       </Pressable>
                     </Pressable>
                   );
@@ -151,20 +168,29 @@ export default function HistoryTab({}: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    backgroundColor: colors.DARKWHITE,
+    paddingRight: 12,
+  },
   removeBtn: {
-    padding: 10,
-    alignSelf: 'flex-end',
+    // padding: 10,
+    // alignSelf: 'flex-end',
+    position: 'absolute',
+    right: 0,
   },
   removeBtnText: {
-    color: colors.CONTRAST,
+    color: colors.BLACK,
+    marginRight: 5,
+    // fontSize: 16,
+    fontWeight: '600',
   },
   date: {
-    color: colors.SECONDARY,
-    paddingLeft: 10,
+    color: colors.BLACK,
+    fontWeight: '500',
+    // paddingLeft: 10,
   },
   historyTitle: {
-    color: colors.CONTRAST,
+    // color: colors.CONTRAST,
     paddingHorizontal: 5,
     fontWeight: '700',
     flex: 1,
@@ -172,7 +198,7 @@ const styles = StyleSheet.create({
   history: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.OVERLAY,
+    // backgroundColor: colors.BLACK,
     padding: 10,
     borderRadius: 5,
     marginBottom: 10,
@@ -180,6 +206,6 @@ const styles = StyleSheet.create({
   listContainer: {
     marginTop: 10,
     // paddingLeft: 10,
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
   },
 });

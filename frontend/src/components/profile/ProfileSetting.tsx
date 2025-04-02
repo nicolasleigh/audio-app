@@ -165,7 +165,7 @@ export default function ProfileSetting({}: Props) {
         : 'You will log out from this device!',
       [
         {
-          text: 'Clear',
+          text: 'Log Out',
           style: 'destructive',
           onPress() {
             handleLogout(fromAll);
@@ -206,7 +206,7 @@ export default function ProfileSetting({}: Props) {
           <View style={styles.emailContainer}>
             <Text style={styles.email}>{profile?.email}</Text>
             {profile?.verified ? (
-              <MaterialIcons name="verified" size={15} color={colors.YELLOW} />
+              <MaterialIcons name="verified" size={15} color={colors.WHITE} />
             ) : (
               <ReVerificationLink linkTitle="verify" activeAtFirst />
             )}
@@ -350,6 +350,7 @@ const styles = StyleSheet.create({
     color: colors.WHITE,
     fontSize: 16,
     marginLeft: 5,
+    padding: 5,
   },
   marginTop: {
     marginTop: 15,

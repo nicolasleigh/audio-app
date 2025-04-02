@@ -45,7 +45,7 @@ export default function ProfileContainer({profile}: Props) {
       <Pressable
         onPress={() => navigate('ProfileSetting')}
         style={styles.settingBtn}>
-        <AntDesign name="setting" size={22} color={colors.BLUE} />
+        <AntDesign name="setting" size={22} color={colors.BLACK} />
       </Pressable>
     </View>
   );
@@ -71,26 +71,29 @@ const styles = StyleSheet.create({
   },
   email: {
     color: colors.GREY,
-    marginRight: 5,
+    // marginRight: 5,
   },
   flexRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 7,
   },
   profileInfoContainer: {
     paddingHorizontal: 20,
     // paddingLeft: 20,
   },
   profileActionLink: {
-    backgroundColor: colors.BLUE,
-    borderWidth: 1,
-    borderColor: colors.BLUE,
-    borderRadius: 5,
+    // backgroundColor: colors.LIGHTBLUE,
+    // borderWidth: 1,
+    // borderColor: colors.LIGHTBLUE,
+    // borderRadius: 5,
     overflow: 'hidden',
-    color: colors.WHITE,
-    paddingHorizontal: 4,
+    // color: colors.WHITE,
+    color: colors.BLACK,
+    // paddingHorizontal: 4,
     paddingVertical: 2,
-    margin: 5,
+    fontSize: 12,
+    // margin: 5,
   },
   settingBtn: {
     width: 40,

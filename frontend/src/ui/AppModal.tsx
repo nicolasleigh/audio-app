@@ -18,19 +18,24 @@ interface Props {
   visible: boolean;
   onRequestClose(): void;
   animation?: boolean;
+  heightOffset?: number;
+  modalColor: string;
+  backdropColor: string;
 }
 
 const {height} = Dimensions.get('window');
-
-const modalHeight = height;
 
 export default function AppModal({
   children,
   visible,
   onRequestClose,
   animation,
+  heightOffset = 0,
+  modalColor,
+  backdropColor,
 }: Props) {
   // const translateY = useSharedValue(modalHeight);
+  const modalHeight = height - heightOffset;
   const translateY = useSharedValue(0);
   const translateStyle = useAnimatedStyle(() => {
     return {
@@ -80,9 +85,14 @@ export default function AppModal({
       style={styles.container}
       transparent>
       <GestureHandlerRootView style={{flex: 1}}>
-        <Pressable style={styles.backdrop}>
+        <Pressable style={[styles.backdrop, {backgroundColor: backdropColor}]}>
           <GestureDetector gesture={gesture}>
-            <Animated.View style={[styles.modal, translateStyle]}>
+            <Animated.View
+              style={[
+                styles.modal,
+                translateStyle,
+                {backgroundColor: modalColor, height: modalHeight},
+              ]}>
               {children}
             </Animated.View>
           </GestureDetector>
@@ -96,15 +106,8 @@ const styles = StyleSheet.create({
   container: {},
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    // backgroundColor: colors.TRANSPARENT_BLUE,
-    // backgroundColor: colors.WHITE,
   },
   modal: {
-    backgroundColor: colors.PLAYER_BLUE,
-    // backgroundColor: 'darkslateblue',
-    // backgroundColor: 'steelblue',
-    // backgroundColor: 'teal',
-    height: modalHeight,
     position: 'absolute',
     bottom: 0,
     right: 0,

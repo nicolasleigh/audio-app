@@ -34,7 +34,7 @@ export default function FavoriteTab({}: Props) {
         <RefreshControl
           refreshing={isFetching}
           onRefresh={handleOnRefresh}
-          tintColor={colors.CONTRAST}
+          tintColor={colors.BLUE}
         />
       }>
       {!data?.length ? (
@@ -56,5 +56,8 @@ export default function FavoriteTab({}: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    backgroundColor: colors.DARKWHITE,
+    paddingRight: 12,
+  },
 });

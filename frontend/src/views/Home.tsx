@@ -157,7 +157,7 @@ export default function Home({}: Props) {
               <Pressable onPress={item.onPress} style={styles.optionContainer}>
                 <MaterialCommunityIcons
                   size={24}
-                  color={colors.PRIMARY}
+                  color={colors.WHITE}
                   name={item.icon}
                 />
                 <Text style={styles.optionLabel}>{item.title}</Text>
@@ -201,6 +201,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
+    paddingHorizontal: 7,
   },
-  optionLabel: {color: colors.PRIMARY, fontSize: 16, marginLeft: 5},
+  optionLabel: {
+    color: colors.WHITE,
+    fontSize: 16,
+    marginLeft: 5,
+    fontWeight: '600',
+  },
 });

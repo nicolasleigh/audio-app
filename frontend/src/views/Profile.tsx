@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical: 10,
     backgroundColor: colors.DARKWHITE,
+    marginBottom: 5,
   },
   tabBarStyle: {
     marginBottom: 20,
@@ -59,7 +60,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0,
   },
   tabBarLabelStyle: {
-    color: colors.GREY,
+    color: colors.BLACK,
     fontSize: 12,
+    fontWeight: '600',
   },
 });

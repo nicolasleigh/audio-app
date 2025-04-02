@@ -80,7 +80,12 @@ export default function AudioPlayer({
   };
 
   return (
-    <AppModal animation visible={visible} onRequestClose={onRequestClose}>
+    <AppModal
+      animation
+      visible={visible}
+      onRequestClose={onRequestClose}
+      modalColor={colors.PLAYER_BLUE}
+      backdropColor="">
       <AudioInfoContainer
         visible={showAudioInfo}
         closeHandler={setShowAudioInfo}
