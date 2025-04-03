@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Pressable,
   StyleProp,
@@ -14,29 +14,44 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import PlayerController from './PlayerController';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
   activeRate?: string;
   onPress?(rate: number): void;
+  onListOptionPress(show: boolean): void;
 }
 
 const speedRates = ['0.25', '0.5', '0.75', '1', '1.25', '1.5', '1.75', '2'];
-const selectorSize = 40;
+const selectorSize = 35;
 
 export default function PlaybackRateSelector({
   containerStyle,
   activeRate,
   onPress,
+  onListOptionPress,
 }: Props) {
-  const [showButton, setShowButton] = useState(true);
+  const [showSelector, setShowSelector] = useState(false);
+
   const width = useSharedValue(0);
   const handleOnPress = () => {
-    setShowButton(false);
-    width.value = withTiming(selectorSize * speedRates.length, {
-      duration: 70,
-    });
+    setShowSelector(prev => !prev);
   };
+
+  useEffect(() => {
+    if (showSelector) {
+      width.value = withTiming(selectorSize * speedRates.length, {
+        duration: 300,
+      });
+    }
+    if (!showSelector) {
+      width.value = withTiming(0, {
+        duration: 300,
+      });
+    }
+  }, [showSelector]);
 
   const widthStyle = useAnimatedStyle(() => ({
     width: width.value,
@@ -44,11 +59,21 @@ export default function PlaybackRateSelector({
 
   return (
     <View style={[styles.container, containerStyle]}>
-      {showButton ? (
+      <View style={styles.btnContainer}>
         <Pressable onPress={handleOnPress}>
-          <FontAwesome5 name="running" color={colors.CONTRAST} size={24} />
+          <FontAwesome5 name="running" color={colors.WHITE} size={24} />
         </Pressable>
-      ) : null}
+        <PlayerController
+          ignoreContainer
+          onPress={() => onListOptionPress(true)}>
+          <MaterialCommunityIcons
+            name="playlist-music"
+            size={24}
+            color={colors.WHITE}
+          />
+        </PlayerController>
+      </View>
+
       <Animated.View style={[styles.buttons, widthStyle]}>
         {speedRates.map(item => {
           return (
@@ -77,7 +102,7 @@ function Selector({value, active, onPress}: SelectorProps) {
       onPress={onPress}
       style={[
         styles.selector,
-        active ? {backgroundColor: colors.SECONDARY} : undefined,
+        active ? {backgroundColor: colors.DARKBLUE} : undefined,
       ]}>
       <Text style={styles.selectorText}>{value}</Text>
     </Pressable>
@@ -85,20 +110,29 @@ function Selector({value, active, onPress}: SelectorProps) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    marginTop: 30,
+  },
+  btnContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   buttons: {
     flexDirection: 'row',
-    backgroundColor: colors.OVERLAY,
+    backgroundColor: colors.BLUE,
     overflow: 'hidden',
     alignSelf: 'center',
+    justifyContent: 'center',
   },
   selector: {
     width: selectorSize,
     height: selectorSize,
     justifyContent: 'center',
     alignItems: 'center',
+    // marginHorizontal: 2,
   },
   selectorText: {
-    color: colors.CONTRAST,
+    color: colors.WHITE,
   },
 });

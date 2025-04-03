@@ -13,7 +13,9 @@ interface Props {
 
 export default function AudioInfoContainer({visible, closeHandler}: Props) {
   const {onGoingAudio} = useSelector(getPlayerState);
-  if (!visible) return null;
+  if (!visible) {
+    return null;
+  }
 
   const handleClose = () => {
     closeHandler(!visible);
@@ -22,15 +24,17 @@ export default function AudioInfoContainer({visible, closeHandler}: Props) {
   return (
     <View style={styles.container}>
       <Pressable onPress={handleClose} style={styles.closeBtn}>
-        <AntDesign name="close" color={colors.CONTRAST} size={24} />
+        <AntDesign name="close" color={colors.WHITE} size={24} />
       </Pressable>
       <ScrollView>
-        <Text style={styles.title}>{onGoingAudio?.title}</Text>
+        <Text style={styles.title}>Title: {onGoingAudio?.title}</Text>
+        <Text style={styles.title}>Category: {onGoingAudio?.category}</Text>
         <View style={styles.ownerInfo}>
-          <Text style={styles.title}>Creator: </Text>
-          <AppLink title={onGoingAudio?.owner.name || ''} />
+          <Text style={styles.title}>
+            Creator: {onGoingAudio?.owner.name || ''}
+          </Text>
         </View>
-        <Text style={styles.about}>{onGoingAudio?.about}</Text>
+        <Text style={styles.title}>Description: {onGoingAudio?.about}</Text>
       </ScrollView>
     </View>
   );
@@ -39,9 +43,10 @@ export default function AudioInfoContainer({visible, closeHandler}: Props) {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: colors.PRIMARY,
+    backgroundColor: colors.PLAYER_BLUE,
     zIndex: 1,
     padding: 10,
+    marginTop: 50,
   },
   closeBtn: {
     alignSelf: 'flex-end',
@@ -51,10 +56,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 18,
+    fontSize: 15,
     color: colors.CONTRAST,
-    fontWeight: 'bold',
-    paddingVertical: 5,
+    fontWeight: '600',
+    paddingVertical: 10,
   },
   about: {
     fontSize: 16,

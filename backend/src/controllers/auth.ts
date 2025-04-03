@@ -1,28 +1,24 @@
-import { RequestHandler } from 'express';
-import crypto from 'node:crypto';
-import jwt from 'jsonwebtoken';
+import { RequestHandler } from "express";
+import crypto from "node:crypto";
+import jwt from "jsonwebtoken";
 
-import { CreateUser, VerifyEmailRequest } from '#/@types/user';
-import User from '#/models/user';
-import { formatProfile, generateToken } from '#/utils/helper';
-import {
-  sendForgetPasswordLink,
-  sendPassResetSuccessEmail,
-  sendVerificationMail,
-} from '#/utils/mail';
-import EmailVerificationToken from '#/models/emailVerificationToken';
-import PasswordResetToken from '#/models/passwordResetToken';
-import { isValidObjectId } from 'mongoose';
-import { JWT_SECRET, PASSWORD_RESET_LINK } from '#/utils/variables';
-import { RequestWithFiles } from '#/middleware/fileParser';
-import cloudinary from '#/cloud';
-import formidable from 'formidable';
+import { CreateUser, VerifyEmailRequest } from "#/@types/user";
+import User from "#/models/user";
+import { formatProfile, generateToken } from "#/utils/helper";
+import { sendForgetPasswordLink, sendPassResetSuccessEmail, sendVerificationMail } from "#/utils/mail";
+import EmailVerificationToken from "#/models/emailVerificationToken";
+import PasswordResetToken from "#/models/passwordResetToken";
+import { isValidObjectId } from "mongoose";
+import { JWT_SECRET, PASSWORD_RESET_LINK } from "#/utils/variables";
+import { RequestWithFiles } from "#/middleware/fileParser";
+import cloudinary from "#/cloud";
+import formidable from "formidable";
 
 export const create: RequestHandler = async (req: CreateUser, res) => {
   const { email, password, name } = req.body;
 
   const oldUser = await User.findOne({ email });
-  if (oldUser) return res.status(403).json({ error: 'Email already in use!' });
+  if (oldUser) return res.status(403).json({ error: "Email already in use!" });
 
   const user = await User.create({ email, password, name });
 
@@ -42,40 +38,34 @@ export const create: RequestHandler = async (req: CreateUser, res) => {
   res.status(201).json({ user: { id: user._id, name, email } });
 };
 
-export const verifyEmail: RequestHandler = async (
-  req: VerifyEmailRequest,
-  res
-) => {
+export const verifyEmail: RequestHandler = async (req: VerifyEmailRequest, res) => {
   const { token, userId } = req.body;
 
   const verificationToken = await EmailVerificationToken.findOne({
     owner: userId,
   });
 
-  if (!verificationToken)
-    return res.status(403).json({ error: 'Invalid token!' });
+  if (!verificationToken) return res.status(403).json({ error: "Invalid token!" });
 
   const matched = await verificationToken.compareToken(token);
 
-  if (!matched) return res.status(403).json({ error: 'Invalid token!' });
+  if (!matched) return res.status(403).json({ error: "Invalid token!" });
 
   await User.findByIdAndUpdate(userId, { verified: true });
   await EmailVerificationToken.findByIdAndDelete(verificationToken._id);
 
-  res.json({ message: 'Email verified successfully!' });
+  res.json({ message: "Email verified successfully!" });
 };
 
 export const sendReVerificationToken: RequestHandler = async (req, res) => {
   const { userId } = req.body;
 
-  if (!isValidObjectId(userId))
-    return res.status(403).json({ error: 'Invalid request!' });
+  if (!isValidObjectId(userId)) return res.status(403).json({ error: "Invalid request!" });
 
   const user = await User.findById(userId);
-  if (!user) return res.status(403).json({ error: 'Invalid request!' });
+  if (!user) return res.status(403).json({ error: "Invalid request!" });
 
-  if (user.verified)
-    return res.status(422).json({ error: 'Email already verified!' });
+  if (user.verified) return res.status(422).json({ error: "Email already verified!" });
 
   await EmailVerificationToken.findOneAndDelete({ owner: userId });
 
@@ -92,18 +82,18 @@ export const sendReVerificationToken: RequestHandler = async (req, res) => {
     userId: user._id.toString(),
   });
 
-  res.json({ message: 'Please check your mail' });
+  res.json({ message: "Please check your mail" });
 };
 
 export const generateForgetPasswordLink: RequestHandler = async (req, res) => {
   const { email } = req.body;
 
   const user = await User.findOne({ email });
-  if (!user) return res.status(404).json({ error: 'Account not found!' });
+  if (!user) return res.status(404).json({ error: "Account not found!" });
 
   await PasswordResetToken.findOneAndDelete({ owner: user._id });
 
-  const token = crypto.randomBytes(36).toString('hex');
+  const token = crypto.randomBytes(36).toString("hex");
 
   PasswordResetToken.create({
     owner: user._id,
@@ -114,7 +104,7 @@ export const generateForgetPasswordLink: RequestHandler = async (req, res) => {
 
   sendForgetPasswordLink({ email: user.email, link: resetLink });
 
-  res.json({ message: 'Check your email to reset password.' });
+  res.json({ message: "Check your email to reset password." });
 };
 
 export const grantValid: RequestHandler = async (req, res) => {
@@ -125,13 +115,10 @@ export const updatePassword: RequestHandler = async (req, res) => {
   const { password, userId } = req.body;
 
   const user = await User.findById(userId);
-  if (!user) return res.status(404).json({ error: 'Account not found!' });
+  if (!user) return res.status(404).json({ error: "Account not found!" });
 
   const matched = await user.comparePassword(password);
-  if (matched)
-    return res
-      .status(422)
-      .json({ error: 'The new password must be different!' });
+  if (matched) return res.status(422).json({ error: "The new password must be different!" });
 
   user.password = password;
   await user.save();
@@ -139,7 +126,7 @@ export const updatePassword: RequestHandler = async (req, res) => {
   await PasswordResetToken.findOneAndDelete({ owner: user._id });
 
   await sendPassResetSuccessEmail(user.name, user.email);
-  res.json({ message: 'Password updated successfully!' });
+  res.json({ message: "Password updated successfully!" });
 };
 
 export const signIn: RequestHandler = async (req, res) => {
@@ -149,12 +136,10 @@ export const signIn: RequestHandler = async (req, res) => {
     email,
   });
 
-  if (!user)
-    return res.status(403).json({ error: 'Email/Password is incorrect!' });
+  if (!user) return res.status(403).json({ error: "Email/Password is incorrect!" });
 
   const matched = await user.comparePassword(password);
-  if (!matched)
-    return res.status(403).json({ error: 'Email/Password is incorrect!' });
+  if (!matched) return res.status(403).json({ error: "Email/Password is incorrect!" });
 
   const token = jwt.sign({ userId: user._id }, JWT_SECRET);
   user.tokens.push(token);
@@ -175,21 +160,16 @@ export const signIn: RequestHandler = async (req, res) => {
   });
 };
 
-export const updateProfile: RequestHandler = async (
-  req: RequestWithFiles,
-  res
-) => {
+export const updateProfile: RequestHandler = async (req: RequestWithFiles, res) => {
   const name = req.body.name;
   const avatar = req.files?.avatar as unknown as formidable.File;
 
   const user = await User.findById(req.user.id);
-  if (!user) throw new Error('something went wrong, user not found!');
+  if (!user) throw new Error("something went wrong, user not found!");
 
-  if (typeof name !== 'string')
-    return res.status(422).json({ error: 'Invalid name!' });
+  if (typeof name !== "string") return res.status(422).json({ error: "Invalid name!" });
 
-  if (name.trim().length < 3)
-    return res.status(422).json({ error: 'Invalid name!' });
+  if (name.trim().length < 3) return res.status(422).json({ error: "Invalid name!" });
 
   user.name = name;
 
@@ -199,15 +179,12 @@ export const updateProfile: RequestHandler = async (
     }
 
     try {
-      const { secure_url, public_id } = await cloudinary.uploader.upload(
-        avatar.filepath,
-        {
-          width: 300,
-          height: 300,
-          crop: 'thumb',
-          gravity: 'face',
-        }
-      );
+      const { secure_url, public_id } = await cloudinary.uploader.upload(avatar.filepath, {
+        width: 300,
+        height: 300,
+        crop: "thumb",
+        gravity: "face",
+      });
       user.avatar = { url: secure_url, publicId: public_id };
     } catch (error) {
       console.log(error);
@@ -227,9 +204,9 @@ export const logOut: RequestHandler = async (req, res, next) => {
   const { fromAll } = req.query;
   const token = req.token;
   const user = await User.findById(req.user.id);
-  if (!user) throw new Error('something went wrong, user not found!');
+  if (!user) throw new Error("something went wrong, user not found!");
 
-  if (fromAll === 'yes') user.tokens = [];
+  if (fromAll === "yes") user.tokens = [];
   else user.tokens = user.tokens.filter((t) => t !== token);
 
   await user.save();

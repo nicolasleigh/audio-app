@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlexStyle, View} from 'react-native';
+import {FlexStyle, StyleSheet, View} from 'react-native';
 import colors from '../utils/colors';
 
 interface Props {
@@ -24,36 +24,37 @@ export default function CircleUi({size, position}: Props) {
       viewPosition = {bottom: -size / 2, right: -size / 2};
   }
 
+  const styles = StyleSheet.create({
+    container: {
+      width: size,
+      height: size,
+      position: 'absolute',
+      ...viewPosition,
+    },
+    inner: {
+      width: size / 1.5,
+      height: size / 1.5,
+      borderRadius: size / 2,
+      backgroundColor: colors.LIGHTBLUE,
+      opacity: 0.3,
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: [{translateX: -size / 3}, {translateY: -size / 3}],
+    },
+    outer: {
+      width: size,
+      height: size,
+      borderRadius: size / 2,
+      backgroundColor: colors.LIGHTBLUE,
+      opacity: 0.3,
+    },
+  });
+
   return (
-    <View
-      style={{
-        width: size,
-        height: size,
-        position: 'absolute',
-        ...viewPosition,
-      }}>
-      <View
-        style={{
-          width: size,
-          height: size,
-          borderRadius: size / 2,
-          backgroundColor: colors.SECONDARY,
-          opacity: 0.3,
-        }}
-      />
-      <View
-        style={{
-          width: size / 1.5,
-          height: size / 1.5,
-          borderRadius: size / 2,
-          backgroundColor: colors.SECONDARY,
-          opacity: 0.3,
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: [{translateX: -size / 3}, {translateY: -size / 3}],
-        }}
-      />
+    <View style={styles.container}>
+      <View style={styles.outer} />
+      <View style={styles.inner} />
     </View>
   );
 }

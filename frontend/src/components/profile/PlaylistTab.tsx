@@ -9,6 +9,7 @@ import {
 } from '../../store/playlistModal';
 import EmptyRecords from '../../ui/EmptyRecords';
 import PlaylistItem from '../../ui/PlaylistItem';
+import colors from '../../utils/colors';
 
 interface Props {}
 
@@ -37,5 +38,8 @@ export default function PlaylistTab({}: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    paddingRight: 12,
+    backgroundColor: colors.DARKWHITE,
+  },
 });

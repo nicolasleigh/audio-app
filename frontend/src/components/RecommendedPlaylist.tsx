@@ -10,9 +10,9 @@ interface Props {
 
 export default function RecommendedPlaylist({onListPress}: Props) {
   const {data} = useFetchRecommendedPlaylist();
-  console.log(data);
+  // console.log(data);
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.header}>Playlist for you</Text>
       <FlatList
         horizontal
@@ -22,7 +22,7 @@ export default function RecommendedPlaylist({onListPress}: Props) {
         renderItem={({item}) => {
           return (
             <Pressable
-              style={styles.container}
+              style={styles.pressContainer}
               onPress={() => onListPress(item)}
               key={item.id}>
               <Image
@@ -45,8 +45,15 @@ const cardSize = 150;
 
 const styles = StyleSheet.create({
   container: {
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    backgroundColor: colors.DARKWHITE,
+  },
+  pressContainer: {
     width: cardSize,
-    marginRight: 15,
+    marginRight: 10,
   },
   image: {
     width: cardSize,
@@ -55,18 +62,18 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: colors.OVERLAY,
+    backgroundColor: colors.OVERLAY_DARK,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 5,
   },
   title: {
-    color: colors.CONTRAST,
+    color: colors.WHITE,
     fontWeight: '700',
     fontSize: 18,
   },
   header: {
-    color: colors.CONTRAST,
+    color: colors.BLACK,
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 15,

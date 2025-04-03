@@ -6,9 +6,10 @@ import PlayAnimation from './PlayAnimation';
 
 interface Props {
   audio: AudioData;
-  isPlaying?: boolean;
-  onPress?(): void;
+  isPlaying: boolean;
+  onPress(): void;
   onLongPress?(): void;
+  isPaused: boolean;
 }
 
 export default function AudioListItem({
@@ -51,25 +52,30 @@ const styles = StyleSheet.create({
   },
   listItem: {
     flexDirection: 'row',
-    backgroundColor: colors.OVERLAY,
-    marginBottom: 15,
+    backgroundColor: colors.GREY,
+    marginBottom: 10,
     borderRadius: 5,
     overflow: 'hidden',
+    gap: 5,
   },
   poster: {
-    width: 50,
+    width: 60,
     height: 50,
   },
   title: {
-    color: colors.CONTRAST,
+    color: colors.WHITE,
     fontWeight: '700',
+    fontSize: 15,
   },
   owner: {
-    color: colors.SECONDARY,
-    fontWeight: '700',
+    color: colors.LIGHTGREY,
+    fontWeight: '400',
+    fontSize: 13,
   },
   titleContainer: {
     flex: 1,
     padding: 5,
+    justifyContent: 'center',
+    gap: 2,
   },
 });

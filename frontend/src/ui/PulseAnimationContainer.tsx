@@ -1,10 +1,12 @@
 import React, {useEffect} from 'react';
+import {StyleSheet} from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
+import colors from '../utils/colors';
 
 interface Props {
   children: React.ReactNode;
@@ -26,5 +28,18 @@ export default function PulseAnimationContainer({children}: Props) {
     );
   }, []);
 
-  return <Animated.View style={opacity}>{children}</Animated.View>;
+  return (
+    <Animated.View style={[styles.container, opacity]}>
+      {children}
+    </Animated.View>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    borderWidth: 1,
+    borderRadius: 5,
+    backgroundColor: colors.DARKWHITE,
+    paddingTop: 5,
+  },
+});

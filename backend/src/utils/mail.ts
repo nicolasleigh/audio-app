@@ -1,18 +1,13 @@
-import path from 'node:path';
-import nodemailer from 'nodemailer';
+import path from "node:path";
+import nodemailer from "nodemailer";
 
-import { generateTemplate } from '#/mail/template';
-import EmailVerificationToken from '#/models/emailVerificationToken';
-import {
-  MAILTRAP_PASS,
-  MAILTRAP_USER,
-  SIGN_IN_URL,
-  VERIFICATION_EMAIL,
-} from '#/utils/variables';
+import { generateTemplate } from "#/mail/template";
+import EmailVerificationToken from "#/models/emailVerificationToken";
+import { MAILTRAP_PASS, MAILTRAP_USER, SIGN_IN_URL, VERIFICATION_EMAIL } from "#/utils/variables";
 
 const generateMailTransporter = () => {
   const transport = nodemailer.createTransport({
-    host: 'sandbox.smtp.mailtrap.io',
+    host: "sandbox.smtp.mailtrap.io",
     port: 2525,
     auth: {
       user: MAILTRAP_USER,
@@ -36,28 +31,30 @@ export const sendVerificationMail = async (token: string, profile: Profile) => {
 
   const welcomeMessage = `Hi ${name}, welcome to my app! Please verify your email by clicking on the link below:`;
 
+  // console.log("sendVerificationMail");
+
   transport.sendMail({
     to: email,
     from: VERIFICATION_EMAIL,
-    subject: 'Welcome to my app!',
+    subject: "Welcome to my app!",
     html: generateTemplate({
-      title: 'Welcome to my app',
+      title: "Welcome to my app",
       message: welcomeMessage,
-      logo: 'cid:logo',
-      banner: 'cid:welcome',
-      link: '#',
+      logo: "cid:logo",
+      banner: "cid:welcome",
+      link: "#",
       btnTitle: token,
     }),
     attachments: [
       {
-        filename: 'logo.png',
-        path: path.join(__dirname, '../mail/logo.png'),
-        cid: 'logo',
+        filename: "logo.webp",
+        path: path.join(__dirname, "../mail/logo.webp"),
+        cid: "logo",
       },
       {
-        filename: 'welcome.png',
-        path: path.join(__dirname, '../mail/welcome.png'),
-        cid: 'welcome',
+        filename: "welcome.png",
+        path: path.join(__dirname, "../mail/welcome.png"),
+        cid: "welcome",
       },
     ],
   });
@@ -68,10 +65,7 @@ interface Options {
   link: string;
 }
 
-export const sendPassResetSuccessEmail = async (
-  name: string,
-  email: string
-) => {
+export const sendPassResetSuccessEmail = async (name: string, email: string) => {
   const transport = generateMailTransporter();
 
   const message = `Dear ${name}, we just updated your password. You can now login with your new password.`;
@@ -79,25 +73,25 @@ export const sendPassResetSuccessEmail = async (
   transport.sendMail({
     to: email,
     from: VERIFICATION_EMAIL,
-    subject: 'Reset Password Successfully',
+    subject: "Reset Password Successfully",
     html: generateTemplate({
-      title: 'Reset Password Successfully',
+      title: "Reset Password Successfully",
       message: message,
-      logo: 'cid:logo',
-      banner: 'cid:forget_password',
+      logo: "cid:logo",
+      banner: "cid:forget_password",
       link: SIGN_IN_URL,
-      btnTitle: 'Log in',
+      btnTitle: "Log in",
     }),
     attachments: [
       {
-        filename: 'logo.png',
-        path: path.join(__dirname, '../mail/logo.png'),
-        cid: 'logo',
+        filename: "logo.webp",
+        path: path.join(__dirname, "../mail/logo.webp"),
+        cid: "logo",
       },
       {
-        filename: 'forget_password.png',
-        path: path.join(__dirname, '../mail/forget_password.png'),
-        cid: 'forget_password',
+        filename: "forget_password.png",
+        path: path.join(__dirname, "../mail/forget_password.png"),
+        cid: "forget_password",
       },
     ],
   });
@@ -112,25 +106,25 @@ export const sendForgetPasswordLink = async (options: Options) => {
   transport.sendMail({
     to: email,
     from: VERIFICATION_EMAIL,
-    subject: 'Reset Password Link',
+    subject: "Reset Password Link",
     html: generateTemplate({
-      title: 'Forget Password',
+      title: "Forget Password",
       message: message,
-      logo: 'cid:logo',
-      banner: 'cid:forget_password',
+      logo: "cid:logo",
+      banner: "cid:forget_password",
       link,
-      btnTitle: 'Reset Password',
+      btnTitle: "Reset Password",
     }),
     attachments: [
       {
-        filename: 'logo.png',
-        path: path.join(__dirname, '../mail/logo.png'),
-        cid: 'logo',
+        filename: "logo.webp",
+        path: path.join(__dirname, "../mail/logo.webp"),
+        cid: "logo",
       },
       {
-        filename: 'forget_password.png',
-        path: path.join(__dirname, '../mail/forget_password.png'),
-        cid: 'forget_password',
+        filename: "forget_password.png",
+        path: path.join(__dirname, "../mail/forget_password.png"),
+        cid: "forget_password",
       },
     ],
   });

@@ -27,17 +27,17 @@ export default function ProfileContainer({profile}: Props) {
         <View style={styles.flexRow}>
           <Text style={styles.email}>{profile.email}</Text>
           {profile.verified ? (
-            <MaterialIcons name="verified" size={15} color={colors.SECONDARY} />
+            <MaterialIcons name="verified" size={15} color={colors.BLUE} />
           ) : (
-            <Octicons name="unverified" size={15} color={colors.SECONDARY} />
+            <Octicons name="unverified" size={15} color={colors.BLUE} />
           )}
         </View>
         <View style={styles.flexRow}>
           <Text style={styles.profileActionLink}>
-            {profile.followers} Followers
+            {profile.followings} Following
           </Text>
           <Text style={styles.profileActionLink}>
-            {profile.followings} Followings
+            {profile.followers} Followers
           </Text>
         </View>
       </View>
@@ -45,7 +45,7 @@ export default function ProfileContainer({profile}: Props) {
       <Pressable
         onPress={() => navigate('ProfileSetting')}
         style={styles.settingBtn}>
-        <AntDesign name="setting" size={22} color={colors.CONTRAST} />
+        <AntDesign name="setting" size={22} color={colors.BLACK} />
       </Pressable>
     </View>
   );
@@ -57,30 +57,43 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    backgroundColor: colors.DARKWHITE,
+    marginBottom: 10,
   },
   profileName: {
-    color: colors.CONTRAST,
+    color: colors.BLACK,
     fontSize: 18,
     fontWeight: '700',
   },
   email: {
-    color: colors.CONTRAST,
-    marginRight: 5,
+    color: colors.GREY,
+    // marginRight: 5,
   },
   flexRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 7,
   },
   profileInfoContainer: {
-    // paddingHorizontal: 10,
-    paddingLeft: 10,
+    paddingHorizontal: 20,
+    // paddingLeft: 20,
   },
   profileActionLink: {
-    backgroundColor: colors.SECONDARY,
-    color: colors.PRIMARY,
-    paddingHorizontal: 4,
+    // backgroundColor: colors.LIGHTBLUE,
+    // borderWidth: 1,
+    // borderColor: colors.LIGHTBLUE,
+    // borderRadius: 5,
+    overflow: 'hidden',
+    // color: colors.WHITE,
+    color: colors.BLACK,
+    // paddingHorizontal: 4,
     paddingVertical: 2,
-    margin: 5,
+    fontSize: 12,
+    // margin: 5,
   },
   settingBtn: {
     width: 40,

@@ -15,12 +15,13 @@ import RecommendedAudios from '../components/RecommendedAudios';
 import RecommendedPlaylist from '../components/RecommendedPlaylist';
 import {useFetchPlaylist} from '../hooks/query';
 import useAudioController from '../hooks/useAudioController';
-import {updateNotification} from '../store/notification';
 import colors from '../utils/colors';
 import {
   updatePlaylistVisibility,
   updateSelectedListId,
 } from '../store/playlistModal';
+import Toast from 'react-native-toast-message';
+import {useQueryClient} from '@tanstack/react-query';
 
 interface Props {}
 
@@ -31,6 +32,7 @@ export default function Home({}: Props) {
   const [showPlaylistForm, setShowPlaylistForm] = useState(false);
   const {onAudioPress} = useAudioController();
   const [show, setShow] = useState(false);
+  const queryClient = useQueryClient();
 
   const {data: list} = useFetchPlaylist();
 
@@ -42,10 +44,14 @@ export default function Home({}: Props) {
     // send request with the audio id that we want to add to fav
     try {
       const client = await getClient();
-      const {data} = await client.post('/favorite?audioId=' + selectedAudio.id);
+      const {data} = await client.post(
+        '/favorite/add?audioId=' + selectedAudio.id,
+      );
+      queryClient.invalidateQueries({queryKey: ['favorite', selectedAudio.id]});
+      Toast.show({type: data.toast, text1: data.message});
     } catch (error) {
       const errorMsg = catchAsyncError(error);
-      dispatch(updateNotification({message: errorMsg, type: 'error'}));
+      Toast.show({type: 'error', text1: errorMsg});
     }
     setSelectedAudio(undefined);
     setShowOptions(false);
@@ -70,10 +76,13 @@ export default function Home({}: Props) {
         title: value.title,
         visibility: value.private ? 'private' : 'public',
       });
-      console.log(data);
+      queryClient.invalidateQueries({queryKey: ['playlist']});
+      Toast.show({type: 'success', text1: 'Playlist created'});
+      // console.log(data);
     } catch (error) {
       const errorMsg = catchAsyncError(error);
-      console.log(errorMsg);
+      Toast.show({type: 'error', text1: errorMsg});
+      console.error(errorMsg);
     }
   };
 
@@ -88,9 +97,8 @@ export default function Home({}: Props) {
       });
       setSelectedAudio(undefined);
       setShowPlaylistModal(false);
-      dispatch(
-        updateNotification({message: 'Added to playlist', type: 'success'}),
-      );
+
+      Toast.show({type: 'success', text1: 'Added to playlist'});
     } catch (error) {
       const errorMsg = catchAsyncError(error);
       console.log(errorMsg);
@@ -149,7 +157,7 @@ export default function Home({}: Props) {
               <Pressable onPress={item.onPress} style={styles.optionContainer}>
                 <MaterialCommunityIcons
                   size={24}
-                  color={colors.PRIMARY}
+                  color={colors.WHITE}
                   name={item.icon}
                 />
                 <Text style={styles.optionLabel}>{item.title}</Text>
@@ -193,6 +201,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
+    paddingHorizontal: 7,
   },
-  optionLabel: {color: colors.PRIMARY, fontSize: 16, marginLeft: 5},
+  optionLabel: {
+    color: colors.WHITE,
+    fontSize: 16,
+    marginLeft: 5,
+    fontWeight: '600',
+  },
 });

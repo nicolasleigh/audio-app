@@ -39,5 +39,7 @@ export default function PublicPlaylistTab(props: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    paddingRight: 12,
+  },
 });

@@ -1,13 +1,13 @@
-import { Request, RequestHandler } from 'express';
-import formidable, { Files } from 'formidable';
+import { Request, RequestHandler } from "express";
+import formidable, { Files } from "formidable";
 
 export interface RequestWithFiles extends Request {
   files?: Files;
 }
 
 const fileParser: RequestHandler = (req: RequestWithFiles, res, next) => {
-  if (!req.headers['content-type']?.includes('multipart/form-data'))
-    return res.status(422).json({ error: 'Only accepts form-data' });
+  if (!req.headers["content-type"]?.includes("multipart/form-data"))
+    return res.status(422).json({ error: "Only accepts form-data" });
 
   const form = formidable({ multiples: false });
 

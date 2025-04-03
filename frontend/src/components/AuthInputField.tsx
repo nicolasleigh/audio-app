@@ -109,10 +109,11 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   label: {
-    color: colors.CONTRAST,
+    color: colors.BLUE,
+    fontWeight: '600',
   },
   errorMsg: {
-    color: colors.ERROR,
+    color: colors.RED,
   },
   rightIcon: {
     width: 45,

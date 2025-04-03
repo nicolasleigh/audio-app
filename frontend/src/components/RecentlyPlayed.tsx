@@ -15,7 +15,7 @@ const dummyData = new Array(4).fill('');
 
 export default function RecentlyPlayed({}: Props) {
   const {data = [], isLoading} = useFetchRecentlyPlayed();
-  const {onAudioPress} = useAudioController();
+  const {onAudioPress, isPaused, isPlaying} = useAudioController();
   const {onGoingAudio} = useSelector(getPlayerState);
   if (isLoading) {
     return (
@@ -28,7 +28,7 @@ export default function RecentlyPlayed({}: Props) {
               <View
                 style={{
                   height: 50,
-                  backgroundColor: colors.INACTIVE_CONTRAST,
+                  backgroundColor: colors.LIGHTGREY,
                   borderRadius: 5,
                   marginBottom: 10,
                 }}
@@ -40,7 +40,9 @@ export default function RecentlyPlayed({}: Props) {
     );
   }
 
-  if (!data.length) return null;
+  if (!data.length) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
@@ -56,7 +58,8 @@ export default function RecentlyPlayed({}: Props) {
                 onPress={() => {
                   onAudioPress(item, data);
                 }}
-                isPlaying={onGoingAudio?.id === item.id}
+                isPlaying={isPlaying && onGoingAudio?.id === item.id}
+                isPaused={isPaused && onGoingAudio?.id === item.id}
               />
             </View>
           );
@@ -67,21 +70,31 @@ export default function RecentlyPlayed({}: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    borderWidth: 1,
+    // paddingHorizontal: 5,
+    paddingVertical: 10,
+    borderRadius: 5,
+    backgroundColor: colors.DARKWHITE,
+  },
   dummyTitleView: {
     height: 20,
     width: 150,
-    backgroundColor: colors.INACTIVE_CONTRAST,
+    backgroundColor: colors.LIGHTGREY,
     marginBottom: 15,
     borderRadius: 5,
+    marginTop: 5,
+    marginLeft: 5,
   },
   title: {
-    color: colors.CONTRAST,
+    color: colors.BLACK,
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 15,
+    marginLeft: 5,
   },
   listStyle: {
-    marginBottom: 10,
+    // marginBottom: 10,
+    // paddingHorizontal: 5,
   },
 });

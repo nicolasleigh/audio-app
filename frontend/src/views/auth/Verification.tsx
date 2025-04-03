@@ -2,7 +2,7 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useRef, useState} from 'react';
 import {Keyboard, StyleSheet, TextInput, View} from 'react-native';
-import {useDispatch} from 'react-redux';
+import Toast from 'react-native-toast-message';
 import {
   AuthStackParamList,
   ProfileNavigatorStackParamList,
@@ -11,7 +11,6 @@ import catchAsyncError from '../../api/catchError';
 import client from '../../api/client';
 import AuthFormContainer from '../../components/AuthFormContainer';
 import ReVerificationLink from '../../components/ReVerificationLink';
-import {updateNotification} from '../../store/notification';
 import AppButton from '../../ui/AppButton';
 import OTPField from '../../ui/OTPField';
 
@@ -32,7 +31,6 @@ export default function Verification(props: Props) {
   const [activeOtpIndex, setActiveOtpIndex] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const navigation = useNavigation<NavigationProp<PossibleScreens>>();
-  const dispatch = useDispatch();
 
   const {userInfo} = props.route.params;
 
@@ -67,9 +65,7 @@ export default function Verification(props: Props) {
 
   const handleSubmit = async () => {
     if (!isValidOtp) {
-      return dispatch(
-        updateNotification({message: 'Invalid OTP', type: 'error'}),
-      );
+      return Toast.show({type: 'error', text1: 'Invalid OTP'});
     }
     setSubmitting(true);
     try {
@@ -78,7 +74,7 @@ export default function Verification(props: Props) {
         token: otp.join(''),
       });
 
-      dispatch(updateNotification({message: data.message, type: 'success'}));
+      Toast.show({type: 'success', text1: data.message});
 
       const {routeNames} = navigation.getState();
 
@@ -92,7 +88,7 @@ export default function Verification(props: Props) {
       }
     } catch (error) {
       const errorMessage = catchAsyncError(error);
-      dispatch(updateNotification({message: errorMessage, type: 'error'}));
+      Toast.show({type: 'error', text1: errorMessage});
     }
     setSubmitting(false);
   };

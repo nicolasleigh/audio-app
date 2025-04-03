@@ -22,13 +22,14 @@ export default function Profile({}: Props) {
       <View style={styles.container}>
         <ProfileContainer profile={profile} />
         <Tab.Navigator
+          style={styles.nav}
           screenOptions={{
             tabBarStyle: styles.tabBarStyle,
             tabBarLabelStyle: styles.tabBarLabelStyle,
           }}>
           <Tab.Screen name="Uploads" component={UploadsTab} />
           <Tab.Screen name="Playlist" component={PlaylistTab} />
-          <Tab.Screen name="Favorites" component={FavoriteTab} />
+          <Tab.Screen name="Favorite" component={FavoriteTab} />
           <Tab.Screen name="History" component={HistoryTab} />
         </Tab.Navigator>
       </View>
@@ -39,6 +40,15 @@ export default function Profile({}: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginHorizontal: 7,
+  },
+  nav: {
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    backgroundColor: colors.DARKWHITE,
+    marginBottom: 5,
   },
   tabBarStyle: {
     marginBottom: 20,
@@ -50,7 +60,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0,
   },
   tabBarLabelStyle: {
-    color: colors.CONTRAST,
+    color: colors.BLACK,
     fontSize: 12,
+    fontWeight: '600',
   },
 });

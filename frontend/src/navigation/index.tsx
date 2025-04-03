@@ -21,8 +21,8 @@ const AppTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: colors.PRIMARY,
-    primary: colors.CONTRAST,
+    background: colors.WHITE,
+    primary: colors.BLUE,
   },
 };
 

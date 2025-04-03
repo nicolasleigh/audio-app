@@ -8,8 +8,8 @@ interface Props {
 
 export default function PasswordVisibilityIcon({privateIcon}: Props) {
   return privateIcon ? (
-    <Icon name="eye" color={colors.SECONDARY} size={16} />
+    <Icon name="eye" color={colors.BLUE} size={16} />
   ) : (
-    <Icon name="eye-with-line" color={colors.SECONDARY} size={16} />
+    <Icon name="eye-with-line" color={colors.BLUE} size={16} />
   );
 }

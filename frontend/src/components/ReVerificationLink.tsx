@@ -6,9 +6,9 @@ import {getClient} from '../api/client';
 import {useDispatch, useSelector} from 'react-redux';
 import {getAuthState} from '../store/auth';
 import catchAsyncError from '../api/catchError';
-import {updateNotification} from '../store/notification';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {ProfileNavigatorStackParamList} from '../@types/navigation';
+import Toast from 'react-native-toast-message';
 
 interface Props {
   time?: number;
@@ -29,7 +29,6 @@ export default function ReVerificationLink({
   const {profile} = useSelector(getAuthState);
   const {navigate} =
     useNavigation<NavigationProp<ProfileNavigatorStackParamList>>();
-  const dispatch = useDispatch();
 
   const requestForOTP = async () => {
     setCountDown(time);
@@ -49,7 +48,7 @@ export default function ReVerificationLink({
     } catch (error) {
       // console.log('Request for new otp ', error.response.data.error);
       const errorMessage = catchAsyncError(error);
-      dispatch(updateNotification({message: errorMessage, type: 'error'}));
+      Toast.show({type: 'error', text1: errorMessage});
     }
   };
 
@@ -72,14 +71,14 @@ export default function ReVerificationLink({
 
   return (
     <View style={styles.container}>
-      {countDown > 0 && !canSendNewOtpRequest ? (
-        <Text style={styles.countDown}>{countDown} sec</Text>
-      ) : null}
       <AppLink
         active={canSendNewOtpRequest}
         title={linkTitle}
         onPress={requestForOTP}
       />
+      {countDown > 0 && !canSendNewOtpRequest ? (
+        <Text style={styles.countDown}>{countDown} second</Text>
+      ) : null}
     </View>
   );
 }
@@ -90,7 +89,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   countDown: {
-    color: colors.SECONDARY,
-    marginRight: 7,
+    color: colors.BLUE,
+    marginLeft: 10,
   },
 });

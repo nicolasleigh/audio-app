@@ -24,7 +24,7 @@ export default function PlayerController({
         borderRadius: size / 2,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: ignoreContainer ? 'transparent' : colors.CONTRAST,
+        backgroundColor: ignoreContainer ? 'transparent' : colors.WHITE,
       }}
       onPress={onPress}>
       {children}

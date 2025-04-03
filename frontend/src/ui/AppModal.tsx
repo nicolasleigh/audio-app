@@ -18,45 +18,64 @@ interface Props {
   visible: boolean;
   onRequestClose(): void;
   animation?: boolean;
+  heightOffset?: number;
+  modalColor: string;
+  backdropColor: string;
 }
 
 const {height} = Dimensions.get('window');
-
-const modalHeight = height - 150;
 
 export default function AppModal({
   children,
   visible,
   onRequestClose,
   animation,
+  heightOffset = 0,
+  modalColor,
+  backdropColor,
 }: Props) {
-  const translateY = useSharedValue(modalHeight);
-  const translateStyle = useAnimatedStyle(() => ({
-    transform: [{translateY: translateY.value}],
-  }));
+  // const translateY = useSharedValue(modalHeight);
+  const modalHeight = height - heightOffset;
+  const translateY = useSharedValue(0);
+  const translateStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{translateY: translateY.value}],
+    };
+  });
 
   const handleClose = () => {
-    translateY.value = modalHeight;
-    onRequestClose();
+    // translateY.value = modalHeight;
+    translateY.value = withTiming(modalHeight, {
+      duration: animation ? 400 : 0,
+    });
+    setTimeout(() => {
+      onRequestClose();
+    }, 500);
   };
 
   const gesture = Gesture.Pan()
     .onUpdate(e => {
       if (e.translationY < 0) return;
       translateY.value = e.translationY;
+      // console.log(e.translationY);
     })
     .onFinalize(e => {
-      if (e.translationY <= modalHeight / 2) {
-        translateY.value = 0;
+      if (e.translationY <= modalHeight / 6) {
+        translateY.value = withTiming(0, {
+          duration: animation ? 200 : 0,
+        });
       } else {
-        translateY.value = modalHeight;
+        translateY.value = withTiming(modalHeight, {
+          duration: animation ? 400 : 0,
+        });
+
         runOnJS(handleClose)();
       }
     });
 
   useEffect(() => {
     if (visible)
-      translateY.value = withTiming(0, {duration: animation ? 200 : 0});
+      translateY.value = withTiming(0, {duration: animation ? 500 : 0});
   }, [visible, animation]);
 
   return (
@@ -66,10 +85,14 @@ export default function AppModal({
       style={styles.container}
       transparent>
       <GestureHandlerRootView style={{flex: 1}}>
-        <Pressable style={styles.backdrop}>
-          {/* <Pressable onResponderEnd={handleClose} style={styles.backdrop}> */}
+        <Pressable style={[styles.backdrop, {backgroundColor: backdropColor}]}>
           <GestureDetector gesture={gesture}>
-            <Animated.View style={[styles.modal, translateStyle]}>
+            <Animated.View
+              style={[
+                styles.modal,
+                translateStyle,
+                {backgroundColor: modalColor, height: modalHeight},
+              ]}>
               {children}
             </Animated.View>
           </GestureDetector>
@@ -83,17 +106,14 @@ const styles = StyleSheet.create({
   container: {},
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: colors.INACTIVE_CONTRAST,
   },
   modal: {
-    backgroundColor: colors.PRIMARY,
-    height: modalHeight,
     position: 'absolute',
     bottom: 0,
     right: 0,
     left: 0,
-    borderTopEndRadius: 10,
-    borderTopStartRadius: 10,
+    borderTopEndRadius: 7,
+    borderTopStartRadius: 7,
     overflow: 'hidden',
   },
 });

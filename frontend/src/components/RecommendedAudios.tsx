@@ -8,6 +8,7 @@ import AudioCard from '../ui/AudioCard';
 import GridView from '../ui/GridView';
 import PulseAnimationContainer from '../ui/PulseAnimationContainer';
 import colors from '../utils/colors';
+import useAudioController from '../hooks/useAudioController';
 
 interface Props {
   onAudioPress(item: AudioData, data: AudioData[]): void;
@@ -22,11 +23,12 @@ export default function RecommendedAudios({
 }: Props) {
   const {data = [], isLoading} = useFetchRecommendedAudios();
   const {onGoingAudio} = useSelector(getPlayerState);
+  const {isPaused, isPlaying} = useAudioController();
 
   if (isLoading) {
     return (
       <PulseAnimationContainer>
-        <View style={styles.container}>
+        <View>
           <View style={styles.dummyTitleView} />
           <GridView
             col={3}
@@ -54,7 +56,8 @@ export default function RecommendedAudios({
               onPress={() => onAudioPress(item, data)}
               onLongPress={() => onAudioLongPress(item, data)}
               containerStyle={{width: '100%'}}
-              playing={onGoingAudio?.id === item.id}
+              isPlaying={isPlaying && onGoingAudio?.id === item.id}
+              isPaused={isPaused && onGoingAudio?.id === item.id}
             />
           );
         }}
@@ -65,32 +68,33 @@ export default function RecommendedAudios({
 
 const styles = StyleSheet.create({
   container: {
-    // padding: 10,
+    borderWidth: 1,
+    borderRadius: 5,
+    // paddingHorizontal: 5,
+    paddingVertical: 10,
+    backgroundColor: colors.DARKWHITE,
   },
   title: {
-    color: colors.CONTRAST,
+    color: colors.BLACK,
     fontSize: 20,
     fontWeight: 'bold',
+    paddingLeft: 5,
     marginBottom: 15,
-  },
-  audioTitle: {
-    color: colors.CONTRAST,
-    fontWeight: '500',
-    fontSize: 16,
-    marginTop: 5,
   },
   poster: {width: '100%', aspectRatio: 1, borderRadius: 7},
   dummyTitleView: {
     height: 20,
     width: 150,
-    backgroundColor: colors.INACTIVE_CONTRAST,
+    backgroundColor: colors.LIGHTGREY,
     marginBottom: 15,
     borderRadius: 5,
+    marginLeft: 5,
+    marginTop: 5,
   },
   dummyView: {
     width: '100%',
     aspectRatio: 1,
-    backgroundColor: colors.INACTIVE_CONTRAST,
+    backgroundColor: colors.LIGHTGREY,
     borderRadius: 7,
   },
   dummyContainer: {

@@ -32,6 +32,7 @@ export default function ImagePicker({
   options,
   imageUri,
   setImageUri,
+  busy,
 }: Props) {
   const selectImage = () => {
     launchImageLibrary(
@@ -55,7 +56,10 @@ export default function ImagePicker({
 
   return (
     <View style={styles.container}>
-      <Pressable onPress={selectImage} style={[styles.btnContainer, style]}>
+      <Pressable
+        onPress={selectImage}
+        disabled={busy}
+        style={[styles.btnContainer, style]}>
         {imageUri ? (
           <Image source={{uri: imageUri}} style={styles.image} />
         ) : (
@@ -76,13 +80,14 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     height: 200,
-    width: 200,
+    width: '100%',
   },
   iconContainer: {
     height: 200,
-    aspectRatio: 1,
-    borderWidth: 2,
-    borderColor: colors.SECONDARY,
+    width: '100%',
+    // aspectRatio: 1,
+    borderWidth: 1,
+    borderColor: colors.WHITE,
     borderRadius: 7,
     alignItems: 'center',
     justifyContent: 'center',
@@ -93,9 +98,9 @@ const styles = StyleSheet.create({
   },
   image: {
     height: 200,
-    aspectRatio: 1,
+    // aspectRatio: 1,
     borderRadius: 7,
-    borderWidth: 2,
-    borderColor: colors.SECONDARY,
+    borderWidth: 1,
+    borderColor: colors.WHITE,
   },
 });

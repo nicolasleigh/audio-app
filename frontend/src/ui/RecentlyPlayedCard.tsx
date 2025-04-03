@@ -7,12 +7,14 @@ interface Props {
   title: string;
   poster?: string;
   isPlaying?: boolean;
+  isPaused?: boolean;
   onPress?(): void;
 }
 
 export default function RecentlyPlayedCard({
   title,
   isPlaying = false,
+  isPaused = true,
   onPress,
   poster,
 }: Props) {
@@ -21,7 +23,7 @@ export default function RecentlyPlayedCard({
     <Pressable onPress={onPress} style={styles.container}>
       <View>
         <Image source={source} style={styles.poster} />
-        <PlayAnimation visible={isPlaying} />
+        <PlayAnimation isPlaying={isPlaying} isPaused={isPaused} />
       </View>
 
       <View style={styles.titleContainer}>
@@ -35,23 +37,27 @@ export default function RecentlyPlayedCard({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.OVERLAY,
+    // backgroundColor: colors.BLACK,
     width: '100%',
     borderRadius: 5,
     overflow: 'hidden',
     flexDirection: 'row',
+    borderWidth: 1,
+    // borderColor: colors.BLUE,
   },
   poster: {
     width: 50,
     height: 50,
   },
   title: {
-    color: colors.CONTRAST,
+    // color: colors.WHITE,
+    color: colors.GREY,
     fontWeight: '500',
   },
   titleContainer: {
     flex: 1,
     // paddingHorizontal: 5,
     padding: 5,
+    justifyContent: 'center',
   },
 });

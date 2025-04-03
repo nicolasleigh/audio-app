@@ -3,6 +3,7 @@ import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import BasicModalContainer from '../ui/BasicModalContainer';
 import colors from '../utils/colors';
+import Toast from 'react-native-toast-message';
 
 interface Props {
   visible: boolean;
@@ -26,6 +27,9 @@ export default function PlaylistForm({
   });
 
   const handleSubmit = () => {
+    if (!playlistInfo.title) {
+      return Toast.show({type: 'error', text1: 'Title cannot be empty'});
+    }
     onSubmit(playlistInfo);
     handleClose();
   };
@@ -37,7 +41,7 @@ export default function PlaylistForm({
 
   return (
     <BasicModalContainer visible={visible} onRequestClose={handleClose}>
-      <View>
+      <View style={styles.container}>
         <Text style={styles.title}>Create New Playlist</Text>
         <TextInput
           placeholder="Title"
@@ -46,6 +50,8 @@ export default function PlaylistForm({
             setPlaylistInfo({...playlistInfo, title: text});
           }}
           value={playlistInfo.title}
+          placeholderTextColor={colors.LIGHTGREY}
+          selectionColor={colors.WHITE}
         />
 
         <Pressable
@@ -55,20 +61,22 @@ export default function PlaylistForm({
           style={styles.privateSelector}>
           {playlistInfo.private ? (
             <MaterialCommunityIcons
-              name="radiobox-marked"
-              color={colors.PRIMARY}
+              name="checkbox-marked-outline"
+              color={colors.WHITE}
+              size={20}
             />
           ) : (
             <MaterialCommunityIcons
-              name="radiobox-blank"
-              color={colors.PRIMARY}
+              name="checkbox-blank-outline"
+              color={colors.WHITE}
+              size={20}
             />
           )}
           <Text style={styles.privateLabel}>Private</Text>
         </Pressable>
 
         <Pressable style={styles.submitBtn} onPress={handleSubmit}>
-          <Text>Create</Text>
+          <Text style={styles.btnTitle}>Create</Text>
         </Pressable>
       </View>
     </BasicModalContainer>
@@ -76,33 +84,46 @@ export default function PlaylistForm({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    gap: 5,
+  },
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: colors.PRIMARY,
+    color: colors.WHITE,
   },
   input: {
     height: 45,
     paddingVertical: 10,
-    borderBottomColor: colors.PRIMARY,
-    borderBottomWidth: 2,
-    color: colors.PRIMARY,
+    borderBottomColor: colors.WHITE,
+    borderBottomWidth: 1,
+    color: colors.WHITE,
+    fontSize: 17,
   },
   privateSelector: {
-    height: 45,
+    height: 50,
     alignItems: 'center',
     flexDirection: 'row',
   },
   privateLabel: {
-    color: colors.PRIMARY,
+    color: colors.WHITE,
     marginLeft: 5,
+    fontSize: 15,
+    fontWeight: '600',
   },
   submitBtn: {
     height: 45,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 0.5,
-    borderColor: colors.PRIMARY,
+    borderColor: colors.WHITE,
     borderRadius: 7,
+    color: colors.WHITE,
+    backgroundColor: colors.WHITE,
+  },
+  btnTitle: {
+    color: colors.BLUE,
+    fontWeight: '600',
+    fontSize: 18,
   },
 });

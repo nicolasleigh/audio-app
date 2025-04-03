@@ -1,11 +1,9 @@
 import React, {useState} from 'react';
+import Toast from 'react-native-toast-message';
 import {useDispatch} from 'react-redux';
 import catchAsyncError from '../api/catchError';
 import {getClient} from '../api/client';
 import AudioForm from '../components/form/AudioForm';
-import {updateNotification} from '../store/notification';
-import {mapRange} from '../utils/math';
-import Toast from 'react-native-toast-message';
 
 interface Props {}
 
@@ -47,7 +45,6 @@ export default function Upload({}: Props) {
         text1: 'Failed to create audio',
       });
       console.error(errorMessage);
-      // dispatch(updateNotification({message: errorMessage, type: 'error'}));
     }
     setBusy(false);
   };

@@ -17,7 +17,7 @@ type Props = NativeStackScreenProps<
 
 export default function PublicUploadsTab(props: Props) {
   const {data, isLoading} = useFetchPublicUploads(props.route.params.profileId);
-  const {onAudioPress} = useAudioController();
+  const {onAudioPress, isPlaying, isPaused} = useAudioController();
   const {onGoingAudio} = useSelector(getPlayerState);
 
   if (isLoading) {
@@ -35,7 +35,8 @@ export default function PublicUploadsTab(props: Props) {
             onPress={() => onAudioPress(item, data)}
             audio={item}
             key={item.id}
-            isPlaying={onGoingAudio?.id === item.id}
+            isPlaying={isPlaying && onGoingAudio?.id === item.id}
+            isPaused={isPaused && onGoingAudio?.id === item.id}
           />
         );
       })}
@@ -44,5 +45,7 @@ export default function PublicUploadsTab(props: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    paddingRight: 12,
+  },
 });

@@ -9,31 +9,32 @@ import {
 } from 'react-native';
 import {DocumentPickerResponse, types} from '@react-native-documents/picker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useDispatch} from 'react-redux';
 import * as yup from 'yup';
 import catchAsyncError from '../../api/catchError';
 import AppView from '../AppView';
 import CategorySelector from '../CategorySelector';
 import FileSelector from '../FileSelector';
-import {updateNotification} from '../../store/notification';
 import AppButton from '../../ui/AppButton';
-import Progress from '../../ui/Progress';
 import {categories} from '../../utils/categories';
 import colors from '../../utils/colors';
 import ImagePicker from '../ImagePicker';
 import Toast from 'react-native-toast-message';
 import AppHeader from '../AppHeader';
+import {useSelector} from 'react-redux';
+import {getAuthState} from '../../store/auth';
+import AppHeaderNormal from '../AppHeaderNormal';
+import SubmitButton from '../../ui/AppButtonSubmit';
 
 interface Props {
   initialValues?: {
     title: string;
     category: string;
     about: string;
-    poster?: string;
   };
   onSubmit(formData: FormData, reset: () => void): void;
   progress?: number;
   busy?: boolean;
+  initialPoster?: string;
 }
 
 interface FormFields {
@@ -79,9 +80,9 @@ const oldAudioSchema = yup.object().shape({
 
 export default function AudioForm({
   initialValues,
-  progress = 0,
   busy,
   onSubmit,
+  initialPoster,
 }: Props) {
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [audioInfo, setAudioInfo] = useState({
@@ -90,8 +91,7 @@ export default function AudioForm({
   const [isForUpdate, setIsForUpdate] = useState(false);
   const [fileName, setFileName] = useState('');
   const [imageUri, setImageUri] = useState('');
-
-  const dispatch = useDispatch();
+  const {profile} = useSelector(getAuthState);
 
   const reset = () => {
     setAudioInfo({...defaultForm});
@@ -100,6 +100,12 @@ export default function AudioForm({
   };
 
   const handleSubmit = async () => {
+    if (!profile?.verified) {
+      return Toast.show({
+        type: 'error',
+        text1: 'Please verify your email',
+      });
+    }
     try {
       let finalData;
       const formData = new FormData();
@@ -130,11 +136,11 @@ export default function AudioForm({
       onSubmit(formData, reset);
     } catch (error) {
       const errorMessage = catchAsyncError(error);
+      console.error(errorMessage);
       Toast.show({
         type: 'error',
         text1: errorMessage,
       });
-      // dispatch(updateNotification({message: errorMessage, type: 'error'}));
     }
   };
 
@@ -151,18 +157,19 @@ export default function AudioForm({
         ...initialValues,
       });
       setIsForUpdate(true);
-      setImageUri(initialValues.poster);
+      setImageUri(initialPoster);
     }
-  }, [initialValues]);
+    console.log('initialValues:', initialValues);
+  }, []);
 
   return (
     <AppView>
+      {isForUpdate ? (
+        <AppHeader title="Update" />
+      ) : (
+        <AppHeaderNormal title="Create Audio" />
+      )}
       <ScrollView style={styles.container}>
-        {isForUpdate ? (
-          <AppHeader title="Update" />
-        ) : (
-          <AppHeader title="Create" />
-        )}
         <View style={styles.formContainer}>
           {/* Title */}
           <View style={styles.inputContainer}>
@@ -175,6 +182,8 @@ export default function AudioForm({
                 setAudioInfo({...audioInfo, title: text});
               }}
               value={audioInfo.title}
+              editable={!busy}
+              selectionColor={colors.LIGHTGREY}
             />
           </View>
 
@@ -182,6 +191,7 @@ export default function AudioForm({
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Category</Text>
             <Pressable
+              disabled={busy}
               onPress={() => {
                 setShowCategoryModal(true);
               }}>
@@ -193,6 +203,7 @@ export default function AudioForm({
                   value={audioInfo.category}
                   placeholder="Select a category"
                   placeholderTextColor={colors.INACTIVE_CONTRAST}
+                  selectionColor={colors.LIGHTGREY}
                 />
               </View>
             </Pressable>
@@ -204,13 +215,15 @@ export default function AudioForm({
             <TextInput
               placeholder="Enter audio information"
               placeholderTextColor={colors.INACTIVE_CONTRAST}
-              style={styles.input}
-              numberOfLines={10}
+              style={[styles.input, {height: 80}]}
+              numberOfLines={5}
               multiline
               onChangeText={text => {
                 setAudioInfo({...audioInfo, about: text});
               }}
               value={audioInfo.about}
+              editable={!busy}
+              selectionColor={colors.LIGHTGREY}
             />
           </View>
 
@@ -222,8 +235,8 @@ export default function AudioForm({
                 icon={
                   <MaterialCommunityIcons
                     name="file-music-outline"
-                    size={35}
-                    color={colors.SECONDARY}
+                    size={15}
+                    color={colors.WHITE}
                   />
                 }
                 btnTitle="Select Audio"
@@ -233,6 +246,7 @@ export default function AudioForm({
                 }}
                 fileName={fileName}
                 setFileName={setFileName}
+                busy={busy}
               />
             </View>
           )}
@@ -245,7 +259,7 @@ export default function AudioForm({
                 <MaterialCommunityIcons
                   name="image-outline"
                   size={20}
-                  color={colors.SECONDARY}
+                  color={colors.WHITE}
                 />
               }
               btnTitle="Select Poster"
@@ -255,6 +269,7 @@ export default function AudioForm({
               }}
               imageUri={imageUri}
               setImageUri={setImageUri}
+              busy={busy}
             />
           </View>
 
@@ -274,7 +289,7 @@ export default function AudioForm({
             initialValue={initialValues?.category}
           />
 
-          <AppButton
+          <SubmitButton
             busy={busy}
             borderRadius={7}
             title={isForUpdate ? 'Update' : 'Submit'}
@@ -289,7 +304,9 @@ export default function AudioForm({
 const styles = StyleSheet.create({
   container: {
     // paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
+    // marginTop: 20,
+    backgroundColor: colors.BLUE,
   },
   btnContainer: {
     alignItems: 'center',
@@ -303,18 +320,18 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     marginTop: 5,
-    gap: 20,
+    gap: 10,
   },
   input: {
-    borderWidth: 2,
-    borderColor: colors.SECONDARY,
+    borderWidth: 1,
+    borderColor: colors.WHITE,
     borderRadius: 7,
     padding: 10,
     fontSize: 15,
-    color: colors.CONTRAST,
+    color: colors.WHITE,
     textAlignVertical: 'top',
   },
-  category: {padding: 10, color: colors.PRIMARY},
+  category: {padding: 10, color: colors.BLACK},
   categorySelector: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -323,7 +340,7 @@ const styles = StyleSheet.create({
   categorySelectorTitle: {
     color: colors.CONTRAST,
   },
-  label: {color: colors.CONTRAST},
+  label: {color: colors.WHITE, fontWeight: '600'},
   selectedCategory: {
     color: colors.SECONDARY,
     marginLeft: 5,

@@ -7,21 +7,23 @@ import colors from '../utils/colors';
 import {AudioData} from '../@types/audio';
 import {useSelector} from 'react-redux';
 import {getPlayerState} from '../store/player';
+import useAudioController from '../hooks/useAudioController';
 
 interface Props {
   onAudioPress(item: AudioData, data: AudioData[]): void;
   onAudioLongPress(item: AudioData, data: AudioData[]): void;
 }
 
-const dummyData = new Array(4).fill('');
+const dummyData = new Array(3).fill('');
 
 export default function LatestUploads({onAudioLongPress, onAudioPress}: Props) {
   const {data, isLoading} = useFetchLatestAudios();
   const {onGoingAudio} = useSelector(getPlayerState);
+  const {isPaused, isPlaying} = useAudioController();
   if (isLoading) {
     return (
       <PulseAnimationContainer>
-        <View style={styles.container}>
+        <View>
           <View style={styles.dummyTitleView} />
           <View style={styles.dummyContainer}>
             {dummyData.map((_, index) => {
@@ -45,7 +47,8 @@ export default function LatestUploads({onAudioLongPress, onAudioPress}: Props) {
               poster={item.poster}
               onPress={() => onAudioPress(item, data)}
               onLongPress={() => onAudioLongPress(item, data)}
-              playing={item.id === onGoingAudio?.id}
+              isPlaying={isPlaying && onGoingAudio?.id === item.id}
+              isPaused={isPaused && onGoingAudio?.id === item.id}
             />
           );
         })}
@@ -56,10 +59,14 @@ export default function LatestUploads({onAudioLongPress, onAudioPress}: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    // padding: 15,
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    backgroundColor: colors.DARKWHITE,
   },
   title: {
-    color: colors.CONTRAST,
+    color: colors.BLACK,
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 15,
@@ -67,18 +74,22 @@ const styles = StyleSheet.create({
   dummyTitleView: {
     height: 20,
     width: 150,
-    backgroundColor: colors.INACTIVE_CONTRAST,
+    backgroundColor: colors.LIGHTGREY,
     marginBottom: 15,
     borderRadius: 5,
+    marginLeft: 5,
+    marginTop: 5,
   },
   dummyView: {
     height: 100,
     width: 100,
-    backgroundColor: colors.INACTIVE_CONTRAST,
-    marginRight: 15,
+    backgroundColor: colors.LIGHTGREY,
+    marginRight: 5,
     borderRadius: 5,
+    marginLeft: 5,
   },
   dummyContainer: {
     flexDirection: 'row',
+    marginBottom: 10,
   },
 });
