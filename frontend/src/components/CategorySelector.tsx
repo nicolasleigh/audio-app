@@ -47,10 +47,13 @@ export default function CategorySelector<T extends any>({
               {selectedIndex === index ? (
                 <MaterialCommunityIcons
                   name="radiobox-marked"
-                  color={colors.SECONDARY}
+                  color={colors.WHITE}
                 />
               ) : (
-                <MaterialCommunityIcons name="radiobox-blank" />
+                <MaterialCommunityIcons
+                  name="radiobox-blank"
+                  color={colors.WHITE}
+                />
               )}
               {renderItem(item)}
             </Pressable>
@@ -65,7 +68,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: colors.PRIMARY,
+    color: colors.WHITE,
     paddingVertical: 10,
   },
   selectorContainer: {

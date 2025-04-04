@@ -215,7 +215,7 @@ export default function AudioForm({
             <TextInput
               placeholder="Enter audio information"
               placeholderTextColor={colors.INACTIVE_CONTRAST}
-              style={[styles.input, {height: 80}]}
+              style={[styles.input, {height: 80, textAlignVertical: 'top'}]}
               numberOfLines={5}
               multiline
               onChangeText={text => {
@@ -312,12 +312,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  fileSelectorContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 50,
-  },
   formContainer: {
     marginTop: 5,
     gap: 10,
@@ -329,9 +323,9 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 15,
     color: colors.WHITE,
-    textAlignVertical: 'top',
+    // textAlignVertical: 'top',
   },
-  category: {padding: 10, color: colors.BLACK},
+  category: {padding: 10, color: colors.WHITE},
   categorySelector: {
     flexDirection: 'row',
     alignItems: 'center',

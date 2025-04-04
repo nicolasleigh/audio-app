@@ -10,6 +10,7 @@ import {
 import EmptyRecords from '../../ui/EmptyRecords';
 import PlaylistItem from '../../ui/PlaylistItem';
 import colors from '../../utils/colors';
+import PlaylistAudioModal from '../PlaylistAudioModal';
 
 interface Props {}
 
@@ -33,6 +34,7 @@ export default function PlaylistTab({}: Props) {
           />
         );
       })}
+      <PlaylistAudioModal />
     </ScrollView>
   );
 }

@@ -19,7 +19,7 @@ export default function PlaylistAudioModal({}: Props) {
   const {visible, selectedListId} = useSelector(getPlaylistModalState);
   const dispatch = useDispatch();
   const {data, isLoading} = useFetchPlaylistAudios(selectedListId || '');
-  console.log('useFetchPlaylistAudios--', data);
+  // console.log('useFetchPlaylistAudios------');
   const {onGoingAudio} = useSelector(getPlayerState);
   const {onAudioPress, isPlaying, isPaused} = useAudioController();
   const handleClose = () => {

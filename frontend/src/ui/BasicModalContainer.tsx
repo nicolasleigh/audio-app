@@ -1,6 +1,8 @@
 import React, {ReactNode} from 'react';
 import {Modal, Pressable, StyleSheet, View} from 'react-native';
 import colors from '../utils/colors';
+import Toast from 'react-native-toast-message';
+import {toastConfig} from '../utils/toastConfig';
 
 interface Props {
   visible?: boolean;
@@ -41,6 +43,6 @@ const styles = StyleSheet.create({
     maxHeight: '50%',
     borderRadius: 10,
     padding: 10,
-    backgroundColor: colors.LIGHTBLUE,
+    backgroundColor: colors.BLUE,
   },
 });
