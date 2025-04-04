@@ -10,6 +10,7 @@ export default function AppInput(props: Props) {
       {...props}
       placeholderTextColor={colors.INACTIVE_CONTRAST}
       style={[styles.input, props.style]}
+      selectionColor={colors.BLUE}
     />
   );
 }

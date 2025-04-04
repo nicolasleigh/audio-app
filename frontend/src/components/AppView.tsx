@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import MiniAudioPlayer from './MiniAudioPlayer';
 import useAudioController from '../hooks/useAudioController';
-import PlaylistAudioModal from './PlaylistAudioModal';
 import {useRoute} from '@react-navigation/native';
 
 interface Props {
@@ -18,7 +17,7 @@ export default function AppView({children}: Props) {
     <View style={styles.container}>
       <View style={styles.children}>{children}</View>
       {isPlayerReady && !isUploadScreen ? <MiniAudioPlayer /> : null}
-      <PlaylistAudioModal />
+      {/* <PlaylistAudioModal /> */}
     </View>
   );
 }

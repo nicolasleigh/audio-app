@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
   Image,
+  Platform,
   Pressable,
   StyleProp,
   StyleSheet,
@@ -77,7 +78,12 @@ export default function FileSelector({
       disabled={busy}
       onPress={handleDocumentSelect}
       style={[styles.btnContainer, style]}>
-      <View pointerEvents="none" style={styles.inputWrapper}>
+      <View
+        pointerEvents="none"
+        style={[
+          styles.inputWrapper,
+          Platform.OS === 'android' ? {paddingLeft: 7} : {padding: 10},
+        ]}>
         {icon}
         <TextInput
           style={styles.input}
@@ -104,7 +110,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.WHITE,
     borderRadius: 7,
-    padding: 10,
+    alignItems: 'center',
   },
   iconContainer: {
     height: 70,
@@ -129,7 +135,7 @@ const styles = StyleSheet.create({
   },
   input: {
     color: colors.WHITE,
-    textAlignVertical: 'top',
+    // textAlignVertical: 'top',
     // fontSize: 15,
   },
 });

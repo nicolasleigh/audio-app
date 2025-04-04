@@ -1,0 +1,21 @@
+name: MusicFy
+
+services:
+  mongodb:
+    image: mongo:7.0-jammy
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+
+secrets:
+  db_password:
+    file: db_password.txt
+
+volumes:
+  mongo_data:

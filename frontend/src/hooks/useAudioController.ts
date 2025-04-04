@@ -74,7 +74,7 @@ const useAudioController = () => {
   const playbackState = usePlaybackState();
   const {onGoingAudio, onGoingList} = useSelector(getPlayerState);
   const dispatch = useDispatch();
-  console.log('playbackState--:', playbackState);
+  // console.log('playbackState--:', playbackState);
 
   const isPlayerReady = Boolean(playbackState.state);
   const isPlaying = playbackState.state === State.Playing;

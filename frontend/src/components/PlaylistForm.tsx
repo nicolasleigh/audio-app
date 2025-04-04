@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import BasicModalContainer from '../ui/BasicModalContainer';
 import colors from '../utils/colors';
 import Toast from 'react-native-toast-message';
+import {toastConfig} from '../utils/toastConfig';
 
 interface Props {
   visible: boolean;
@@ -25,10 +26,11 @@ export default function PlaylistForm({
     title: '',
     private: false,
   });
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleSubmit = () => {
     if (!playlistInfo.title) {
-      return Toast.show({type: 'error', text1: 'Title cannot be empty'});
+      return setErrorMsg('Title cannot be empty');
     }
     onSubmit(playlistInfo);
     handleClose();
@@ -36,6 +38,7 @@ export default function PlaylistForm({
 
   const handleClose = () => {
     setPlaylistInfo({title: '', private: false});
+    setErrorMsg('');
     onRequestClose();
   };
 
@@ -43,16 +46,20 @@ export default function PlaylistForm({
     <BasicModalContainer visible={visible} onRequestClose={handleClose}>
       <View style={styles.container}>
         <Text style={styles.title}>Create New Playlist</Text>
-        <TextInput
-          placeholder="Title"
-          style={styles.input}
-          onChangeText={text => {
-            setPlaylistInfo({...playlistInfo, title: text});
-          }}
-          value={playlistInfo.title}
-          placeholderTextColor={colors.LIGHTGREY}
-          selectionColor={colors.WHITE}
-        />
+        <View>
+          <TextInput
+            placeholder="Title"
+            style={styles.input}
+            onChangeText={text => {
+              setPlaylistInfo({...playlistInfo, title: text});
+              setErrorMsg('');
+            }}
+            value={playlistInfo.title}
+            placeholderTextColor={colors.LIGHTGREY}
+            selectionColor={colors.WHITE}
+          />
+          <Text style={styles.errorMsg}>{errorMsg}</Text>
+        </View>
 
         <Pressable
           onPress={() => {
@@ -101,9 +108,10 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   privateSelector: {
-    height: 50,
+    // height: 30,
     alignItems: 'center',
     flexDirection: 'row',
+    marginBottom: 20,
   },
   privateLabel: {
     color: colors.WHITE,
@@ -125,5 +133,8 @@ const styles = StyleSheet.create({
     color: colors.BLUE,
     fontWeight: '600',
     fontSize: 18,
+  },
+  errorMsg: {
+    color: 'tomato',
   },
 });
