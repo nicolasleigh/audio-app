@@ -1,10 +1,9 @@
 import React from 'react';
 import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import colors from '../utils/colors';
-import AppLink from '../ui/AppLink';
 import {useSelector} from 'react-redux';
 import {getPlayerState} from '../store/player';
+import colors from '../utils/colors';
 
 interface Props {
   visible: boolean;

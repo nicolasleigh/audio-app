@@ -35,7 +35,7 @@ export default function AppNavigator({}: Props) {
       dispatch(updateBusy(true));
       try {
         const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
-        console.log('get token', token);
+        // console.log('get token', token);
         if (!token) {
           return dispatch(updateBusy(false));
         }

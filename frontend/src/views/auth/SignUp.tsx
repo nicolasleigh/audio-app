@@ -3,7 +3,6 @@ import {FormikHelpers} from 'formik';
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import Toast from 'react-native-toast-message';
-import {useDispatch} from 'react-redux';
 import * as yup from 'yup';
 import {AuthStackParamList} from '../../@types/navigation';
 import catchAsyncError from '../../api/catchError';

@@ -1,3 +1,6 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {useQueryClient} from '@tanstack/react-query';
+import deepEqual from 'deep-equal';
 import React, {useEffect, useState} from 'react';
 import {
   Alert,
@@ -7,32 +10,27 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import ImagePicker from 'react-native-image-crop-picker';
-import AppHeader from '../AppHeader';
-import colors from '../../utils/colors';
-import AvatarField from '../../ui/AvatarField';
-import AppButton from '../../ui/AppButton';
-import {getClient} from '../../api/client';
-import catchAsyncError from '../../api/catchError';
+import Toast from 'react-native-toast-message';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch, useSelector} from 'react-redux';
-import {Keys, removeFromAsyncStorage} from '../../utils/asyncStorage';
+import {AuthStackParamList} from '../../@types/navigation';
+import catchAsyncError from '../../api/catchError';
+import {getClient} from '../../api/client';
 import {
   getAuthState,
   updateBusy,
   updateLoggedIn,
   updateProfile,
 } from '../../store/auth';
-import deepEqual from 'deep-equal';
-import {getPermissionToReadImages} from '../../utils/helper';
-import ReVerificationLink from '../ReVerificationLink';
-import {useQueryClient} from '@tanstack/react-query';
-import Toast from 'react-native-toast-message';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {AuthStackParamList} from '../../@types/navigation';
 import AppButtonSubmit from '../../ui/AppButtonSubmit';
+import AvatarField from '../../ui/AvatarField';
+import {Keys, removeFromAsyncStorage} from '../../utils/asyncStorage';
+import colors from '../../utils/colors';
+import {getPermissionToReadImages} from '../../utils/helper';
+import AppHeader from '../AppHeader';
+import ReVerificationLink from '../ReVerificationLink';
 
 interface Props {}
 interface ProfileInfo {

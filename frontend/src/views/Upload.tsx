@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import Toast from 'react-native-toast-message';
-import {useDispatch} from 'react-redux';
 import catchAsyncError from '../api/catchError';
 import {getClient} from '../api/client';
 import AudioForm from '../components/form/AudioForm';
@@ -8,9 +7,7 @@ import AudioForm from '../components/form/AudioForm';
 interface Props {}
 
 export default function Upload({}: Props) {
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [busy, setBusy] = useState(false);
-  const dispatch = useDispatch();
 
   const handleUpload = async (formData: FormData, reset: () => void) => {
     setBusy(true);
@@ -49,7 +46,5 @@ export default function Upload({}: Props) {
     setBusy(false);
   };
 
-  return (
-    <AudioForm onSubmit={handleUpload} busy={busy} progress={uploadProgress} />
-  );
+  return <AudioForm onSubmit={handleUpload} busy={busy} />;
 }

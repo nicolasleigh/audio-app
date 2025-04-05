@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function PlaylistItem({playlist, onPress}: Props) {
-  const {id, itemsCount, title, visibility} = playlist;
+  const {itemsCount, title, visibility} = playlist;
   return (
     <Pressable style={styles.container} onPress={onPress}>
       <View style={styles.postContainer}>

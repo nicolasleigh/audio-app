@@ -1,4 +1,4 @@
-import {PayloadAction, createSelector, createSlice} from '@reduxjs/toolkit';
+import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {RootState} from '.';
 import {AudioData} from '../@types/audio';
 
@@ -33,10 +33,12 @@ const slice = createSlice({
   },
 });
 
-export const getPlayerState = createSelector(
-  (state: RootState) => state.player,
-  playerState => playerState,
-);
+// export const getPlayerState = createSelector(
+//   (state: RootState) => state.player,
+//   playerState => playerState,
+// );
+export const getPlayerState = (state: RootState) => state.player;
+
 export const {updateOnGoingAudio, updateOnGoingList, updatePlaybackRate} =
   slice.actions;
 export default slice.reducer;

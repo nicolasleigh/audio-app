@@ -1,3 +1,4 @@
+import {DocumentPickerResponse, types} from '@react-native-documents/picker';
 import React, {useEffect, useState} from 'react';
 import {
   Pressable,
@@ -7,23 +8,21 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {DocumentPickerResponse, types} from '@react-native-documents/picker';
+import Toast from 'react-native-toast-message';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useSelector} from 'react-redux';
 import * as yup from 'yup';
 import catchAsyncError from '../../api/catchError';
+import {getAuthState} from '../../store/auth';
+import SubmitButton from '../../ui/AppButtonSubmit';
+import {categories} from '../../utils/categories';
+import colors from '../../utils/colors';
+import AppHeader from '../AppHeader';
+import AppHeaderNormal from '../AppHeaderNormal';
 import AppView from '../AppView';
 import CategorySelector from '../CategorySelector';
 import FileSelector from '../FileSelector';
-import AppButton from '../../ui/AppButton';
-import {categories} from '../../utils/categories';
-import colors from '../../utils/colors';
 import ImagePicker from '../ImagePicker';
-import Toast from 'react-native-toast-message';
-import AppHeader from '../AppHeader';
-import {useSelector} from 'react-redux';
-import {getAuthState} from '../../store/auth';
-import AppHeaderNormal from '../AppHeaderNormal';
-import SubmitButton from '../../ui/AppButtonSubmit';
 
 interface Props {
   initialValues?: {

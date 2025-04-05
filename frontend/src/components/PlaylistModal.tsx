@@ -1,10 +1,10 @@
 import React from 'react';
-import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {Pressable, ScrollView, StyleSheet, Text} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {Playlist} from '../@types/audio';
 import BasicModalContainer from '../ui/BasicModalContainer';
 import colors from '../utils/colors';
-import {Playlist} from '../@types/audio';
 
 interface Props {
   visible?: boolean;
@@ -31,7 +31,7 @@ export default function PlaylistModal({
     <BasicModalContainer visible={visible} onRequestClose={onRequestClose}>
       {/* render playlist */}
       <ScrollView>
-        {list.map((item, index) => {
+        {list.map((item, _) => {
           return (
             <ListItem
               onPress={() => onPlaylistPress(item)}

@@ -1,13 +1,11 @@
-import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Home from '../views/Home';
+import React from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Profile from '../views/Profile';
-import Upload from '../views/Upload';
 import colors from '../utils/colors';
-import ProfileNavigator from './ProfileNavigator';
+import Upload from '../views/Upload';
 import HomeNavigator from './HomeNavigator';
+import ProfileNavigator from './ProfileNavigator';
 
 const Tab = createBottomTabNavigator();
 

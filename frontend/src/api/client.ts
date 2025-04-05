@@ -1,7 +1,8 @@
 import axios, {CreateAxiosDefaults} from 'axios';
 import {Keys, getFromAsyncStorage} from '../utils/asyncStorage';
 
-const baseURL = 'http://192.168.0.102:8080';
+const baseURL = 'http://192.168.0.101:8080';
+// const baseURL = 'https://music.linze.pro';
 
 const client = axios.create({
   baseURL,

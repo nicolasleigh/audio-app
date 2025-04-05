@@ -1,11 +1,10 @@
 import React, {useEffect} from 'react';
-import {Dimensions, Modal, Pressable, StyleSheet, View} from 'react-native';
+import {Dimensions, Modal, Pressable, StyleSheet} from 'react-native';
 import {
   Gesture,
   GestureDetector,
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
-import colors from '../utils/colors';
 import Animated, {
   runOnJS,
   useAnimatedStyle,

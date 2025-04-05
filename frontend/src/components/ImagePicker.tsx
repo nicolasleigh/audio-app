@@ -1,4 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import {
+  DocumentPickerOptions,
+  DocumentPickerResponse,
+} from '@react-native-documents/picker';
+import React from 'react';
 import {
   Image,
   Pressable,
@@ -8,13 +12,8 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import colors from '../utils/colors';
-import DocumentPicker, {
-  DocumentPickerOptions,
-  DocumentPickerResponse,
-  pick,
-} from '@react-native-documents/picker';
 import {launchImageLibrary} from 'react-native-image-picker';
+import colors from '../utils/colors';
 
 interface Props {
   icon?: React.ReactNode;

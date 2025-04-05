@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
-import MiniAudioPlayer from './MiniAudioPlayer';
-import useAudioController from '../hooks/useAudioController';
 import {useRoute} from '@react-navigation/native';
+import React from 'react';
+import {StyleSheet, View} from 'react-native';
+import useAudioController from '../hooks/useAudioController';
+import MiniAudioPlayer from './MiniAudioPlayer';
 
 interface Props {
   children: React.ReactNode;

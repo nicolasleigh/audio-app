@@ -1,24 +1,22 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 import React, {useState} from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import colors from '../utils/colors';
-import {useSelector} from 'react-redux';
-import {getPlayerState} from '../store/player';
-import PlayPauseBtn from '../ui/PlayPauseBtn';
-import useAudioController from '../hooks/useAudioController';
-import Loader from '../ui/Loader';
-import {mapRange} from '../utils/math';
-import {useProgress} from 'react-native-track-player';
-import AudioPlayer from './AudioPlayer';
-import CurrentAudioList from './CurrentAudioList';
-import {useFetchIsFavorite} from '../hooks/query';
-import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {getClient} from '../api/client';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {HomeNavigatorStackParamList} from '../@types/navigation';
-import {getAuthState} from '../store/auth';
 import Toast from 'react-native-toast-message';
-import AudioListContainer from '../ui/AudioListContainer';
+import {useProgress} from 'react-native-track-player';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {useSelector} from 'react-redux';
+import {HomeNavigatorStackParamList} from '../@types/navigation';
+import {getClient} from '../api/client';
+import {useFetchIsFavorite} from '../hooks/query';
+import useAudioController from '../hooks/useAudioController';
+import {getAuthState} from '../store/auth';
+import {getPlayerState} from '../store/player';
+import Loader from '../ui/Loader';
+import PlayPauseBtn from '../ui/PlayPauseBtn';
+import colors from '../utils/colors';
+import {mapRange} from '../utils/math';
+import AudioPlayer from './AudioPlayer';
 
 interface Props {}
 
@@ -29,7 +27,6 @@ export default function MiniAudioPlayer({}: Props) {
   const {profile} = useSelector(getAuthState);
   const {isPlaying, isBusy, togglePlayPause} = useAudioController();
   const [playerVisibility, setPlayerVisibility] = useState(false);
-  const [showCurrentList, setShowCurrentList] = useState(false);
   const progress = useProgress();
   const {navigate} =
     useNavigation<NavigationProp<HomeNavigatorStackParamList>>();
@@ -67,12 +64,9 @@ export default function MiniAudioPlayer({}: Props) {
   const showPlayerModal = () => {
     setPlayerVisibility(true);
   };
-  const handleOnCurrentListClose = () => {
-    setShowCurrentList(false);
-  };
+
   const handleOnListOptionPress = () => {
     closePlayerModal();
-    setShowCurrentList(true);
   };
   const handleOnProfileLinkPress = () => {
     closePlayerModal();

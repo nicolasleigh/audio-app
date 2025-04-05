@@ -26,7 +26,11 @@ export default function SubmitButton({
           borderRadius: borderRadius || 10,
         },
       ]}>
-      {!busy ? <Text style={styles.title}>{title}</Text> : <Loader />}
+      {!busy ? (
+        <Text style={styles.title}>{title}</Text>
+      ) : (
+        <Loader color={colors.BLUE} />
+      )}
     </Pressable>
   );
 }

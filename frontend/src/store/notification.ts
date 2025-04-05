@@ -1,34 +1,34 @@
-import {PayloadAction, createSelector, createSlice} from '@reduxjs/toolkit';
-import {RootState} from '.';
+// import {PayloadAction, createSelector, createSlice} from '@reduxjs/toolkit';
+// import {RootState} from '.';
 
-type notificationType = 'error' | 'success';
+// type notificationType = 'error' | 'success';
 
-interface Notification {
-  message: string;
-  type: notificationType;
-}
+// interface Notification {
+//   message: string;
+//   type: notificationType;
+// }
 
-const initialState: Notification = {
-  message: '',
-  type: 'error',
-};
+// const initialState: Notification = {
+//   message: '',
+//   type: 'error',
+// };
 
-const slice = createSlice({
-  name: 'notification',
-  initialState,
-  reducers: {
-    updateNotification(
-      notificationState,
-      {payload}: PayloadAction<Notification>,
-    ) {
-      notificationState.message = payload.message;
-      notificationState.type = payload.type;
-    },
-  },
-});
-export const getNotificationState = createSelector(
-  (state: RootState) => state.notification,
-  notificationState => notificationState,
-);
-export const {updateNotification} = slice.actions;
-export default slice.reducer;
+// const slice = createSlice({
+//   name: 'notification',
+//   initialState,
+//   reducers: {
+//     updateNotification(
+//       notificationState,
+//       {payload}: PayloadAction<Notification>,
+//     ) {
+//       notificationState.message = payload.message;
+//       notificationState.type = payload.type;
+//     },
+//   },
+// });
+// export const getNotificationState = createSelector(
+//   (state: RootState) => state.notification,
+//   notificationState => notificationState,
+// );
+// export const {updateNotification} = slice.actions;
+// export default slice.reducer;

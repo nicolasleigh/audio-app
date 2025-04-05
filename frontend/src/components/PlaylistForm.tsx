@@ -1,10 +1,8 @@
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import BasicModalContainer from '../ui/BasicModalContainer';
 import colors from '../utils/colors';
-import Toast from 'react-native-toast-message';
-import {toastConfig} from '../utils/toastConfig';
 
 interface Props {
   visible: boolean;

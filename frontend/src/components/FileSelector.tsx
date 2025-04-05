@@ -1,23 +1,19 @@
-import React, {useEffect, useState} from 'react';
-import {
-  Image,
-  Platform,
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  ViewStyle,
-} from 'react-native';
-import colors from '../utils/colors';
 import DocumentPicker, {
   DocumentPickerOptions,
   DocumentPickerResponse,
   pick,
 } from '@react-native-documents/picker';
-import {launchImageLibrary} from 'react-native-image-picker';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import React from 'react';
+import {
+  Platform,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  TextInput,
+  View,
+  ViewStyle,
+} from 'react-native';
+import colors from '../utils/colors';
 
 interface Props {
   icon?: React.ReactNode;

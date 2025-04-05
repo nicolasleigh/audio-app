@@ -1,14 +1,14 @@
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
+import {useSelector} from 'react-redux';
+import {PublicProfileTabParamsList} from '../../@types/navigation';
 import {useFetchPublicUploads} from '../../hooks/query';
+import useAudioController from '../../hooks/useAudioController';
+import {getPlayerState} from '../../store/player';
 import AudioListItem from '../../ui/AudioListItem';
 import AudioListLoadingUI from '../../ui/AudioListLoadingUI';
 import EmptyRecords from '../../ui/EmptyRecords';
-import useAudioController from '../../hooks/useAudioController';
-import {useSelector} from 'react-redux';
-import {getPlayerState} from '../../store/player';
-import {PublicProfileTabParamsList} from '../../@types/navigation';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 type Props = NativeStackScreenProps<
   PublicProfileTabParamsList,

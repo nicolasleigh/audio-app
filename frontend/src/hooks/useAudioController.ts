@@ -1,21 +1,18 @@
+import deepEqual from 'deep-equal';
+import RNFS from 'react-native-fs';
+import Toast from 'react-native-toast-message';
 import TrackPlayer, {
+  State,
   Track,
   usePlaybackState,
-  State,
-  AppKilledPlaybackBehavior,
-  Capability,
 } from 'react-native-track-player';
-import {AudioData} from '../@types/audio';
 import {useDispatch, useSelector} from 'react-redux';
+import {AudioData} from '../@types/audio';
 import {
   getPlayerState,
   updateOnGoingAudio,
   updateOnGoingList,
 } from '../store/player';
-import deepEqual from 'deep-equal';
-import {useEffect, useState} from 'react';
-import RNFS from 'react-native-fs';
-import Toast from 'react-native-toast-message';
 
 // let isReady = false;
 
@@ -70,7 +67,6 @@ const downLoadFile = async (url: string, publicId: string) => {
 };
 
 const useAudioController = () => {
-  const [isReady, setIsReady] = useState(false);
   const playbackState = usePlaybackState();
   const {onGoingAudio, onGoingList} = useSelector(getPlayerState);
   const dispatch = useDispatch();
@@ -179,37 +175,6 @@ const useAudioController = () => {
   const setPlaybackRate = async (rate: number) => {
     await TrackPlayer.setRate(rate);
   };
-
-  useEffect(() => {
-    const setupPlayer = async () => {
-      if (isReady) {
-        return;
-      }
-
-      await TrackPlayer.setupPlayer();
-      await TrackPlayer.updateOptions({
-        progressUpdateEventInterval: 10, // in order to make Event.PlaybackProgressUpdated work, must set this value. Every 10s will emit event
-        android: {
-          appKilledPlaybackBehavior:
-            AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotification,
-        },
-        capabilities: [
-          Capability.Play,
-          Capability.Pause,
-          Capability.SkipToNext,
-          Capability.SkipToPrevious,
-        ],
-        compactCapabilities: [
-          Capability.Play,
-          Capability.Pause,
-          Capability.SkipToNext,
-          Capability.SkipToPrevious,
-        ],
-      });
-    };
-    setupPlayer();
-    setIsReady(true);
-  }, [isReady]);
 
   return {
     onAudioPress,

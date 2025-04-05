@@ -31,7 +31,7 @@ export default function Home({}: Props) {
   const [showPlaylistModal, setShowPlaylistModal] = useState(false);
   const [showPlaylistForm, setShowPlaylistForm] = useState(false);
   const {onAudioPress} = useAudioController();
-  const [show, setShow] = useState(false);
+  // const [show, setShow] = useState(false);
   const queryClient = useQueryClient();
 
   const {data: list} = useFetchPlaylist();

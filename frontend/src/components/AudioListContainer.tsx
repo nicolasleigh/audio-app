@@ -1,14 +1,12 @@
 import React from 'react';
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import colors from '../utils/colors';
-import AppModal from './AppModal';
-import {AudioData} from '../@types/audio';
 // import AudioListItem from './AudioListItem';
 // import AudioListLoadingUI from './AudioListLoadingUI';
-import {useSelector} from 'react-redux';
-import {getPlayerState} from '../store/player';
-import useAudioController from '../hooks/useAudioController';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {useSelector} from 'react-redux';
+import useAudioController from '../hooks/useAudioController';
+import {getPlayerState} from '../store/player';
 import AudioListItem from '../ui/AudioListItem';
 
 // interface Props {

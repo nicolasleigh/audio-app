@@ -12,7 +12,7 @@ interface Props {
   color?: string;
 }
 
-export default function Loader({color = colors.CONTRAST}: Props) {
+export default function Loader({color = colors.WHITE}: Props) {
   const initialRotation = useSharedValue(0);
   const transform = useAnimatedStyle(() => {
     return {

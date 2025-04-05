@@ -1,4 +1,4 @@
-import {PayloadAction, createSelector, createSlice} from '@reduxjs/toolkit';
+import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {RootState} from '.';
 
 interface PlaylistModal {
@@ -23,9 +23,11 @@ const slice = createSlice({
   },
 });
 
-export const getPlaylistModalState = createSelector(
-  (state: RootState) => state.playlistModal,
-  modalState => modalState,
-);
+// export const getPlaylistModalState = createSelector(
+//   (state: RootState) => state.playlistModal,
+//   modalState => modalState,
+// );
+export const getPlaylistModalState = (state: RootState) => state.playlistModal;
+
 export const {updatePlaylistVisibility, updateSelectedListId} = slice.actions;
 export default slice.reducer;

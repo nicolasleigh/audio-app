@@ -1,14 +1,14 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import colors from '../utils/colors';
-import AppLink from '../ui/AppLink';
-import {getClient} from '../api/client';
-import {useDispatch, useSelector} from 'react-redux';
-import {getAuthState} from '../store/auth';
-import catchAsyncError from '../api/catchError';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {ProfileNavigatorStackParamList} from '../@types/navigation';
 import Toast from 'react-native-toast-message';
+import {useSelector} from 'react-redux';
+import {ProfileNavigatorStackParamList} from '../@types/navigation';
+import catchAsyncError from '../api/catchError';
+import {getClient} from '../api/client';
+import {getAuthState} from '../store/auth';
+import AppLink from '../ui/AppLink';
+import colors from '../utils/colors';
 
 interface Props {
   time?: number;

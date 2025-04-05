@@ -3,7 +3,6 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useQueryClient} from '@tanstack/react-query';
 import React, {useState} from 'react';
 import Toast from 'react-native-toast-message';
-import {useDispatch} from 'react-redux';
 import {ProfileNavigatorStackParamList} from '../../@types/navigation';
 import catchAsyncError from '../../api/catchError';
 import {getClient} from '../../api/client';
@@ -17,10 +16,10 @@ type Props = NativeStackScreenProps<
 export default function UpdateAudio({route}: Props) {
   const {audio} = route.params;
 
-  const [uploadProgress, setUploadProgress] = useState(0);
+  // const [uploadProgress, setUploadProgress] = useState(0);
   const [busy, setBusy] = useState(false);
   const queryClient = useQueryClient();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const {navigate} =
     useNavigation<NavigationProp<ProfileNavigatorStackParamList>>();
 
@@ -64,7 +63,7 @@ export default function UpdateAudio({route}: Props) {
       }}
       onSubmit={handleUpdate}
       busy={busy}
-      progress={uploadProgress}
+      // progress={uploadProgress}
       initialPoster={audio.poster}
     />
   );
