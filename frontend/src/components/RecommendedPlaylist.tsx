@@ -10,7 +10,6 @@ interface Props {
 
 export default function RecommendedPlaylist({onListPress}: Props) {
   const {data} = useFetchRecommendedPlaylist();
-  // console.log(data);
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Playlist for you</Text>
@@ -19,12 +18,13 @@ export default function RecommendedPlaylist({onListPress}: Props) {
         showsHorizontalScrollIndicator={false}
         data={data}
         keyExtractor={item => item.id}
-        renderItem={({item}) => {
+        renderItem={({item, index}) => {
           return (
             <Pressable
               style={styles.pressContainer}
               onPress={() => onListPress(item)}
-              key={item.id}>
+              // key={item.id}
+              key={index}>
               <Image
                 source={require('../assets/music.png')}
                 style={styles.image}

@@ -172,7 +172,7 @@ export default function AudioForm({
         <View style={styles.formContainer}>
           {/* Title */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Title</Text>
+            <Text style={styles.label}>Audio Title</Text>
             <TextInput
               placeholder="Enter audio title"
               placeholderTextColor={colors.INACTIVE_CONTRAST}
@@ -210,7 +210,7 @@ export default function AudioForm({
 
           {/* About */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>About</Text>
+            <Text style={styles.label}>Description</Text>
             <TextInput
               placeholder="Enter audio information"
               placeholderTextColor={colors.INACTIVE_CONTRAST}

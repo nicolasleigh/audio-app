@@ -69,7 +69,9 @@ export default function SignIn({}) {
       initialValues={initialValues}
       validationSchema={signinSchema}
       onSubmit={handleSubmit}>
-      <AuthFormContainer heading="Welcome back!">
+      <AuthFormContainer
+        heading="Welcome back!"
+        subHeading="Please sign in to continue.">
         <View style={styles.formContainer}>
           <AuthInputField
             name="email"
