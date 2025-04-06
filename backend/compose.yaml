@@ -5,8 +5,7 @@ services:
     restart:
       - on-failure:10
     image: mongo:7.0-jammy
-    container_name:
-      - musicfy-mongodb
+    container_name: musicfy-mongodb
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/db_password
@@ -25,8 +24,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name:
-      - musicfy-backend
+    container_name: musicfy-backend
     environment:
       - NODE_ENV=production
     networks:
