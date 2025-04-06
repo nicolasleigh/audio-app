@@ -3,10 +3,26 @@ import nodemailer from "nodemailer";
 
 import { generateTemplate } from "#/mail/template";
 import EmailVerificationToken from "#/models/emailVerificationToken";
-import { MAILTRAP_PASS, MAILTRAP_USER, SIGN_IN_URL, VERIFICATION_EMAIL } from "#/utils/variables";
+import { MAILTRAP_PASS, MAILTRAP_USER, RESEND_API_KEY, SIGN_IN_URL, VERIFICATION_EMAIL } from "#/utils/variables";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 const generateMailTransporter = () => {
-  const transport = nodemailer.createTransport({
+  let transport: nodemailer.Transporter<SMTPTransport.SentMessageInfo>;
+
+  if (process.env.NODE_ENV === "production") {
+    transport = nodemailer.createTransport({
+      host: "smtp.resend.com",
+      secure: true,
+      port: 465,
+      auth: {
+        user: "resend",
+        pass: RESEND_API_KEY,
+      },
+    });
+    return transport;
+  }
+
+  transport = nodemailer.createTransport({
     host: "sandbox.smtp.mailtrap.io",
     port: 2525,
     auth: {
@@ -14,7 +30,6 @@ const generateMailTransporter = () => {
       pass: MAILTRAP_PASS,
     },
   });
-
   return transport;
 };
 
