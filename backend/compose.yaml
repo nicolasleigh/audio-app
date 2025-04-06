@@ -2,8 +2,7 @@ name: musicfy
 
 services:
   mongodb:
-    restart:
-      - on-failure:10
+    restart: on-failure:10
     image: mongo:7.0-jammy
     container_name: musicfy-mongodb
     environment:
@@ -19,8 +18,7 @@ services:
       - backend_network
 
   backend:
-    restart:
-      - on-failure:10
+    restart: on-failure:10
     build:
       context: .
       dockerfile: Dockerfile
