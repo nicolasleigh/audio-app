@@ -1,79 +1,61 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 🎵 MusicFy
 
-# Getting Started
+A **full-stack mobile music streaming app** built with **bare React Native**, complete with music uploads, playback, playlists, and secure authentication.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## 📱 Project Overview
 
-## Step 1: Start the Metro Server
+**MusicFy** is a full-featured music streaming application developed from scratch using **bare React Native**, with a backend powered by **Node.js**, **Express**, and **MongoDB**.
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+Users can upload and stream audio, create playlists, manage favorites, track listening history, and follow other users. The app also supports secure authentication with email verification, password reset, and uses local audio caching for smooth offline playback.
 
-To start Metro, run the following command from the _root_ of your React Native project:
+## 🎯 Project Goals
 
-```bash
-# using npm
-npm start
+This project was created to:
 
-# OR using Yarn
-yarn start
-```
+* Learn and apply **bare React Native** to understand native module integration and platform-specific setups
+* Build a **secure, scalable backend** with file handling, authentication, and session management
+* Design a music streaming app with **real-world features**, including playlists, user interactions, and media uploads
+* Optimize audio performance via **local caching**
+* Practice **DevOps** workflows with containerization and reverse proxy setup
 
-## Step 2: Start your Application
+## 🛠️ Tech Stack
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+### 📲 Frontend (Mobile App)
 
-### For Android
+* **React Native** – mobile app development without Expo
+* **React Navigation** – seamless screen transitions and routing
+* **Redux** – global state management
+* **React Query** – server state handling, caching, and background syncing
+* **Axios** – API communication
+* **AsyncStorage** – persistent storage for caching audio files locally
 
-```bash
-# using npm
-npm run android
+### 🔙 Backend
 
-# OR using Yarn
-yarn android
-```
+* **Node.js + Express** – REST API and server logic
+* **MongoDB + Mongoose** – NoSQL database with schema modeling
+* **Formidable** – file upload handling (music files & cover images)
+* **Nodemailer** – email-based flows for verification and password resets
+* **JWT (JSON Web Tokens)** – secure authentication & session management
+* **Bcrypt** – password hashing for user security
 
-### For iOS
+### ⚙️ DevOps & Deployment
 
-```bash
-# using npm
-npm run ios
+* **Docker** – containerized backend for consistent development & deployment
+* **Caddy** – web server and reverse proxy with automatic HTTPS support
 
-# OR using Yarn
-yarn ios
-```
+## 🌟 Key Features
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+* 🔒 **Authentication**
+  * Email verification & password reset
+  * JWT-based session handling
+* 🎵 **Music Management**
+  * Upload & stream music with cover images
+  * Local caching for optimized playback
+* 📚 **Playlists & Favorites**
+  * Create & manage personal playlists
+  * Mark songs as favorites
+* 📈 **Listening History & Recommendations**
+  * Track what users listen to
+  * Suggest music based on listening habits (basic recommendation logic)
+* 👥 **User Interaction**
+  * Follow/unfollow users and explore shared content
