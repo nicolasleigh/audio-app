@@ -9,7 +9,7 @@ import { sendForgetPasswordLink, sendPassResetSuccessEmail, sendVerificationMail
 import EmailVerificationToken from "#/models/emailVerificationToken";
 import PasswordResetToken from "#/models/passwordResetToken";
 import { isValidObjectId } from "mongoose";
-import { JWT_SECRET, PASSWORD_RESET_LINK } from "#/utils/variables";
+import { JWT_SECRET, PASSWORD_RESET_LINK, CLOUD_PASSWORD_RESET_LINK, NODE_ENV } from "#/utils/variables";
 import { RequestWithFiles } from "#/middleware/fileParser";
 import cloudinary from "#/cloud";
 import formidable from "formidable";
@@ -100,7 +100,12 @@ export const generateForgetPasswordLink: RequestHandler = async (req, res) => {
     token,
   });
 
-  const resetLink = `${PASSWORD_RESET_LINK}?token=${token}&userId=${user._id}`;
+  let LINK = PASSWORD_RESET_LINK;
+  if (NODE_ENV === "production") {
+    LINK = CLOUD_PASSWORD_RESET_LINK;
+  }
+
+  const resetLink = `${LINK}?token=${token}&userId=${user._id}`;
 
   sendForgetPasswordLink({ email: user.email, link: resetLink });
 
