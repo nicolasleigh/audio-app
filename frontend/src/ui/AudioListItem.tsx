@@ -20,7 +20,7 @@ export default function AudioListItem({
   isPaused = true,
 }: Props) {
   const getSource = (poster?: string) => {
-    return poster ? {uri: poster} : require('../assets/music_small.png');
+    return poster ? {uri: poster} : require('../assets/music.jpg');
   };
   return (
     <Pressable

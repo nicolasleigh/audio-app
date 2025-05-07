@@ -23,7 +23,7 @@ const updateQueue = async (data: AudioData[]) => {
       title: item.title,
       // url: item.file,
       url: RNFS.CachesDirectoryPath + `/${item.publicId}.mp3`,
-      artwork: item.poster || require('../assets/music.png'),
+      artwork: item.poster || require('../assets/music.jpg'),
       artist: item.owner.name,
       genre: item.category,
       isLiveStream: true,

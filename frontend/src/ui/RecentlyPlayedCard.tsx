@@ -18,7 +18,7 @@ export default function RecentlyPlayedCard({
   onPress,
   poster,
 }: Props) {
-  const source = poster ? {uri: poster} : require('../assets/music_small.png');
+  const source = poster ? {uri: poster} : require('../assets/music.jpg');
   return (
     <Pressable onPress={onPress} style={styles.container}>
       <View>

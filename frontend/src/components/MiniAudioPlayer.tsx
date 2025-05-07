@@ -34,7 +34,7 @@ export default function MiniAudioPlayer({}: Props) {
 
   // console.log(progress); //{"buffered": 90.69714285714285, "duration": 90.69714285714285, "position": 0.502803609}
   const poster = onGoingAudio?.poster;
-  const source = poster ? {uri: poster} : require('../assets/music.png');
+  const source = poster ? {uri: poster} : require('../assets/music.jpg');
   const queryClient = useQueryClient();
 
   const toggleIsFav = async (id: string) => {

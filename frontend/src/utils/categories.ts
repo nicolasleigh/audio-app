@@ -1,22 +1,12 @@
 export const categories = [
-  'Arts',
-  'Business',
-  'Education',
-  'Entertainment',
-  'Kids & Family',
   'Music',
-  'Science',
-  'Tech',
+  'English Audio Book',
+  'French Audio Book',
   'Others',
 ];
 
 export type categoriesTypes =
-  | 'Arts'
-  | 'Business'
-  | 'Education'
-  | 'Entertainment'
-  | 'Kids & Family'
   | 'Music'
-  | 'Science'
-  | 'Tech'
+  | 'English Audio Book'
+  | 'French Audio Book'
   | 'Others';

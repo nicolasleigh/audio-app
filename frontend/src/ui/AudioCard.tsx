@@ -31,7 +31,7 @@ export default function AudioCard({
   isPlaying = false,
   isPaused = true,
 }: Props) {
-  const source = poster ? {uri: poster} : require('../assets/music.png');
+  const source = poster ? {uri: poster} : require('../assets/music.jpg');
   return (
     <Pressable
       onPress={onPress}

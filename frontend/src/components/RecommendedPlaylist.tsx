@@ -26,7 +26,7 @@ export default function RecommendedPlaylist({onListPress}: Props) {
               // key={item.id}
               key={index}>
               <Image
-                source={require('../assets/music.png')}
+                source={require('../assets/music.jpg')}
                 style={styles.image}
               />
               <View style={styles.overlay}>

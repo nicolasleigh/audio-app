@@ -51,7 +51,7 @@ export default function AudioPlayer({
     setPlaybackRate,
   } = useAudioController();
   const poster = onGoingAudio?.poster;
-  const source = poster ? {uri: poster} : require('../assets/music.png');
+  const source = poster ? {uri: poster} : require('../assets/music.jpg');
 
   const {duration, position} = useProgress();
   const dispatch = useDispatch();
